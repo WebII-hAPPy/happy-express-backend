@@ -1,0 +1,258 @@
+openapi: "3.0.0"
+info:
+  description: "API for the Web-Engineering II project hAPPy"
+  version: "0"
+  title: "hAPPy"
+servers:
+  - url: "localhost"
+tags:
+  - name: "face"
+  - name: "user"
+  - name: "statistic"
+  - name: "image"
+paths:
+  /image:
+    post:
+      tags:
+        - "image"
+      description: "Uploads a single image file."
+      operationId: "post-image"
+      requestBody:
+        description: "MultipartFormDataInput of file"
+        content:
+          multipart/form-data:
+            schema:
+              # EDIT REF
+              $ref: "#/components/schemas/Emotion"
+        required: false
+      responses:
+        200:
+          description: "Uploaded successfully"
+          content:
+            application/json:
+              schema:
+                # EDIT REF
+                $ref: "#/components/schemas/Emotion"
+        500:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  "/image/{imageName}":
+    delete:
+      tags:
+        - "image"
+      description: "Deletes a single image file"
+      operationId: "delete-image"
+      responses:
+        200:
+          description: "Deleted successfully"
+        500:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: "Entity not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - in: path
+        name: "imageName"
+        description: "The name of the image which you want to delete"
+        required: true
+        schema:
+          type: "string"
+  "/face/{imageName}":
+    post:
+      tags:
+        - "face"
+      operationId: "post-face"
+      responses:
+        200:
+          description: "Request successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Analysis"
+        500:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: "Entity not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - in: path
+        name: "imageName"
+        description: "The name of the image which you want to delete"
+        required: true
+        schema:
+          type: "string"
+  "/statistic/{email}":
+    get:
+      tags:
+        - statistic
+      operationId: "get-statistic"
+      responses:
+        200:
+          description: "Generated successfully some statistics"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Statistic"
+        500:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      parameters:
+        - in: path
+          name: "email"
+          description: "The E-Mail address of the user."
+          required: true
+          schema:
+            type: string
+components:
+  schemas:
+    User:
+      properties:
+        id:
+          type: "number"
+          format: "long"
+        name:
+          type: "string"
+        e-mail:
+          type: "string"
+        password:
+          type: "string"
+        analysis-count:
+          type: "integer"
+    Analysis:
+      properties:
+        id:
+          type: "number"
+          format: "long"
+        userId:
+          type: "number"
+          format: "long"
+        date:
+          type: "string"
+          format: "date"
+        emotions:
+          $ref: "#/components/schemas/Emotion"
+        smile:
+          type: "number"
+          format: "double"
+        accessories:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Accessory"
+        makeup:
+          $ref: "#/components/schemas/MakeUp"
+        glasses:
+          type: "string"
+        gender:
+          type: "string"
+        age:
+          type: "integer"
+        facialHair:
+          $ref: "#/components/schemas/FacialHair"
+        hair:
+          $ref: "#/components/schemas/Hair"
+    Emotion:
+      properties:
+        id:
+          type: "number"
+          format: "long"
+        analysisId:
+          type: "number"
+          format: "long"
+        anger:
+          type: "number"
+          format: "double"
+        contempt:
+          type: "number"
+          format: "double"
+        disgust:
+          type: "number"
+          format: "double"
+        fear:
+          type: "number"
+          format: "double"
+        happiness:
+          type: "number"
+          format: "double"
+        neutral:
+          type: "number"
+          format: "double"
+        sadness:
+          type: "number"
+          format: "double"
+        surprise:
+          type: "number"
+          format: "double"
+    Statistic:
+      type: object
+    Accessory:
+      properties:
+        type:
+          type: "string"
+        confidence:
+          type: "number"
+          format: "double"
+    MakeUp:
+      properties:
+        eyeMakeup:
+          type: "boolean"
+        lipMakeup:
+          type: "boolean"
+    FacialHair:
+      properties:
+        moustache:
+          type: "number"
+          format: "float"
+        beard:
+          type: "number"
+          format: "float"
+        sideburns:
+          type: "number"
+          format: "float"
+    Hair:
+      properties:
+        bald:
+          type: "number"
+          format: "float"
+        invisible:
+          type: "boolean"
+        hairColor:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/HairColor"
+    HairColor:
+      properties:
+        color:
+          type: "string"
+        confidence:
+          type: "number"
+          format: "float"
+    Error:
+      properties:
+        message:
+          type: "string"
