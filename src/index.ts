@@ -5,6 +5,12 @@ import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
 import { Routes } from "./routes";
 import { User } from "./entity/User";
+import * as request from "request-promise-native";
+import * as multer from "multer";
+import * as fs from "fs";
+import * as path from "path";
+import * as Loki from "lokijs";
+import * as del from "del";
 
 createConnection()
   .then(async connection => {
@@ -34,6 +40,44 @@ createConnection()
           }
         }
       );
+    });
+
+    // setup
+    const DB_NAME = "db.json";
+    const COLLECTION_NAME = "images";
+    const UPLOAD_PATH = "uploads";
+    const upload = multer({ dest: `${UPLOAD_PATH}/` }); // multer configuration
+    const db = new Loki(`${UPLOAD_PATH}/${DB_NAME}`, {
+      persistenceMethod: "fs"
+    });
+
+    const loadCollection = function(
+      colName,
+      db: Loki
+    ): Promise<Loki.Collection<any>> {
+      return new Promise(resolve => {
+        db.loadDatabase({}, () => {
+          const _collection =
+            db.getCollection(colName) || db.addCollection(colName);
+          resolve(_collection);
+        });
+      });
+    };
+
+    app.post("/anal", upload.single("pic"), async (req, res) => {
+      try {
+        const col = await loadCollection(COLLECTION_NAME, db);
+        const data = col.insert(req.file);
+
+        db.saveDatabase();
+        res.send({
+          id: data.$loki,
+          fileName: data.filename,
+          originalName: data.originalname
+        });
+      } catch (err) {
+        res.sendStatus(400);
+      }
     });
 
     // setup express app here
