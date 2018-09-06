@@ -1,20 +1,24 @@
 {
-   "name": "happyBackend",
-   "version": "0.0.1",
-   "description": "Awesome project developed with TypeORM.",
-   "devDependencies": {
-      "ts-node": "3.3.0",
-      "@types/node": "^8.0.29",
-      "typescript": "2.5.2"
-   },
-   "dependencies": {
-      "typeorm": "0.2.7",
-      "reflect-metadata": "^0.1.10",
-      "pg": "^7.3.0",
-      "express": "^4.15.4",
-      "body-parser": "^1.18.1"
-   },
-   "scripts": {
-      "start": "ts-node src/index.ts"
-   }
+  "name": "happyBackend",
+  "version": "0.0.1",
+  "description": "Awesome project developed with TypeORM.",
+  "devDependencies": {
+    "@types/node": "^8.0.29",
+    "husky": "^0.14.3",
+    "prettier": "1.14.2",
+    "pretty-quick": "^1.6.0",
+    "ts-node": "3.3.0",
+    "typescript": "2.5.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "pg": "^7.3.0",
+    "reflect-metadata": "^0.1.10",
+    "typeorm": "0.2.7"
+  },
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "precommit": "pretty-quick --staged"
+  }
 }
