@@ -1,7 +1,7 @@
 {
-  "name": "happyBackend",
+  "name": "happy-backend",
   "version": "0.0.1",
-  "description": "Awesome project developed with TypeORM.",
+  "description": "hAPPy-API Web-Engineering II project",
   "devDependencies": {
     "@types/node": "^8.0.29",
     "husky": "^0.14.3",
