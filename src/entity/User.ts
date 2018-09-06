@@ -1,25 +1,23 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { Analysis } from "./Analysis";
 
 @Entity()
 export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  name: string;
 
-    @Column()
-    email: string;
+  @Column()
+  email: string;
 
-    @Column()
-    name: string;
+  @Column()
+  password: string;
 
-    @Column()
-    password: string;
+  @Column()
+  analysisCount: number;
 
-    @Column()
-    analysisCount: number;
-
-    @OneToMany(type => Analysis, analysis => analysis.user)
-    analyses: Analysis[];
-
+  @OneToMany(type => Analysis, analysis => analysis.user)
+  analyses: Analysis[];
 }

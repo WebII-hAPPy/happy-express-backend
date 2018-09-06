@@ -1,36 +1,38 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  OneToOne
+} from "typeorm";
+import { Analysis } from "./Analysis";
 
 @Entity()
 export class Emotion {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column("double precision")
+  anger: number;
 
-    @Column("double precision")
-    anger: number;
+  @Column("double precision")
+  contempt: number;
 
-    @Column("float")
-    contempt: number;
+  @Column("double precision")
+  disgust: number;
 
-    @Column("float")
-    disgust: number;
+  @Column("double precision")
+  fear: number;
 
-    @Column("float")
-    fear: number;
+  @Column("double precision")
+  happiness: number;
 
-    @Column("float")
-    happiness: number;
+  @Column("double precision")
+  neutral: number;
 
-    @Column("float")
-    neutral: number;
+  @Column("double precision")
+  sadness: number;
 
-    @Column("float")
-    sadness: number;
-
-    @Column("float")
-    surprise: number;
-
-    @Column("float")
-    smile: number;
-    
+  @Column("double precision")
+  surprise: number;
 }
