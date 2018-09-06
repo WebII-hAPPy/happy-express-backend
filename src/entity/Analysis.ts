@@ -19,7 +19,7 @@ export class Analysis {
   id: number;
 
   @Column("timestamp")
-  time: number;
+  time: string;
 
   @OneToOne(type => Emotion)
   @JoinColumn()
