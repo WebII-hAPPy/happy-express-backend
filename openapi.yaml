@@ -237,18 +237,18 @@ components:
           format: "integer"
         moustache:
           type: "number"
-          format: "float"
+          format: "double"
         beard:
           type: "number"
-          format: "float"
+          format: "double"
         sideburns:
           type: "number"
-          format: "float"
+          format: "double"
     Hair:
       properties:
         bald:
           type: "number"
-          format: "float"
+          format: "double"
         invisible:
           type: "boolean"
         hairColor:
@@ -261,7 +261,7 @@ components:
           type: "string"
         confidence:
           type: "number"
-          format: "float"
+          format: "double"
     Error:
       properties:
         message:

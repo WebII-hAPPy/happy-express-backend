@@ -47,11 +47,5 @@ export const Routes = [
     route: "/analysis:id",
     controller: AnalysisController,
     action: "remove"
-  },
-  {
-    method: "post",
-    route: "/analysis",
-    controller: AnalysisController,
-    action: "save"
   }
 ];
