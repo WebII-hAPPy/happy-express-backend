@@ -13,11 +13,11 @@ export class AnalysisController {
     return this.analysisRepository.findOne(request.params.id);
   }
 
-  async remove(request: Request, response: Response, next: NextFunction) {
-    await this.analysisRepository.remove(request.params.id);
-  }
-
   async save(request: Request, response: Response, next: NextFunction) {
     return this.analysisRepository.save(request.body);
+  }
+
+  async remove(request: Request, response: Response, next: NextFunction) {
+    await this.analysisRepository.remove(request.params.id);
   }
 }

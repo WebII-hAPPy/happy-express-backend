@@ -135,7 +135,7 @@ components:
       properties:
         id:
           type: "number"
-          format: "long"
+          format: "integer"
         name:
           type: "string"
         e-mail:
@@ -148,10 +148,10 @@ components:
       properties:
         id:
           type: "number"
-          format: "long"
+          format: "integer"
         userId:
           type: "number"
-          format: "long"
+          format: "integer"
         date:
           type: "string"
           format: "date"
@@ -180,10 +180,7 @@ components:
       properties:
         id:
           type: "number"
-          format: "long"
-        analysisId:
-          type: "number"
-          format: "long"
+          format: "integer"
         anger:
           type: "number"
           format: "double"
@@ -210,8 +207,15 @@ components:
           format: "double"
     Statistic:
       type: object
+      properties:
+        id:
+          type: "number"
+          format: "integer"
     Accessory:
       properties:
+        id:
+          type: "number"
+          format: "integer"
         type:
           type: "string"
         confidence:
@@ -219,12 +223,18 @@ components:
           format: "double"
     MakeUp:
       properties:
+        id:
+          type: "number"
+          format: "integer"
         eyeMakeup:
           type: "boolean"
         lipMakeup:
           type: "boolean"
     FacialHair:
       properties:
+        id:
+          type: "number"
+          format: "integer"
         moustache:
           type: "number"
           format: "float"
