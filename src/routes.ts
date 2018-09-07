@@ -1,5 +1,6 @@
 import { UserController } from "./controller/UserController";
 import { AnalysisController } from "./controller/AnalysisController";
+import { UploadController } from "./controller/UploadController";
 
 const UserRoutes = [];
 
@@ -47,5 +48,11 @@ export const Routes = [
     route: "/analysis:id",
     controller: AnalysisController,
     action: "remove"
+  },
+  {
+    method: "post",
+    route: "/upload",
+    controller: UploadController,
+    action: "save"
   }
 ];
