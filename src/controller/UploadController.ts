@@ -26,8 +26,6 @@ const loadCollection = function(
 export class UploadController {
   async save(request: Request, response: Response, next: NextFunction) {
     try {
-      console.log("YES");
-      console.log(request.headers["content-type"]);
       const col = await loadCollection(COLLECTION_NAME, db);
       const data = col.insert(request.file);
 
