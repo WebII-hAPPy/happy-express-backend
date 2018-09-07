@@ -17,52 +17,31 @@ createConnection()
 
     // register express routes from defined application routes
     Routes.forEach(route => {
-      if (route.route == "/upload") {
-        (app as any)[route.method](
-          route.route,
-          upload.single("pic"),
-          (request: Request, res: Response, next: Function) => {
-            const result = new (route.controller as any)()[route.action](
-              request,
-              res,
-              next
+      (app as any)[route.method](
+        route.route,
+        route.route == "/upload"
+          ? upload.single("pic")
+          : function(request, response, next) {
+              next();
+            },
+        (request: Request, res: Response, next: Function) => {
+          const result = new (route.controller as any)()[route.action](
+            request,
+            res,
+            next
+          );
+          if (result instanceof Promise) {
+            result.then(
+              result =>
+                result !== null && result !== undefined
+                  ? res.send(result)
+                  : undefined
             );
-            if (result instanceof Promise) {
-              result.then(
-                result =>
-                  result !== null && result !== undefined
-                    ? res.send(result)
-                    : undefined
-              );
-            } else if (result !== null && result !== undefined) {
-              res.json(result);
-            }
+          } else if (result !== null && result !== undefined) {
+            res.json(result);
           }
-        );
-      } else {
-        // const uploadCheck = route.route == "/upload" ? upload.single("pic") : (() => {});
-        (app as any)[route.method](
-          route.route,
-          // uploadCheck,
-          (req: Request, res: Response, next: Function) => {
-            const result = new (route.controller as any)()[route.action](
-              req,
-              res,
-              next
-            );
-            if (result instanceof Promise) {
-              result.then(
-                result =>
-                  result !== null && result !== undefined
-                    ? res.send(result)
-                    : undefined
-              );
-            } else if (result !== null && result !== undefined) {
-              res.json(result);
-            }
-          }
-        );
-      }
+        }
+      );
     });
 
     function checkMultipart(req, res, next) {
