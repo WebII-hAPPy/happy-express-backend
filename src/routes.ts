@@ -46,19 +46,19 @@ export const Routes = [
   },
   {
     method: "delete",
-    route: "/analysis:id",
+    route: "/analysis/:id",
     controller: AnalysisController,
     action: "remove"
   },
   {
     method: "post",
-    route: "/upload",
+    route: "/image",
     controller: UploadController,
     action: "save"
   },
   {
     method: "delete",
-    route: "/delete",
+    route: "/image/:imageName",
     controller: DeleteController,
     action: "delete"
   }

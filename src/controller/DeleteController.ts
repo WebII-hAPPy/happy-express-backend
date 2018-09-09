@@ -6,7 +6,7 @@ import { deleteImage } from "../shared/utils";
 
 export class DeleteController {
   async delete(request: Request, response: Response, next: NextFunction) {
-    const result = deleteImage(request.body.imageName);
+    const result = deleteImage(request.params.imageName);
 
     if (result != []) {
       response.sendStatus(200);
