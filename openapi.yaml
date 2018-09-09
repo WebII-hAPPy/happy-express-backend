@@ -48,7 +48,7 @@ paths:
       responses:
         200:
           description: "Deleted successfully"
-        500:
+        501:
           description: "An error occurred"
           content:
             application/json:

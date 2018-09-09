@@ -5,6 +5,8 @@ import * as multer from "multer";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { Routes } from "./routes";
+import { imageFilter } from "./shared/utils";
+import { UPLOAD_PATH } from "./shared/constants";
 
 createConnection()
   .then(async connection => {
@@ -12,8 +14,7 @@ createConnection()
     const app = express();
     app.use(bodyParser.json());
 
-    const UPLOAD_PATH = "uploads";
-    const upload = multer({ dest: `${UPLOAD_PATH}/` });
+    const upload = multer({ dest: `${UPLOAD_PATH}/`, fileFilter: imageFilter });
 
     // register express routes from defined application routes
     Routes.forEach(route => {
@@ -43,16 +44,6 @@ createConnection()
         }
       );
     });
-
-    function checkMultipart(req, res, next) {
-      const contentType = req.headers["content-type"];
-      // Make sure it's multipart/form
-      if (!contentType || !contentType.includes("multipart/form-data")) {
-        // Stop middleware chain and send a status
-        return res.sendStatus(500);
-      }
-      next();
-    }
 
     // setup express app here
     // ...
