@@ -61,5 +61,11 @@ export const Routes = [
     route: "/image/:imageName",
     controller: DeleteController,
     action: "delete"
+  },
+  {
+    method: "get",
+    route: "/face/:imageName",
+    controller: AnalysisController,
+    action: "query"
   }
 ];
