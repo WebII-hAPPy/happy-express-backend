@@ -11,7 +11,7 @@ tags:
   - name: "statistic"
   - name: "image"
 paths:
-  /image:
+  "/image":
     post:
       tags:
         - "image"
@@ -95,10 +95,12 @@ paths:
       - in: path
         name: "imageName"
         description: "The name of the image which you want to delete"
+        # copy / pasted
         required: true
         schema:
           type: "string"
   "/statistic/{email}":
+    # This should be id!
     get:
       tags:
         - statistic

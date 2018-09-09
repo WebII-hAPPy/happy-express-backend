@@ -20,8 +20,8 @@ createConnection()
     Routes.forEach(route => {
       (app as any)[route.method](
         route.route,
-        route.route == "/upload"
-          ? upload.single("pic")
+        route.route == "/image"
+          ? upload.single("image")
           : function(request, response, next) {
               next();
             },
