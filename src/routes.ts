@@ -1,6 +1,7 @@
 import { UserController } from "./controller/UserController";
 import { AnalysisController } from "./controller/AnalysisController";
 import { UploadController } from "./controller/UploadController";
+import { DeleteController } from "./controller/DeleteController";
 
 const UserRoutes = [];
 
@@ -54,5 +55,11 @@ export const Routes = [
     route: "/upload",
     controller: UploadController,
     action: "save"
+  },
+  {
+    method: "delete",
+    route: "/delete",
+    controller: DeleteController,
+    action: "delete"
   }
 ];
