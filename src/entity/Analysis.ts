@@ -21,6 +21,9 @@ export class Analysis {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  uuid: string;
+
   @ManyToOne(type => User, user => user.analyses)
   user: User;
 

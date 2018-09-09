@@ -20,4 +20,11 @@ export class AnalysisController {
   async remove(request: Request, response: Response, next: NextFunction) {
     await this.analysisRepository.remove(request.params.id);
   }
+
+  async query(request: Request, response: Response, next: NextFunction) {
+    await this.analysisRepository
+      .createQueryBuilder("analysis")
+      .where(`analysis.uuid = ${request.params.imageName}`)
+      .andWhere(`analysis.user.id = ${request.body.userId}`);
+  }
 }
