@@ -3,14 +3,16 @@ import { URI_BASE, OCP_APIM_SUBSCRIPTION_KEY } from "../shared/constants";
 import { readFile } from "fs";
 import * as https from "https";
 
-const params: any = {
-  faceId: true,
-  faceLandmarks: false,
-  faceAttributes:
-    "age,gender,smile,facialHair,glasses,emotion,hair,makeup,accessories"
-};
-
 export class Repo {
+  constructor() {}
+
+  public static readonly params = {
+    faceId: true,
+    faceLandmarks: false,
+    faceAttributes:
+      "age,gender,smile,facialHair,glasses,emotion,hair,makeup,accessories"
+  };
+
   public async getImageAnalysis(
     request: Request,
     response: Response,
@@ -22,10 +24,10 @@ export class Repo {
         const post_options = {
           host: URI_BASE,
           path: `/face/v1.0/detect?returnFaceId=${
-            params.faceId
-          }&returnFaceLandmarks=${params.faceLandmarks}&returnFaceAttributes=${
-            params.faceAttributes
-          }`,
+            this.params.faceId
+          }&returnFaceLandmarks=${
+            this.params.faceLandmarks
+          }&returnFaceAttributes=${this.params.faceAttributes}`,
           method: "POST",
           data: data,
           headers: {

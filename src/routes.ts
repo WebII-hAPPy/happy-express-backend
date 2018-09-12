@@ -4,10 +4,6 @@ import { UploadController } from "./controller/UploadController";
 import { DeleteController } from "./controller/DeleteController";
 import { Repo } from "./controller/Repository";
 
-const UserRoutes = [];
-
-const AnalysisRoutes = [];
-
 export const Routes = [
   {
     method: "get",
