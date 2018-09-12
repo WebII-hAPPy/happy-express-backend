@@ -5,8 +5,8 @@ import * as https from "https";
 
 const params: any = {
   faceId: true,
-  faceAttributes: false,
-  faceLandmarks:
+  faceLandmarks: false,
+  faceAttributes:
     "age,gender,smile,facialHair,glasses,emotion,hair,makeup,accessories"
 };
 
@@ -16,7 +16,7 @@ export class Repo {
     response: Response,
     next: NextFunction
   ) {
-    fs.readFile(`./uploads/${request.params.fileName}`, function(err, data) {
+    fs.readFile(`./uploads/${request.params.imageName}`, function(err, data) {
       if (err) console.log("could not read file " + err);
       else {
         var post_options = {
