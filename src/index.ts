@@ -1,12 +1,14 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
 import { Request, Response } from "express";
+import * as morgan from "morgan";
 import * as multer from "multer";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { Routes } from "./routes";
 import { UPLOAD_PATH } from "./shared/constants";
 import { imageFilter } from "./shared/utils";
+import { infoLogger, errorLogger } from "./config/logger";
 
 createConnection()
   .then(async connection => {
@@ -32,18 +34,40 @@ createConnection()
             next
           );
           if (result instanceof Promise) {
-            result.then(
-              result =>
-                result !== null && result !== undefined
-                  ? res.send(result)
-                  : undefined
-            );
+            result.then(result => {
+              result !== null && result !== undefined
+                ? res.send(result)
+                : undefined;
+            });
           } else if (result !== null && result !== undefined) {
             res.json(result);
           }
         }
       );
     });
+
+    // logging
+    app.use(
+      morgan("dev", {
+        skip: function(req, res) {
+          return res.statusCode < 400;
+        },
+        stream: {
+          write: message => errorLogger.error(message)
+        }
+      })
+    );
+
+    app.use(
+      morgan("dev", {
+        skip: function(req, res) {
+          return res.statusCode >= 400;
+        },
+        stream: {
+          write: message => infoLogger.info(message)
+        }
+      })
+    );
 
     // start express server
     app.listen(3000);
