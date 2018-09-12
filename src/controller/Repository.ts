@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { URI_BASE, OCP_APIM_SUBSCRIPTION_KEY } from "../shared/constants";
-import * as fs from "fs";
+import { readFile } from "fs";
 import * as https from "https";
 
 const params: any = {
@@ -11,15 +11,15 @@ const params: any = {
 };
 
 export class Repo {
-  async getImageAnalysis(
+  public async getImageAnalysis(
     request: Request,
     response: Response,
     next: NextFunction
   ) {
-    fs.readFile(`./uploads/${request.params.imageName}`, function(err, data) {
+    readFile(`./uploads/${request.params.imageName}`, function(err, data) {
       if (err) console.log("could not read file " + err);
       else {
-        var post_options = {
+        const post_options = {
           host: URI_BASE,
           path: `/face/v1.0/detect?returnFaceId=${
             params.faceId
@@ -35,8 +35,8 @@ export class Repo {
           }
         };
 
-        var post_req = https.request(post_options, function(_response) {
-          var responseText = "";
+        const post_req = https.request(post_options, function(_response) {
+          let responseText = "";
 
           _response.on("data", function(rdata) {
             responseText += rdata;

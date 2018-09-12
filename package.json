@@ -18,6 +18,7 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "del": "^3.0.0",
     "express": "^4.15.4",
     "lokijs": "^1.5.5",
