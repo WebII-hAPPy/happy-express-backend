@@ -22,9 +22,8 @@ export class AnalysisController {
   }
 
   async query(request: Request, response: Response, next: NextFunction) {
-    await this.analysisRepository
-      .createQueryBuilder("analysis")
-      .where(`analysis.uuid = ${request.params.imageName}`)
-      .andWhere(`analysis.user.id = ${request.body.userId}`);
+    await this.analysisRepository.createQueryBuilder("analysis");
+    // .where(`analysis.uuid = ${request.params.imageName}`)
+    // .andWhere(`analysis.user.id = ${request.body.userId}`);
   }
 }
