@@ -2,6 +2,7 @@ import { UserController } from "./controller/UserController";
 import { AnalysisController } from "./controller/AnalysisController";
 import { UploadController } from "./controller/UploadController";
 import { DeleteController } from "./controller/DeleteController";
+import { Repo } from "./controller/Repo";
 
 const UserRoutes = [];
 
@@ -64,8 +65,8 @@ export const Routes = [
   },
   {
     method: "get",
-    route: "/face/:imageName",
-    controller: AnalysisController,
-    action: "query"
+    route: "/face",
+    controller: Repo,
+    action: "getImageAnalysis"
   }
 ];
