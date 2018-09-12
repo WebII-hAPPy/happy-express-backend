@@ -2,7 +2,7 @@ import { UserController } from "./controller/UserController";
 import { AnalysisController } from "./controller/AnalysisController";
 import { UploadController } from "./controller/UploadController";
 import { DeleteController } from "./controller/DeleteController";
-import { Repo } from "./controller/Repo";
+import { Repo } from "./controller/Repository";
 
 const UserRoutes = [];
 
