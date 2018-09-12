@@ -65,7 +65,7 @@ export const Routes = [
   },
   {
     method: "get",
-    route: "/face",
+    route: "/face/:imageName",
     controller: Repo,
     action: "getImageAnalysis"
   }
