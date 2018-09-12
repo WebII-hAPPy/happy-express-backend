@@ -5,8 +5,8 @@ import * as multer from "multer";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { Routes } from "./routes";
-import { imageFilter } from "./shared/utils";
 import { UPLOAD_PATH } from "./shared/constants";
+import { imageFilter } from "./shared/utils";
 
 createConnection()
   .then(async connection => {
@@ -44,9 +44,6 @@ createConnection()
         }
       );
     });
-
-    // setup express app here
-    // ...
 
     // start express server
     app.listen(3000);
