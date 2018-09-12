@@ -363,6 +363,18 @@
           "size": 350254,
           "meta": { "revision": 0, "created": 1536736705606, "version": 0 },
           "$loki": 30
+        },
+        {
+          "fieldname": "image",
+          "originalname": "kyle-loftus-592045-unsplash.jpg",
+          "encoding": "7bit",
+          "mimetype": "image/jpeg",
+          "destination": "uploads/",
+          "filename": "d4cd14b93b78977a7bf133081e06e16d",
+          "path": "uploads/d4cd14b93b78977a7bf133081e06e16d",
+          "size": 350254,
+          "meta": { "revision": 0, "created": 1536749575962, "version": 0 },
+          "$loki": 31
         }
       ],
       "idIndex": [
@@ -395,7 +407,8 @@
         27,
         28,
         29,
-        30
+        30,
+        31
       ],
       "binaryIndices": {},
       "constraints": null,
@@ -417,7 +430,7 @@
       "autoupdate": false,
       "serializableIndices": true,
       "ttl": null,
-      "maxId": 30,
+      "maxId": 31,
       "DynamicViews": [],
       "events": {
         "insert": [],
