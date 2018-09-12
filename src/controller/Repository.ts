@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { URI_BASE } from "../shared/constants";
+import { URI_BASE, OCP_APIM_SUBSCRIPTION_KEY } from "../shared/constants";
 import * as fs from "fs";
 import * as https from "https";
 
@@ -16,11 +16,11 @@ export class Repo {
     response: Response,
     next: NextFunction
   ) {
-    fs.readFile(`./uploads/${request.body.fileName}`, function(err, data) {
+    fs.readFile(`./uploads/${request.params.fileName}`, function(err, data) {
       if (err) console.log("could not read file " + err);
       else {
         var post_options = {
-          host: `${URI_BASE}`,
+          host: URI_BASE,
           path: `/face/v1.0/detect?returnFaceId=${
             params.faceId
           }&returnFaceLandmarks=${params.faceLandmarks}&returnFaceAttributes=${
@@ -31,7 +31,7 @@ export class Repo {
           headers: {
             "Content-Type": "application/octet-stream",
             "Content-Length": data.length,
-            "Ocp-Apim-Subscription-Key": "2f43ea3609644ba99c3a8cdae4382178"
+            "Ocp-Apim-Subscription-Key": OCP_APIM_SUBSCRIPTION_KEY
           }
         };
 
@@ -43,7 +43,6 @@ export class Repo {
           });
 
           _response.on("end", function() {
-            console.log(responseText);
             response.send(responseText);
           });
         });

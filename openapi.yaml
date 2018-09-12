@@ -68,7 +68,7 @@ paths:
         schema:
           type: "string"
   "/face/{imageName}":
-    post:
+    get:
       tags:
         - "face"
       operationId: "post-face"
@@ -94,11 +94,16 @@ paths:
     parameters:
       - in: path
         name: "imageName"
-        description: "The name of the image which you want to delete"
-        # copy / pasted
+        description: "The name of the image which you an analysis of"
         required: true
         schema:
           type: "string"
+      - in: body
+        name: "userId"
+        description: "Id of user"
+        required: true
+        schema:
+          type: "number"
   "/statistic/{email}":
     # This should be id!
     get:
