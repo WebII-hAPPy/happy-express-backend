@@ -1,68 +1,69 @@
-import { UserController } from "./controller/UserController";
-import { AnalysisController } from "./controller/AnalysisController";
-import { UploadController } from "./controller/UploadController";
-import { DeleteController } from "./controller/DeleteController";
-import { Repo } from "./controller/Repository";
+import { UserController } from './controller/UserController';
+import { AnalysisController } from './controller/AnalysisController';
+import { UploadController } from './controller/UploadController';
+import { DeleteController } from './controller/DeleteController';
+import { Repo } from './controller/Repository';
+import { IRoute } from './models/Route.model';
 
-export const Routes = [
+export const Routes: IRoute[] = [
   {
-    method: "get",
-    route: "/users",
+    method: 'get',
+    route: '/users',
     controller: UserController,
-    action: "all"
+    action: 'all'
   },
   {
-    method: "get",
-    route: "/users/:id",
+    method: 'get',
+    route: '/users/:id',
     controller: UserController,
-    action: "one"
+    action: 'one'
   },
   {
-    method: "post",
-    route: "/users",
+    method: 'post',
+    route: '/users',
     controller: UserController,
-    action: "save"
+    action: 'save'
   },
   {
-    method: "delete",
-    route: "/users",
+    method: 'delete',
+    route: '/users',
     controller: UserController,
-    action: "remove"
+    action: 'remove'
   },
   {
-    method: "get",
-    route: "/analyses",
+    method: 'get',
+    route: '/analyses',
     controller: AnalysisController,
-    action: "all"
+    action: 'all'
   },
   {
-    method: "get",
-    route: "/analysis",
+    method: 'get',
+    route: '/analysis',
     controller: AnalysisController,
-    action: "one"
+    action: 'one'
   },
   {
-    method: "delete",
-    route: "/analysis/:id",
+    method: 'delete',
+    route: '/analysis/:id',
     controller: AnalysisController,
-    action: "remove"
+    action: 'remove'
   },
   {
-    method: "post",
-    route: "/image",
+    method: 'post',
+    route: '/image',
     controller: UploadController,
-    action: "save"
+    action: 'save'
   },
   {
-    method: "delete",
-    route: "/image/:imageName",
+    method: 'delete',
+    route: '/image/:imageName',
     controller: DeleteController,
-    action: "delete"
+    action: 'delete'
   },
   {
-    method: "get",
-    route: "/face/:imageName",
+    method: 'get',
+    route: '/face/:imageName',
     controller: Repo,
-    action: "getImageAnalysis"
+    action: 'getImageAnalysis'
   }
 ];
