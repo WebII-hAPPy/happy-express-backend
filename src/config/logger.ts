@@ -1,9 +1,9 @@
-import * as winston from 'winston';
+import * as winston from "winston";
 
 const options: any = {
   file: {
-    level: 'info',
-    filename: 'logs/app.log',
+    level: "info",
+    filename: "logs/app.log",
     handleExceptions: true,
     json: true,
     maxsize: 5242880,
@@ -12,8 +12,8 @@ const options: any = {
     timestamp: true
   },
   error: {
-    level: 'error',
-    filename: 'logs/error.log',
+    level: "error",
+    filename: "logs/error.log",
     handleExceptions: true,
     json: true,
     maxsize: 5242880,
@@ -22,7 +22,7 @@ const options: any = {
     timestamp: true
   },
   console: {
-    level: 'debug',
+    level: "debug",
     handleExceptions: true,
     json: false,
     colorize: true
@@ -30,7 +30,7 @@ const options: any = {
 };
 
 const infoLogger: winston.Logger = winston.createLogger({
-  level: 'info',
+  level: "info",
   transports: [
     new winston.transports.File(options.file),
     new winston.transports.Console(options.console)
@@ -39,7 +39,7 @@ const infoLogger: winston.Logger = winston.createLogger({
 });
 
 const errorLogger: winston.Logger = winston.createLogger({
-  level: 'error',
+  level: "error",
   transports: [
     new winston.transports.File(options.error),
     new winston.transports.Console(options.console)

@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from 'express';
-import { loadCollection, db } from '../shared/utils';
-import { COLLECTION_NAME } from '../shared/constants';
-import { IUploadResponse } from '../models/UploadResult.model';
+import { NextFunction, Request, Response } from "express";
+import { loadCollection, db } from "../shared/utils";
+import { COLLECTION_NAME } from "../shared/constants";
+import { IUploadResponse } from "../models/UploadResult.model";
 
 export class UploadController {
   async save(
