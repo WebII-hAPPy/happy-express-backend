@@ -1,15 +1,15 @@
-import * as bodyParser from 'body-parser';
-import * as express from 'express';
-import { Request, Response } from 'express';
-import * as morgan from 'morgan';
-import * as multer from 'multer';
-import 'reflect-metadata';
-import { createConnection } from 'typeorm';
-import { Routes } from './routes';
-import { UPLOAD_PATH } from './shared/constants';
-import { imageFilter } from './shared/utils';
-import { infoLogger, errorLogger } from './config/logger';
-import { IRequestResult } from './models/RequestResult.model';
+import * as bodyParser from "body-parser";
+import * as express from "express";
+import { Request, Response } from "express";
+import * as morgan from "morgan";
+import * as multer from "multer";
+import "reflect-metadata";
+import { createConnection } from "typeorm";
+import { Routes } from "./routes";
+import { UPLOAD_PATH } from "./shared/constants";
+import { imageFilter } from "./shared/utils";
+import { infoLogger, errorLogger } from "./config/logger";
+import { IRequestResult } from "./models/RequestResult.model";
 
 createConnection()
   .then(async (connection) => {
@@ -26,8 +26,8 @@ createConnection()
     Routes.forEach((route) => {
       (app as any)[route.method](
         route.route,
-        route.route === '/image'
-          ? upload.single('image')
+        route.route === "/image"
+          ? upload.single("image")
           : function(
               request: Request,
               response: Response,
@@ -55,7 +55,7 @@ createConnection()
 
     // logging
     app.use(
-      morgan('dev', {
+      morgan("dev", {
         skip: function(req: Request, res: Response): boolean {
           return res.statusCode < 400;
         },
@@ -66,7 +66,7 @@ createConnection()
     );
 
     app.use(
-      morgan('dev', {
+      morgan("dev", {
         skip: function(req: Request, res: Response): boolean {
           return res.statusCode >= 400;
         },
@@ -80,7 +80,7 @@ createConnection()
     app.listen(3000);
 
     console.log(
-      'Express server has started on port 3000. Open http://localhost:3000/users to see results'
+      "Express server has started on port 3000. Open http://localhost:3000/users to see results"
     );
   })
   .catch((error) => console.log(error));

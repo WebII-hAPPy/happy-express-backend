@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import { getRepository } from 'typeorm';
-import { Analysis } from '../entity/Analysis';
+import { NextFunction, Request, Response } from "express";
+import { getRepository } from "typeorm";
+import { Analysis } from "../entity/Analysis";
 
 export class AnalysisController {
   private analysisRepository = getRepository(Analysis);
@@ -42,7 +42,7 @@ export class AnalysisController {
     response: Response,
     next: NextFunction
   ): Promise<void> {
-    await this.analysisRepository.createQueryBuilder('analysis');
+    await this.analysisRepository.createQueryBuilder("analysis");
     // .where(`analysis.uuid = ${request.params.imageName}`)
     // .andWhere(`analysis.user.id = ${request.body.userId}`);
   }

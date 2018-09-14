@@ -1,8 +1,8 @@
-import { getRepository } from 'typeorm';
-import { NextFunction, Request, Response } from 'express';
-import { Statistic } from '../entity/Statistic';
-import * as del from 'del';
-import { deleteImage } from '../shared/utils';
+import { getRepository } from "typeorm";
+import { NextFunction, Request, Response } from "express";
+import { Statistic } from "../entity/Statistic";
+import * as del from "del";
+import { deleteImage } from "../shared/utils";
 
 export class DeleteController {
   async delete(
