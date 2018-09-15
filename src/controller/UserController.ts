@@ -1,10 +1,15 @@
-import { getRepository } from "typeorm";
-import { NextFunction, Request, Response } from "express";
-import { User } from "../entity/User";
 import * as bcrypt from "bcrypt";
-import * as jwt from "jsonwebtoken";
+import { NextFunction, Request, Response } from "express";
+import { getRepository } from "typeorm";
+import { User } from "../entity/User";
+import { UserService } from "../services/user.service";
 
 export class UserController {
+  userService: UserService;
+
+  constructor() {
+    this.userService = new UserService();
+  }
   private userRepository = getRepository(User);
 
   async all(
@@ -23,40 +28,6 @@ export class UserController {
     return this.userRepository.findOne(request.params.id);
   }
 
-  public authenticate(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): void {
-    this.userRepository
-      .createQueryBuilder("user")
-      .where("user.email = :email", { email: request.body.email })
-      .getOne()
-      .then((user: User) => {
-        if (
-          user === undefined ||
-          !bcrypt.compareSync(request.body.password, user.password)
-        ) {
-          response.json({
-            status: "error",
-            message: "E-Mail / Password invalid",
-            data: null
-          });
-        } else {
-          const token: string = jwt.sign(
-            { id: user.id },
-            request.app.get("secretKey"),
-            { expiresIn: "1h" }
-          );
-          response.json({
-            status: "error",
-            message: "authentication successful",
-            data: { user: user, token: token }
-          });
-        }
-      });
-  }
-
   async save(
     request: Request,
     response: Response,
@@ -71,5 +42,25 @@ export class UserController {
     next: NextFunction
   ): Promise<void> {
     await this.userRepository.remove(request.params.id);
+  }
+
+  public async getUserByEmail(email: string): Promise<User> {
+    return this.userRepository
+      .createQueryBuilder("user")
+      .select()
+      .where("user.email = :email", { email: email })
+      .getOne();
+  }
+
+  public async createUser(request: Request): Promise<User> {
+    const user: User = request.body;
+    const salt: string = await this.userService.generateSalt();
+    const hash: string = await this.userService.hashPassword(
+      user.password,
+      salt
+    );
+    user.salt = salt;
+    user.password = hash;
+    return this.userRepository.save(user);
   }
 }

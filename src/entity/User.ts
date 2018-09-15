@@ -16,20 +16,22 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    unique: true
+  })
   email: string;
 
   @Column()
   password: string;
 
   @Column()
+  salt: string;
+
+  @Column({
+    default: 0
+  })
   analysisCount: number;
 
   @OneToMany((type) => Analysis, (analysis) => analysis.user)
   analyses: Analysis[];
-
-  @BeforeInsert()
-  async hashPasswordBeforeInsert(): Promise<void> {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
 }
