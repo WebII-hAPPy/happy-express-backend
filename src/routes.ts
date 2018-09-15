@@ -5,21 +5,9 @@ import { DeleteController } from "./controller/DeleteController";
 import { Repo } from "./controller/Repository";
 import { IRoute } from "./models/Route.model";
 import { StatisticController } from "./controller/Statistics";
-import { AuthController } from "./controller/auth.controller";
+import { AuthController } from "./controller/AuthController";
 
 export const Routes: IRoute[] = [
-  {
-    method: "get",
-    route: "/users",
-    controller: UserController,
-    action: "all"
-  },
-  {
-    method: "get",
-    route: "/users/:id",
-    controller: UserController,
-    action: "one"
-  },
   {
     method: "post",
     route: "/login",
@@ -31,6 +19,18 @@ export const Routes: IRoute[] = [
     route: "/register",
     controller: AuthController,
     action: "register"
+  },
+  {
+    method: "get",
+    route: "/users",
+    controller: UserController,
+    action: "all"
+  },
+  {
+    method: "get",
+    route: "/users/:id",
+    controller: UserController,
+    action: "one"
   },
   {
     method: "post",
