@@ -1,58 +1,43 @@
 import * as winston from "winston";
+import { Logger, transports } from "winston";
 
-const options: any = {
-  file: {
-    level: "info",
-    filename: "logs/app.log",
-    handleExceptions: true,
-    json: true,
-    maxsize: 5242880,
-    maxFiles: 5,
-    colorize: false,
-    timestamp: true
-  },
-  error: {
-    level: "error",
-    filename: "logs/error.log",
-    handleExceptions: true,
-    json: true,
-    maxsize: 5242880,
-    maxFiles: 5,
-    colorize: false,
-    timestamp: true
-  },
-  console: {
-    level: "debug",
-    handleExceptions: true,
-    json: false,
-    colorize: true
+const date: Date = new Date();
+const dateString: string = date.toISOString();
+
+const logger: Logger = winston.createLogger({
+  transports: [
+    new transports.Console({
+      level: process.env.NODE_ENV === "production" ? "error" : "debug",
+      format: null,
+      handleExceptions: true
+    }),
+    new transports.File({
+      filename: `${dateString}.log.json`,
+      dirname: "logs",
+      level: "info",
+      eol: "\n",
+      maxsize: 5242880,
+      maxFiles: 5,
+      options: {
+        colorize: false,
+        // morgan will turn log file into json
+        json: false,
+        timestamp: true
+      },
+      handleExceptions: true
+    })
+  ],
+  exitOnError: false
+});
+
+if (process.env.NODE_ENV !== "production") {
+  logger.debug("Logging initialized at debug level");
+}
+
+export class LoggerStream {
+  write(message: string): any {
+    logger.info(message.substring(0, message.lastIndexOf("\n")));
   }
-};
+}
 
-const infoLogger: winston.Logger = winston.createLogger({
-  level: "info",
-  transports: [
-    new winston.transports.File(options.file),
-    new winston.transports.Console(options.console)
-  ],
-  exitOnError: false
-});
-
-const errorLogger: winston.Logger = winston.createLogger({
-  level: "error",
-  transports: [
-    new winston.transports.File(options.error),
-    new winston.transports.Console(options.console)
-  ],
-  exitOnError: false
-});
-
-// create a stream object with a 'write' function that will be used by `morgan`
-// logger.stream = {
-//   write: function(message, encoding) {
-//     // use the 'info' log level so the output will be picked up by both transports (file and console)
-//     logger.info(message);
-//   },
-// };
-
-export { infoLogger, errorLogger };
+export { logger };

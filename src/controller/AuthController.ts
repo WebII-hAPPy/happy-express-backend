@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { User } from "../entity/User";
 import { AuthService } from "../services/auth.service";
 import { UserController } from "./UserController";
+import { IResponse } from "../models/Response.model";
 
 export class AuthController {
   userController: UserController;
@@ -16,12 +17,17 @@ export class AuthController {
     request: Request,
     response: Response,
     next: NextFunction
-  ): Promise<Response> {
+  ): Promise<IResponse> {
     if (!(request.body && request.body.email && request.body.password)) {
-      response
-        .status(401)
-        .json({ message: "Username and password are required." });
-      return null;
+      // response
+      //   .status(401)
+      //   .json({ message: "Username and password are required." });
+      // return null;
+
+      return {
+        status: 401,
+        message: "Username and password are required."
+      };
     }
 
     const user: User = await this.userController.getUserByEmail(
@@ -35,31 +41,40 @@ export class AuthController {
           user.password
         )
       ) {
-        response.json({
-          id: user.id,
-          email: user.email,
-          data: await this.authService.createToken(user.id, request)
-        });
+        // response.json({
+        //   id: user.id,
+        //   email: user.email,
+        //   data: await this.authService.createToken(user.id, request)
+        // });
 
-        return null;
+        // return null;
+
+        return {
+          status: 200,
+          data: {
+            email: user.email,
+            token: await this.authService.createToken(user.id, request)
+          }
+        };
       }
     }
 
-    response.status(422).json({ message: "E-Mail / Password invalid" });
-    return null;
+    return {
+      status: 422,
+      message: "E-Mail / Password invalid"
+    };
   }
 
   public async register(
     request: Request,
     response: Response,
     next: NextFunction
-  ): Promise<Response> {
+  ): Promise<IResponse> {
     if (!(request.body && request.body.email && request.body.password)) {
-      response
-        .status(401)
-        .json({ message: "Username and password are required." });
-
-      return null;
+      return {
+        status: 401,
+        message: "Username and password are required."
+      };
     }
 
     let user: User = await this.userController.getUserByEmail(
@@ -67,10 +82,10 @@ export class AuthController {
     );
 
     if (user) {
-      response.status(409).json({
+      return {
+        status: 409,
         message: "This E-Mail is already registered"
-      });
-      return null;
+      };
     } else {
       user = await this.userController.createUser(request);
       if (user) {
@@ -78,7 +93,12 @@ export class AuthController {
       }
     }
 
-    response.json(user);
-    return null;
+    return {
+      status: 201,
+      data: user
+    };
+
+    // response.status(201).json(user);
+    // return null;
   }
 }

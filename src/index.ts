@@ -5,11 +5,13 @@ import * as morgan from "morgan";
 import * as multer from "multer";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
+// import { errorLogger, infoLogger } from "./config/logger";
+import { IRequestResult } from "./models/RequestResult.model";
 import { Routes } from "./routes";
 import { UPLOAD_PATH } from "./shared/constants";
 import { imageFilter } from "./shared/utils";
-import { infoLogger, errorLogger } from "./config/logger";
-import { IRequestResult } from "./models/RequestResult.model";
+import { LoggerStream } from "./config/logger";
+import { IResponse } from "./models/Response.model";
 
 createConnection()
   .then(async (connection) => {
@@ -41,10 +43,11 @@ createConnection()
           ](request, res, next);
           if (result instanceof Promise) {
             result.then((result) => {
-              result !== null && result !== undefined
-                ? res.send(result)
-                : // tslint:disable-next-line:no-unused-expression
-                  undefined;
+              if (result !== null && result !== undefined) {
+                res
+                  .status(result.status)
+                  .json({ message: result.message, data: result.data });
+              }
             });
           } else if (result !== null && result !== undefined) {
             res.json(result);
@@ -53,31 +56,10 @@ createConnection()
       );
     });
 
-    // logging
-    app.use(
-      morgan("dev", {
-        skip: function(req: Request, res: Response): boolean {
-          return res.statusCode < 400;
-        },
-        stream: {
-          write: (message) => errorLogger.error(message)
-        }
-      })
-    );
-
-    app.use(
-      morgan("dev", {
-        skip: function(req: Request, res: Response): boolean {
-          return res.statusCode >= 400;
-        },
-        stream: {
-          write: (message) => infoLogger.info(message)
-        }
-      })
-    );
-
     // start express server
     app.listen(3000);
+
+    app.use(morgan("combined", { stream: new LoggerStream() }));
 
     console.log("Express server has started on port 3000.");
   })
