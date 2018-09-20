@@ -19,11 +19,6 @@ export class AuthController {
     next: NextFunction
   ): Promise<IResponse> {
     if (!(request.body && request.body.email && request.body.password)) {
-      // response
-      //   .status(401)
-      //   .json({ message: "Username and password are required." });
-      // return null;
-
       return {
         status: 401,
         message: "Username and password are required."
@@ -41,19 +36,11 @@ export class AuthController {
           user.password
         )
       ) {
-        // response.json({
-        //   id: user.id,
-        //   email: user.email,
-        //   data: await this.authService.createToken(user.id, request)
-        // });
-
-        // return null;
-
         return {
           status: 200,
           data: {
             email: user.email,
-            token: await this.authService.createToken(user.id, request)
+            token: await this.authService.createToken(user)
           }
         };
       }
@@ -97,8 +84,5 @@ export class AuthController {
       status: 201,
       data: user
     };
-
-    // response.status(201).json(user);
-    // return null;
   }
 }
