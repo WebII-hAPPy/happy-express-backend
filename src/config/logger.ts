@@ -5,6 +5,12 @@ const date: Date = new Date();
 const dateString: string = date.toISOString();
 
 const logger: Logger = winston.createLogger({
+  format: winston.format.combine(
+    winston.format.json(),
+    winston.format.padLevels(),
+    winston.format.label(),
+    winston.format.timestamp()
+  ),
   transports: [
     new transports.Console({
       level: process.env.NODE_ENV === "production" ? "error" : "debug",
@@ -12,27 +18,22 @@ const logger: Logger = winston.createLogger({
       handleExceptions: true
     }),
     new transports.File({
-      filename: `${dateString}.log.json`,
+      // filename: `${dateString}.log.json`,
+      filename: "app.log.json",
       dirname: "logs",
       level: "info",
       eol: "\n",
       maxsize: 5242880,
       maxFiles: 5,
-      options: {
-        colorize: false,
-        // morgan will turn log file into json
-        json: false,
-        timestamp: true
-      },
       handleExceptions: true
     })
   ],
   exitOnError: false
 });
 
-if (process.env.NODE_ENV !== "production") {
-  logger.debug("Logging initialized at debug level");
-}
+// if (process.env.NODE_ENV !== "production") {
+//   logger.debug("Logging initialized at debug level");
+// }
 
 export class LoggerStream {
   write(message: string): any {

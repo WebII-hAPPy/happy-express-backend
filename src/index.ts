@@ -43,10 +43,16 @@ createConnection()
           ](request, res, next);
           if (result instanceof Promise) {
             result.then((result) => {
+              console.log(result);
+
               if (result !== null && result !== undefined) {
-                res
-                  .status(result.status)
-                  .json({ message: result.message, data: result.data });
+                if (result.status !== undefined) {
+                  res
+                    .status(result.status)
+                    .json({ message: result.message, data: result.data });
+                } else {
+                  res.send(result);
+                }
               }
             });
           } else if (result !== null && result !== undefined) {
@@ -60,7 +66,7 @@ createConnection()
     app.listen(3000);
 
     app.use(morgan("combined", { stream: new LoggerStream() }));
-
+    // app.use(morgan("combined"));
     console.log("Express server has started on port 3000.");
   })
   .catch((error) => console.log(error));
