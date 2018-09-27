@@ -12,6 +12,12 @@ export class Repo {
       "age,gender,smile,facialHair,glasses,emotion,hair,makeup,accessories"
   };
 
+  /**
+   * Login authentication
+   * @param request User request
+   * @param response Server response
+   * @param next callback
+   */
   public async getImageAnalysis(
     request: Request,
     response: Response,

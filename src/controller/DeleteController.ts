@@ -1,10 +1,13 @@
-import { getRepository } from "typeorm";
 import { NextFunction, Request, Response } from "express";
-import { Statistic } from "../entity/Statistic";
-import * as del from "del";
 import { deleteImage } from "../shared/utils";
 
 export class DeleteController {
+  /**
+   * Login authentication
+   * @param request User request
+   * @param response Server response
+   * @param next callback
+   */
   async delete(
     request: Request,
     response: Response,
