@@ -31,9 +31,9 @@ const logger: Logger = winston.createLogger({
   exitOnError: false
 });
 
-// if (process.env.NODE_ENV !== "production") {
-//   logger.debug("Logging initialized at debug level");
-// }
+if (process.env.NODE_ENV !== "production") {
+  logger.debug("Logging initialized at debug level");
+}
 
 export class LoggerStream {
   write(message: string): any {

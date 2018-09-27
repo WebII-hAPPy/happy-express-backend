@@ -28,39 +28,36 @@ createConnection()
 
     const authService: AuthService = new AuthService();
 
-    // const middleware: any = {
-    //   skip: function(
-    //     request: Request,
-    //     response: Response,
-    //     next: Function
-    //   ): void {
-    //     next();
-    //   },
-    // };
+    const middleware: any = {
+      skip: function(
+        request: Request,
+        response: Response,
+        next: Function
+      ): void {
+        next();
+      },
+      protect: function(
+        request: Request,
+        response: Response,
+        next: Function
+      ): void {
+        if (authService.validate(request)) {
+          next();
+        } else {
+          response
+            .status(401)
+            .json({ message: "Route protected. Authentication required." });
+        }
+      }
+    };
 
     // register express routes from defined application routes
     Routes.forEach((route) => {
       (app as any)[route.method](
         route.route,
         [
-          route.route === "/image"
-            ? upload.single("image")
-            : function(
-                request: Request,
-                response: Response,
-                next: Function
-              ): void {
-                next();
-              },
-          function(request: Request, response: Response, next: Function): void {
-            if (!route.route.startsWith("/api")) {
-              next();
-            } else if (authService.validate(request)) {
-              next();
-            } else {
-              response.status(401).json({ message: "get fucked" });
-            }
-          }
+          route.route === "/image" ? upload.single("image") : middleware.skip,
+          route.route.startsWith("/api") ? middleware.protect : middleware.skip
         ],
         (request: Request, res: Response, next: Function) => {
           const result: IRequestResult = new (route.controller as any)()[
