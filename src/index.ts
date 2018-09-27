@@ -12,6 +12,8 @@ import { UPLOAD_PATH } from "./shared/constants";
 import { imageFilter } from "./shared/utils";
 import { LoggerStream } from "./config/logger";
 import { IResponse } from "./models/Response.model";
+import { AuthService } from "./services/auth.service";
+import { request } from "http";
 
 createConnection()
   .then(async (connection) => {
@@ -24,27 +26,48 @@ createConnection()
       fileFilter: imageFilter
     });
 
+    const authService: AuthService = new AuthService();
+
+    // const middleware: any = {
+    //   skip: function(
+    //     request: Request,
+    //     response: Response,
+    //     next: Function
+    //   ): void {
+    //     next();
+    //   },
+    // };
+
     // register express routes from defined application routes
     Routes.forEach((route) => {
       (app as any)[route.method](
         route.route,
-        route.route === "/image"
-          ? upload.single("image")
-          : function(
-              request: Request,
-              response: Response,
-              next: Function
-            ): void {
+        [
+          route.route === "/image"
+            ? upload.single("image")
+            : function(
+                request: Request,
+                response: Response,
+                next: Function
+              ): void {
+                next();
+              },
+          function(request: Request, response: Response, next: Function): void {
+            if (!route.route.startsWith("/api")) {
               next();
-            },
+            } else if (authService.validate(request)) {
+              next();
+            } else {
+              response.status(401).json({ message: "get fucked" });
+            }
+          }
+        ],
         (request: Request, res: Response, next: Function) => {
           const result: IRequestResult = new (route.controller as any)()[
             route.action
           ](request, res, next);
           if (result instanceof Promise) {
             result.then((result) => {
-              console.log(result);
-
               if (result !== null && result !== undefined) {
                 if (result.status !== undefined) {
                   res

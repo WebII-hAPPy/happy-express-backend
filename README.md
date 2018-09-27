@@ -1,1 +1,22 @@
 # hAPPy-API for the Web-Engineering II project
+
+## Requirements
+
+1. Running postgresql database
+2. JWT_SECRET set as an environment variable
+
+```
+#file: app-env
+export JWT_SECRET="{secret}"
+```
+
+```bash
+source app-env
+```
+
+## Setup
+
+```bash
+yarn install
+yarn start
+```

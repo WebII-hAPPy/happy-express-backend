@@ -14,24 +14,29 @@ export class AuthService {
     return bcrypt.compareSync(password, hash);
   }
 
-  public async createToken(user: User): Promise<Object> {
+  public async createToken(user: User): Promise<string> {
     const JWT_SECRET: string = process.env.JWT_SECRET;
+
     user.password = "";
     user.salt = "";
 
-    const token: string = jwt.sign({ user: user, auth: "" }, JWT_SECRET);
+    const token: string = jwt.sign({ user: user }, JWT_SECRET, {
+      algorithm: "HS256"
+    });
 
-    return { token: token };
+    return token;
   }
 
   public validate(request: Request): boolean {
     const token: string = request.headers.authorization;
     let decoded: string | object;
+
     try {
       decoded = jwt.verify(token, this.secret);
     } catch (err) {
       return false;
     }
+
     if (!decoded) {
       return false;
     } else {

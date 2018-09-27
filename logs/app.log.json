@@ -1,4 +1,0 @@
-{
-  "message": "::1 - - [20/Sep/2018:15:31:18 +0000] \"GET /userss HTTP/1.1\" 404 145 \"-\" \"insomnia/6.0.2\"",
-  "level": "info"
-}
