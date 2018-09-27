@@ -36,10 +36,12 @@ export class AuthController {
           user.password
         )
       ) {
+        user.password = "";
+        user.salt = "";
         return {
           status: 200,
           data: {
-            email: user.email,
+            user: user,
             token: await this.authService.createToken(user)
           }
         };
@@ -77,12 +79,16 @@ export class AuthController {
       user = await this.userController.createUser(request);
       if (user) {
         user.password = "";
+        user.salt = "";
       }
     }
 
     return {
       status: 201,
-      data: user
+      data: {
+        user: user,
+        token: await this.authService.createToken(user)
+      }
     };
   }
 }

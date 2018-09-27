@@ -22,68 +22,62 @@ export const Routes: IRoute[] = [
   },
   {
     method: "get",
-    route: "/users",
+    route: "/api/users",
     controller: UserController,
     action: "all"
   },
   {
     method: "get",
-    route: "/users/:id",
+    route: "/api/users/:id",
     controller: UserController,
     action: "one"
   },
   {
     method: "post",
-    route: "/users",
+    route: "/api/users",
     controller: UserController,
     action: "save"
   },
   {
     method: "delete",
-    route: "/users",
+    route: "/api/users",
     controller: UserController,
     action: "remove"
   },
   {
     method: "get",
-    route: "/analyses",
+    route: "/api/analyses",
     controller: AnalysisController,
     action: "all"
   },
   {
     method: "get",
-    route: "/analysis",
+    route: "/api/analysis",
     controller: AnalysisController,
     action: "one"
   },
   {
     method: "delete",
-    route: "/analysis/:id",
+    route: "/api/analysis/:id",
     controller: AnalysisController,
     action: "remove"
   },
   {
     method: "post",
-    route: "/image",
+    route: "/api/image",
     controller: UploadController,
     action: "save"
   },
   {
     method: "delete",
-    route: "/image/:imageName",
+    route: "/api/image/:imageName",
     controller: DeleteController,
     action: "delete"
   },
   {
     method: "get",
-    route: "/face/:imageName",
+    route: "/api/face/:imageName",
     controller: Repo,
     action: "getImageAnalysis"
-  },
-  {
-    method: "get",
-    route: "/statistic/:id",
-    controller: StatisticController,
-    action: "compose"
   }
 ];
