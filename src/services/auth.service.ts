@@ -7,6 +7,11 @@ import { IResponse } from "../models/Response.model";
 export class AuthService {
   readonly secret = process.env.JWT_SECRET;
 
+  /**
+   * Test password against hash.
+   * @param password Password from user request.
+   * @param hash Hash from database.
+   */
   public async checkCredentials(
     password: string,
     hash: string
@@ -14,6 +19,10 @@ export class AuthService {
     return bcrypt.compareSync(password, hash);
   }
 
+  /**
+   * Creates an authorization jwt token.
+   * @param user User object
+   */
   public async createToken(user: User): Promise<string> {
     const JWT_SECRET: string = process.env.JWT_SECRET;
 
@@ -27,6 +36,10 @@ export class AuthService {
     return token;
   }
 
+  /**
+   * Tries to decode and validate token against JWT_SECRET
+   * @param request User request
+   */
   public validate(request: Request): boolean {
     const token: string = request.headers.authorization;
     let decoded: string | object;

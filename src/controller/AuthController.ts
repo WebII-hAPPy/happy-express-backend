@@ -13,6 +13,12 @@ export class AuthController {
     this.authService = new AuthService();
   }
 
+  /**
+   * Login authentication
+   * @param request User request
+   * @param response Server response
+   * @param next callback
+   */
   public async authenticate(
     request: Request,
     response: Response,
@@ -54,6 +60,12 @@ export class AuthController {
     };
   }
 
+  /**
+   * Registration authentication
+   * @param request User request
+   * @param response Server Response
+   * @param next callback
+   */
   public async register(
     request: Request,
     response: Response,
