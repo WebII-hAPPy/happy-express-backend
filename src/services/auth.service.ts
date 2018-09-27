@@ -42,6 +42,7 @@ export class AuthService {
    */
   public validate(request: Request): boolean {
     const token: string = request.headers.authorization;
+    console.log(token);
     let decoded: string | object;
 
     try {
