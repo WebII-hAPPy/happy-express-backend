@@ -5,6 +5,12 @@ import { IUploadResponse } from "../models/UploadResult.model";
 import { IResponse } from "../models/Response.model";
 
 export class UploadController {
+  /**
+   * Login authentication
+   * @param request User request
+   * @param response Server response
+   * @param next callback
+   */
   async save(
     request: Request,
     response: Response,

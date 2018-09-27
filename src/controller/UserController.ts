@@ -1,4 +1,3 @@
-import * as bcrypt from "bcrypt";
 import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { User } from "../entity/User";
@@ -12,6 +11,12 @@ export class UserController {
   }
   private userRepository = getRepository(User);
 
+  /**
+   * Login authentication
+   * @param request User request
+   * @param response Server response
+   * @param next callback
+   */
   async all(
     request: Request,
     response: Response,
@@ -20,6 +25,12 @@ export class UserController {
     return this.userRepository.find();
   }
 
+  /**
+   * Login authentication
+   * @param request User request
+   * @param response Server response
+   * @param next callback
+   */
   async one(
     request: Request,
     response: Response,
@@ -28,6 +39,12 @@ export class UserController {
     return this.userRepository.findOne(request.params.id);
   }
 
+  /**
+   * Login authentication
+   * @param request User request
+   * @param response Server response
+   * @param next callback
+   */
   async save(
     request: Request,
     response: Response,
@@ -36,6 +53,12 @@ export class UserController {
     return this.userRepository.save(request.body);
   }
 
+  /**
+   * Login authentication
+   * @param request User request
+   * @param response Server response
+   * @param next callback
+   */
   async remove(
     request: Request,
     response: Response,
@@ -44,6 +67,10 @@ export class UserController {
     await this.userRepository.remove(request.params.id);
   }
 
+  /**
+   * Find user by email
+   * @param email user email
+   */
   public async getUserByEmail(email: string): Promise<User> {
     return this.userRepository
       .createQueryBuilder("user")
@@ -52,6 +79,10 @@ export class UserController {
       .getOne();
   }
 
+  /**
+   * Create a user.
+   * @param request user request
+   */
   public async createUser(request: Request): Promise<User> {
     const user: User = request.body;
     const salt: string = await this.userService.generateSalt();

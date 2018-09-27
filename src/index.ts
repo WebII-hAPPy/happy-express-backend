@@ -5,15 +5,13 @@ import * as morgan from "morgan";
 import * as multer from "multer";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
+import { LoggerStream } from "./config/logger";
 // import { errorLogger, infoLogger } from "./config/logger";
 import { IRequestResult } from "./models/RequestResult.model";
 import { Routes } from "./routes";
+import { AuthService } from "./services/auth.service";
 import { UPLOAD_PATH } from "./shared/constants";
 import { imageFilter } from "./shared/utils";
-import { LoggerStream } from "./config/logger";
-import { IResponse } from "./models/Response.model";
-import { AuthService } from "./services/auth.service";
-import { request } from "http";
 
 createConnection()
   .then(async (connection) => {

@@ -5,6 +5,12 @@ import { Analysis } from "../entity/Analysis";
 export class StatisticController {
   private analysisRepository = getRepository(Analysis);
 
+  /**
+   * Login authentication
+   * @param request User request
+   * @param response Server response
+   * @param next callback
+   */
   async compose(
     request: Request,
     response: Response,

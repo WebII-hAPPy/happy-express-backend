@@ -1,8 +1,7 @@
 import * as bcrypt from "bcrypt";
-import { Request, Response } from "express";
+import { Request } from "express";
 import * as jwt from "jsonwebtoken";
 import { User } from "../entity/User";
-import { IResponse } from "../models/Response.model";
 
 export class AuthService {
   readonly secret = process.env.JWT_SECRET;
