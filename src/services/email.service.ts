@@ -61,7 +61,7 @@ export class MailService {
 
   async test(): Promise<void> {
     const mailOption: IMailOption = await this.buildOptions(
-      "phuc.vuuu@gmail.com",
+      process.env.GMAIL_USER,
       "phuc.vu-quang@gmx.de",
       true
     );
