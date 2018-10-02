@@ -2,16 +2,25 @@ import {
   Column,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
-  BeforeInsert
+  JoinColumn
 } from "typeorm";
+import { ActivationHash } from "./ActivationHash";
 import { Analysis } from "./Analysis";
-import * as bcrypt from "bcrypt";
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({
+    default: false
+  })
+  active: boolean;
+
+  @OneToOne((type) => ActivationHash)
+  hash: ActivationHash;
 
   @Column()
   name: string;

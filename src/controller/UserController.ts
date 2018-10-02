@@ -44,6 +44,10 @@ export class UserController {
     await this.userRepository.remove(request.params.id);
   }
 
+  async update(user: User): Promise<User> {
+    return await this.userRepository.save(user);
+  }
+
   public async getUserByEmail(email: string): Promise<User> {
     return this.userRepository
       .createQueryBuilder("user")
