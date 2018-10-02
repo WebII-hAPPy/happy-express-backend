@@ -1,8 +1,8 @@
 import * as bcrypt from "bcrypt";
-import { Request, Response } from "express";
+import * as crypto from "crypto";
+import { Request } from "express";
 import * as jwt from "jsonwebtoken";
 import { User } from "../entity/User";
-import { IResponse } from "../models/Response.model";
 
 export class AuthService {
   readonly secret = process.env.JWT_SECRET;
@@ -42,7 +42,6 @@ export class AuthService {
    */
   public validate(request: Request): boolean {
     const token: string = request.headers.authorization;
-    console.log(token);
     let decoded: string | object;
 
     try {
@@ -56,5 +55,12 @@ export class AuthService {
     } else {
       return true;
     }
+  }
+
+  /**
+   * creates Hash for email verification
+   */
+  public async createHash(): Promise<string> {
+    return crypto.randomBytes(256).toString("base64");
   }
 }

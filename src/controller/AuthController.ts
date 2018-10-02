@@ -3,14 +3,21 @@ import { User } from "../entity/User";
 import { AuthService } from "../services/auth.service";
 import { UserController } from "./UserController";
 import { IResponse } from "../models/Response.model";
+import { ActivationHash } from "../entity/ActivationHash";
+import { ActivationHashController } from "./ActivationHashesController";
+import { MailService } from "../services/email.service";
 
 export class AuthController {
   userController: UserController;
   authService: AuthService;
+  hashController: ActivationHashController;
+  emailService: MailService;
 
   constructor() {
     this.userController = new UserController();
     this.authService = new AuthService();
+    this.hashController = new ActivationHashController();
+    this.emailService = new MailService();
   }
 
   /**
@@ -95,6 +102,8 @@ export class AuthController {
       }
     }
 
+    this.hashController.createHash(user).then();
+
     return {
       status: 201,
       data: {
@@ -102,5 +111,48 @@ export class AuthController {
         token: await this.authService.createToken(user)
       }
     };
+  }
+
+  public async verifyAccount(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<IResponse> {
+    if (request.params && request.params.hash) {
+      const hash: ActivationHash = await this.hashController.findHash(
+        request.params.hash
+      );
+      if (hash) {
+        const user: User = hash.user;
+        this.hashController.removeHash(hash);
+        user.active = true;
+        this.userController.update(user);
+        user.password = "";
+        user.salt = "";
+        return {
+          status: 204,
+          message: "User successfully activated",
+          data: {
+            user: user
+          }
+        };
+      }
+    }
+    return {
+      status: 404,
+      message: "Activation link invalid or expired"
+    };
+  }
+
+  public async fuck(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<void> {
+    console.log("FUNCTION: FUCK");
+
+    console.log(process.env.GMAIL_USER);
+    console.log(process.env.GMAIL_PASS);
+    this.emailService.test();
   }
 }
