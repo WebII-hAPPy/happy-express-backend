@@ -149,10 +149,6 @@ export class AuthController {
     response: Response,
     next: NextFunction
   ): Promise<void> {
-    console.log("FUNCTION: FUCK");
-
-    console.log(process.env.GMAIL_USER);
-    console.log(process.env.GMAIL_PASS);
     this.emailService.test();
   }
 }
