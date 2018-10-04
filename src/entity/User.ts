@@ -19,8 +19,8 @@ export class User {
   })
   active: boolean;
 
-  @OneToOne((type) => ActivationHash)
-  hash: ActivationHash;
+  // @OneToOne((type) => ActivationHash)
+  // hash: ActivationHash;
 
   @Column()
   name: string;

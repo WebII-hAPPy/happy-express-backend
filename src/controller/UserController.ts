@@ -56,6 +56,14 @@ export class UserController {
       .getOne();
   }
 
+  public async getUserById(id: number): Promise<User> {
+    return this.userRepository
+      .createQueryBuilder("user")
+      .select()
+      .where("user.id = :id", { id: id })
+      .getOne();
+  }
+
   public async createUser(request: Request): Promise<User> {
     const user: User = request.body;
     const salt: string = await this.userService.generateSalt();

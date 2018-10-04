@@ -15,7 +15,6 @@ export class ActivationHash {
   @Column()
   hash: string;
 
-  @OneToOne((type) => User)
-  @JoinColumn()
-  user: User;
+  @Column()
+  userId: number;
 }
