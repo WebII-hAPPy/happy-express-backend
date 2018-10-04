@@ -68,20 +68,16 @@ createConnection()
                     .status(result.status)
                     .json({ message: result.message, data: result.data });
                 } else {
-                  res.send(result);
+                  res.json({ data: result });
                 }
               }
             });
           } else if (result !== null && result !== undefined) {
-            res.json(result);
+            res.json({ data: result });
           }
         }
       );
     });
-
-    app.engine("html", require("ejs").renderFile);
-    app.set("view engine", "html");
-    app.set("view engine", "ejs");
 
     // start express server
     app.listen(3000);

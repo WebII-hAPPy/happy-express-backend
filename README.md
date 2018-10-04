@@ -12,12 +12,13 @@ node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
 ```
 
 ```
-#file: app-env
+#file: app.env
 export JWT_SECRET="{secret}"
+export NODE_ENV="dev"
 ```
 
 ```bash
-source app-env
+source app.env
 ```
 
 ## Setup

@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { ActivationHash } from "../entity/ActivationHash";
 import { User } from "../entity/User";
-import * as crypto from "crypto";
 import { AuthService } from "../services/auth.service";
 
 export class ActivationHashController {

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { HairColor } from "./HairColor";
 
 @Entity()
@@ -12,6 +12,6 @@ export class Hair {
   @Column()
   invisible: boolean;
 
-  @OneToMany(type => HairColor, hairColor => hairColor.hair)
+  @OneToMany((type) => HairColor, (hairColor) => hairColor.hair)
   hairColor: HairColor[];
 }

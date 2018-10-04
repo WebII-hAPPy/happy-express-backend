@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { URI_BASE, OCP_APIM_SUBSCRIPTION_KEY } from "../shared/constants";
 import { readFile } from "fs";
-import * as https from "https";
 import { ClientRequest, IncomingMessage } from "http";
+import * as https from "https";
+import { OCP_APIM_SUBSCRIPTION_KEY, URI_BASE } from "../shared/constants";
 
 export class Repo {
   public static readonly params = {

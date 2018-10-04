@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Hair } from "./Hair";
 
 @Entity()
@@ -12,6 +12,6 @@ export class HairColor {
   @Column("double precision")
   confidence: number;
 
-  @ManyToOne(type => Hair, hair => hair.hairColor)
+  @ManyToOne((type) => Hair, (hair) => hair.hairColor)
   hair: Hair;
 }

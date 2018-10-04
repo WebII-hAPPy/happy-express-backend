@@ -1,12 +1,4 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  JoinColumn
-} from "typeorm";
-import { ActivationHash } from "./ActivationHash";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Analysis } from "./Analysis";
 
 @Entity()
