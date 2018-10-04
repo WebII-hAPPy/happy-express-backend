@@ -144,8 +144,15 @@ export class AuthController {
         this.userController.update(user);
         user.password = "";
         user.salt = "";
+        this.hashController.removeHash(hash);
         return {
-          status: 204,
+          // status: 204,
+          // message: "User successfully activated",
+          // data: {
+          //   user: user,
+          //   token: await this.authService.createToken(user)
+          // }
+          status: 200,
           message: "User successfully activated",
           data: {
             user: user,
@@ -153,10 +160,14 @@ export class AuthController {
           }
         };
       }
+      return {
+        status: 404,
+        message: "Activation link invalid or expired"
+      };
     }
     return {
       status: 404,
-      message: "Activation link invalid or expired"
+      message: "Activation link invalid"
     };
   }
 }

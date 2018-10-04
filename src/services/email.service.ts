@@ -3,6 +3,7 @@ import * as nodemailer from "nodemailer";
 import * as Mail from "nodemailer/lib/mailer";
 import * as path from "path";
 import { IMailOption } from "../models/MailOption";
+import { URL_BASE } from "../shared/constants";
 
 export class MailService {
   user: string;
@@ -50,7 +51,7 @@ export class MailService {
         )
         .toString()
         .replace("${name}", name)
-        .replace("${verificationLink}", `localhost:3000/ver/${hash}`)
+        .replace("${verificationLink}", `${URL_BASE}/verifyAccount/${hash}`)
     };
   }
 
