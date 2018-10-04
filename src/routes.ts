@@ -21,6 +21,12 @@ export const Routes: IRoute[] = [
   },
   {
     method: "get",
+    route: "/ver/:hash",
+    controller: AuthController,
+    action: "verifyAccount"
+  },
+  {
+    method: "get",
     route: "/api/users",
     controller: UserController,
     action: "all"
