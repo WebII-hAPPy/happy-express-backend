@@ -43,13 +43,6 @@ export class AuthController {
     );
 
     if (user) {
-      if (!user.active) {
-        return {
-          status: 403,
-          message: "User not verified"
-        };
-      }
-
       if (
         await this.authService.checkCredentials(
           request.body.password,
@@ -133,41 +126,29 @@ export class AuthController {
     response: Response,
     next: NextFunction
   ): Promise<IResponse> {
-    if (request.params && request.params.hash) {
-      const hash: ActivationHash = await this.hashController.findHash(
-        request.params.hash
-      );
-      if (hash) {
-        const user: User = await this.userController.getUserById(hash.userId);
-        this.hashController.removeHash(hash);
-        user.active = true;
-        this.userController.update(user);
-        user.password = "";
-        user.salt = "";
-        this.hashController.removeHash(hash);
-        return {
-          // status: 204,
-          // message: "User successfully activated",
-          // data: {
-          //   user: user,
-          //   token: await this.authService.createToken(user)
-          // }
-          status: 200,
-          message: "User successfully activated",
-          data: {
-            user: user,
-            token: await this.authService.createToken(user)
-          }
-        };
-      }
+    const hash: ActivationHash = await this.hashController.findHash(
+      request.params.hash
+    );
+    if (hash) {
+      const user: User = await this.userController.getUserById(hash.userId);
+      this.hashController.removeHash(hash);
+      user.active = true;
+      this.userController.update(user);
+      user.password = "";
+      user.salt = "";
+      this.hashController.removeHash(hash);
       return {
-        status: 404,
-        message: "Activation link invalid or expired"
+        status: 200,
+        message: "User successfully activated",
+        data: {
+          user: user,
+          token: await this.authService.createToken(user)
+        }
       };
     }
     return {
       status: 404,
-      message: "Activation link invalid"
+      message: "Activation link invalid or expired"
     };
   }
 }

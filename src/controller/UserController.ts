@@ -67,10 +67,18 @@ export class UserController {
     await this.userRepository.remove(request.params.id);
   }
 
+  /**
+   * updates a user resource
+   * @param user a user
+   */
   async update(user: User): Promise<User> {
     return await this.userRepository.save(user);
   }
 
+  /**
+   * Find user by email
+   * @param email user email
+   */
   public async getUserByEmail(email: string): Promise<User> {
     return this.userRepository
       .createQueryBuilder("user")
@@ -79,6 +87,10 @@ export class UserController {
       .getOne();
   }
 
+  /**
+   * Find user by id
+   * @param id user id
+   */
   public async getUserById(id: number): Promise<User> {
     return this.userRepository
       .createQueryBuilder("user")
@@ -87,6 +99,10 @@ export class UserController {
       .getOne();
   }
 
+  /**
+   * Creates user resource
+   * @param request http request
+   */
   public async createUser(request: Request): Promise<User> {
     const user: User = request.body;
     const salt: string = await this.userService.generateSalt();

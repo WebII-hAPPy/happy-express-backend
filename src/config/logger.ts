@@ -1,9 +1,6 @@
 import * as winston from "winston";
 import { Logger, transports } from "winston";
 
-const date: Date = new Date();
-const dateString: string = date.toISOString();
-
 const logger: Logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.json(),
@@ -18,14 +15,16 @@ const logger: Logger = winston.createLogger({
       handleExceptions: true
     }),
     new transports.File({
-      // filename: `${dateString}.log.json`,
       filename: "app.log.json",
       dirname: "logs",
       level: "info",
       eol: "\n",
       maxsize: 5242880,
       maxFiles: 5,
-      handleExceptions: true
+      handleExceptions: true,
+      options: {
+        flag: "a"
+      }
     })
   ],
   exitOnError: false
