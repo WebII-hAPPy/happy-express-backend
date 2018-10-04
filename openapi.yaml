@@ -11,7 +11,7 @@ tags:
   - name: "statistic"
   - name: "image"
 paths:
-  "/image":
+  "/api/image":
     post:
       tags:
         - "image"
@@ -39,7 +39,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  "/image/{imageName}":
+  "/api/image/{imageName}":
     delete:
       tags:
         - "image"
@@ -67,7 +67,7 @@ paths:
         required: true
         schema:
           type: "string"
-  "/face/{imageName}":
+  "/api/face/{imageName}":
     get:
       tags:
         - "face"
@@ -104,8 +104,7 @@ paths:
         required: true
         schema:
           type: "number"
-  "/statistic/{email}":
-    # This should be id!
+  "/api/statistic/{id}":
     get:
       tags:
         - statistic
@@ -131,11 +130,71 @@ paths:
                 $ref: "#/components/schemas/Error"
       parameters:
         - in: path
-          name: "email"
-          description: "The E-Mail address of the user."
+          name: "id"
+          description: "The user id."
           required: true
           schema:
-            type: string
+            type: number
+  "/login":
+    post:
+      tags:
+        - login
+      operationId: "login"
+      responses:
+        200:
+          description: "Login successful."
+          content:
+            application/json:
+              schema:
+                $ref: "#component/schemas/User"
+        422:
+          description: "E-Mail or password invalid."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  "/register":
+    post:
+      tags:
+        - register
+      operationId: "register"
+      responses:
+        201:
+          description: "Registration successful."
+          content:
+            application/json:
+              schema:
+                $ref: "#/schemas/User"
+        401:
+          description: "Username and/or password missing."
+          content:
+            application/json:
+              schema:
+                $ref: "#schema/Error"
+        409:
+          description: "E-Mail is already registered."
+          content:
+            application/json:
+              schema:
+                $ref: "#/schemas/Error"
+  "/verifyAccount":
+    get:
+      tags:
+        - verifyAccount
+      operationId: "account_verification"
+      responses:
+        200:
+          description: "User E-Mail successfully verified."
+          content:
+            application/json:
+              schema:
+                $ref: "#/schemas/User"
+        404:
+          description: "Activation link invalid or expired"
+          content:
+            application/json:
+              schema:
+                $ref: "#/schemas/Error"
 components:
   schemas:
     User:

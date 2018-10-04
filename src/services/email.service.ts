@@ -46,7 +46,7 @@ export class MailService {
         : "HAPPY Password Reset",
       html: fs
         .readFileSync(
-          path.resolve("src", "templates", "verification", "html.ejs"),
+          path.resolve("src", "templates", "verification", "html.html"),
           "utf8"
         )
         .toString()
