@@ -1,20 +1,18 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
-  ManyToOne,
-  OneToOne,
-  OneToMany,
+  Entity,
   JoinColumn,
-  Timestamp
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { Emotion } from "./Emotion";
 import { Accessory } from "./Accessory";
-import { User } from "./User";
-import { MakeUp } from "./MakeUp";
+import { Emotion } from "./Emotion";
 import { FacialHair } from "./FacialHair";
 import { Hair } from "./Hair";
+import { MakeUp } from "./MakeUp";
+import { User } from "./User";
 
 @Entity()
 export class Analysis {
@@ -24,23 +22,23 @@ export class Analysis {
   @Column()
   uuid: string;
 
-  @ManyToOne(type => User, user => user.analyses)
+  @ManyToOne((type) => User, (user) => user.analyses)
   user: User;
 
   @Column("timestamp")
   time: string;
 
-  @OneToOne(type => Emotion)
+  @OneToOne((type) => Emotion)
   @JoinColumn()
   emotion: Emotion;
 
   @Column()
   smile: number;
 
-  @OneToMany(type => Accessory, accessory => accessory.analysis)
+  @OneToMany((type) => Accessory, (accessory) => accessory.analysis)
   accessories: Accessory[];
 
-  @OneToOne(type => MakeUp)
+  @OneToOne((type) => MakeUp)
   @JoinColumn()
   makeUp: MakeUp;
 
@@ -53,9 +51,9 @@ export class Analysis {
   @Column()
   age: string;
 
-  @OneToOne(type => FacialHair)
+  @OneToOne((type) => FacialHair)
   facialHair: FacialHair;
 
-  @OneToOne(type => Hair)
+  @OneToOne((type) => Hair)
   hair: Hair;
 }

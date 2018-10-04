@@ -1,19 +1,17 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Analysis } from "./Analysis";
 
 @Entity()
 export class Accessory {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  type: string;
 
-    @Column()
-    type: string;
+  @Column("float")
+  confidence: number;
 
-    @Column("float")
-    confidence: number;
-
-    @ManyToOne(type => Analysis, analysis => analysis.accessories)
-    analysis: Analysis;
-
+  @ManyToOne((type) => Analysis, (analysis) => analysis.accessories)
+  analysis: Analysis;
 }

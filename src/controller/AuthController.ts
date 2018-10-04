@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { User } from "../entity/User";
-import { AuthService } from "../services/auth.service";
-import { UserController } from "./UserController";
-import { IResponse } from "../models/Response.model";
 import { ActivationHash } from "../entity/ActivationHash";
-import { ActivationHashController } from "./ActivationHashesController";
+import { User } from "../entity/User";
+import { IResponse } from "../models/Response.model";
+import { AuthService } from "../services/auth.service";
 import { MailService } from "../services/email.service";
+import { ActivationHashController } from "./ActivationHashesController";
+import { UserController } from "./UserController";
 
 export class AuthController {
   userController: UserController;
@@ -101,6 +101,8 @@ export class AuthController {
       const hash: ActivationHash = await this.hashController.createHash(user);
       this.emailService.send(user.email, user.name, isVerification, hash.hash);
 
+      console.log(user);
+
       if (user) {
         user.password = "";
         user.salt = "";
@@ -130,10 +132,9 @@ export class AuthController {
       request.params.hash
     );
     if (hash) {
-      const user: User = await this.userController.getUserById(hash.userId);
-      this.hashController.removeHash(hash);
+      let user: User = await this.userController.getUserById(hash.userId);
       user.active = true;
-      this.userController.update(user);
+      user = await this.userController.update(user);
       user.password = "";
       user.salt = "";
       this.hashController.removeHash(hash);

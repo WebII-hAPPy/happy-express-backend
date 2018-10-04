@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { loadCollection, db } from "../shared/utils";
-import { COLLECTION_NAME } from "../shared/constants";
-import { IUploadResponse } from "../models/UploadResult.model";
 import { IResponse } from "../models/Response.model";
+import { IUploadResponse } from "../models/UploadResult.model";
+import { COLLECTION_NAME } from "../shared/constants";
+import { db, loadCollection } from "../shared/utils";
 
 export class UploadController {
   /**
