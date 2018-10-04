@@ -3,14 +3,21 @@ import { User } from "../entity/User";
 import { AuthService } from "../services/auth.service";
 import { UserController } from "./UserController";
 import { IResponse } from "../models/Response.model";
+import { ActivationHash } from "../entity/ActivationHash";
+import { ActivationHashController } from "./ActivationHashesController";
+import { MailService } from "../services/email.service";
 
 export class AuthController {
   userController: UserController;
   authService: AuthService;
+  hashController: ActivationHashController;
+  emailService: MailService;
 
   constructor() {
     this.userController = new UserController();
     this.authService = new AuthService();
+    this.hashController = new ActivationHashController();
+    this.emailService = new MailService();
   }
 
   /**
@@ -36,6 +43,13 @@ export class AuthController {
     );
 
     if (user) {
+      if (!user.active) {
+        return {
+          status: 403,
+          message: "User not verified"
+        };
+      }
+
       if (
         await this.authService.checkCredentials(
           request.body.password,
@@ -62,8 +76,8 @@ export class AuthController {
 
   /**
    * Registration authentication
-   * @param request User request
-   * @param response Server Response
+   * @param request http request
+   * @param response htpp Response
    * @param next callback
    */
   public async register(
@@ -89,6 +103,11 @@ export class AuthController {
       };
     } else {
       user = await this.userController.createUser(request);
+
+      const isVerification: boolean = true;
+      const hash: ActivationHash = await this.hashController.createHash(user);
+      this.emailService.send(user.email, user.name, isVerification, hash.hash);
+
       if (user) {
         user.password = "";
         user.salt = "";
@@ -98,9 +117,57 @@ export class AuthController {
     return {
       status: 201,
       data: {
-        user: user,
-        token: await this.authService.createToken(user)
+        user: user
       }
+    };
+  }
+
+  /**
+   * Checks verification link against db and activates user if valid
+   * @param request http request
+   * @param response http response
+   * @param next callback
+   */
+  public async verifyAccount(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<IResponse> {
+    if (request.params && request.params.hash) {
+      const hash: ActivationHash = await this.hashController.findHash(
+        request.params.hash
+      );
+      if (hash) {
+        const user: User = await this.userController.getUserById(hash.userId);
+        this.hashController.removeHash(hash);
+        user.active = true;
+        this.userController.update(user);
+        user.password = "";
+        user.salt = "";
+        this.hashController.removeHash(hash);
+        return {
+          // status: 204,
+          // message: "User successfully activated",
+          // data: {
+          //   user: user,
+          //   token: await this.authService.createToken(user)
+          // }
+          status: 200,
+          message: "User successfully activated",
+          data: {
+            user: user,
+            token: await this.authService.createToken(user)
+          }
+        };
+      }
+      return {
+        status: 404,
+        message: "Activation link invalid or expired"
+      };
+    }
+    return {
+      status: 404,
+      message: "Activation link invalid"
     };
   }
 }

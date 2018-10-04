@@ -6,7 +6,6 @@ import * as multer from "multer";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { LoggerStream } from "./config/logger";
-// import { errorLogger, infoLogger } from "./config/logger";
 import { IRequestResult } from "./models/RequestResult.model";
 import { Routes } from "./routes";
 import { AuthService } from "./services/auth.service";
@@ -79,6 +78,10 @@ createConnection()
         }
       );
     });
+
+    app.engine("html", require("ejs").renderFile);
+    app.set("view engine", "html");
+    app.set("view engine", "ejs");
 
     // start express server
     app.listen(3000);
