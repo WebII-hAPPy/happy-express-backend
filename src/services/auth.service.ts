@@ -61,6 +61,9 @@ export class AuthService {
    * creates Hash for email verification
    */
   public async createHash(): Promise<string> {
-    return crypto.randomBytes(256).toString("base64");
+    return crypto
+      .randomBytes(256)
+      .toString("base64")
+      .replace(/\//g, "");
   }
 }

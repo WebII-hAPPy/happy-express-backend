@@ -70,6 +70,8 @@ export class ActivationHashController {
   public async createHash(user: User): Promise<ActivationHash> {
     const hash: ActivationHash = new ActivationHash();
     hash.hash = await this.authService.createHash();
+    hash.userId = user.id;
+
     return this.activationHashRepository.save(hash);
   }
 }

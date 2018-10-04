@@ -43,6 +43,13 @@ export class AuthController {
     );
 
     if (user) {
+      if (!user.active) {
+        return {
+          status: 403,
+          message: "User not verified"
+        };
+      }
+
       if (
         await this.authService.checkCredentials(
           request.body.password,
@@ -69,8 +76,8 @@ export class AuthController {
 
   /**
    * Registration authentication
-   * @param request User request
-   * @param response Server Response
+   * @param request http request
+   * @param response htpp Response
    * @param next callback
    */
   public async register(
@@ -96,23 +103,31 @@ export class AuthController {
       };
     } else {
       user = await this.userController.createUser(request);
+
+      const isVerification: boolean = true;
+      const hash: ActivationHash = await this.hashController.createHash(user);
+      this.emailService.send(user.email, user.name, isVerification, hash.hash);
+
       if (user) {
         user.password = "";
         user.salt = "";
       }
     }
 
-    this.hashController.createHash(user).then();
-
     return {
       status: 201,
       data: {
-        user: user,
-        token: await this.authService.createToken(user)
+        user: user
       }
     };
   }
 
+  /**
+   * Checks verification link against db and activates user if valid
+   * @param request http request
+   * @param response http response
+   * @param next callback
+   */
   public async verifyAccount(
     request: Request,
     response: Response,
@@ -123,7 +138,7 @@ export class AuthController {
         request.params.hash
       );
       if (hash) {
-        const user: User = hash.user;
+        const user: User = await this.userController.getUserById(hash.userId);
         this.hashController.removeHash(hash);
         user.active = true;
         this.userController.update(user);
@@ -133,7 +148,8 @@ export class AuthController {
           status: 204,
           message: "User successfully activated",
           data: {
-            user: user
+            user: user,
+            token: await this.authService.createToken(user)
           }
         };
       }
@@ -142,13 +158,5 @@ export class AuthController {
       status: 404,
       message: "Activation link invalid or expired"
     };
-  }
-
-  public async fuck(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<void> {
-    this.emailService.test();
   }
 }

@@ -1,11 +1,10 @@
-import { UserController } from "./controller/UserController";
 import { AnalysisController } from "./controller/AnalysisController";
-import { UploadController } from "./controller/UploadController";
+import { AuthController } from "./controller/AuthController";
 import { DeleteController } from "./controller/DeleteController";
 import { Repo } from "./controller/Repository";
+import { UploadController } from "./controller/UploadController";
+import { UserController } from "./controller/UserController";
 import { IRoute } from "./models/Route.model";
-import { StatisticController } from "./controller/Statistics";
-import { AuthController } from "./controller/AuthController";
 
 export const Routes: IRoute[] = [
   {
@@ -22,13 +21,7 @@ export const Routes: IRoute[] = [
   },
   {
     method: "get",
-    route: "/fuck",
-    controller: AuthController,
-    action: "fuck"
-  },
-  {
-    method: "put",
-    route: "/activate/:hash",
+    route: "/ver/:hash",
     controller: AuthController,
     action: "verifyAccount"
   },
