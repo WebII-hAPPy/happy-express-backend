@@ -1,10 +1,10 @@
 {
   "type": "postgres",
-  "host": "localhost",
+  "host": "happy-database",
   "port": 5432,
   "username": "root",
   "password": "root",
-  "database": "postgres",
+  "database": "happy-database",
   "synchronize": true,
   "logging": false,
   "entities": ["src/entity/**/*.ts"],
