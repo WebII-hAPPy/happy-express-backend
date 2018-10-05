@@ -85,11 +85,13 @@ export class AuthController {
       };
     }
 
-    console.log(request.body);
+    console.log("THIS IS YOUR REQUEST: " + request.body);
 
     let user: User = await this.userController.getUserByEmail(
       request.body.email
     );
+
+    console.log("THIS USER WAS FOUND IN DB:" + user);
 
     if (user) {
       return {
@@ -103,7 +105,7 @@ export class AuthController {
       const hash: ActivationHash = await this.hashController.createHash(user);
       this.emailService.send(user.email, user.name, isVerification, hash.hash);
 
-      console.log(user);
+      console.log("THIS USER WAS CREATED: " + user);
 
       if (user) {
         user.password = "";
