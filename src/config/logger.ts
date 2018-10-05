@@ -21,10 +21,7 @@ const logger: Logger = winston.createLogger({
       eol: "\n",
       maxsize: 5242880,
       maxFiles: 5,
-      handleExceptions: true,
-      options: {
-        flag: "a"
-      }
+      handleExceptions: true
     })
   ],
   exitOnError: false

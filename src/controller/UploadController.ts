@@ -21,6 +21,9 @@ export class UploadController {
         COLLECTION_NAME,
         db
       );
+
+      console.log("HERE: " + request.file);
+
       const data: any = col.insert(request.file);
 
       db.saveDatabase();
@@ -36,6 +39,8 @@ export class UploadController {
         data: result
       };
     } catch (err) {
+      console.log(err);
+
       response.sendStatus(400);
     }
   }
