@@ -22,8 +22,6 @@ export class UploadController {
         db
       );
 
-      console.log("HERE: " + request.file);
-
       const data: any = col.insert(request.file);
 
       db.saveDatabase();
