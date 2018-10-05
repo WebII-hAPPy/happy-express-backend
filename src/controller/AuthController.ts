@@ -85,6 +85,8 @@ export class AuthController {
       };
     }
 
+    console.log(request.body);
+
     let user: User = await this.userController.getUserByEmail(
       request.body.email
     );
