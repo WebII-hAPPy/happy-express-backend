@@ -4,6 +4,7 @@
   "description": "hAPPy-API Web-Engineering II project",
   "devDependencies": {
     "@types/bcrypt": "^2.0.0",
+    "@types/cors": "^2.8.4",
     "@types/del": "^3.0.1",
     "@types/express": "^4.16.0",
     "@types/jsonwebtoken": "^7.2.8",
@@ -22,6 +23,7 @@
   "dependencies": {
     "bcrypt": "^3.0.1",
     "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
     "del": "^3.0.0",
     "express": "^4.15.4",
     "jsonwebtoken": "^8.3.0",

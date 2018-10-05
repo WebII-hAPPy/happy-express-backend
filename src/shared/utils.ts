@@ -9,6 +9,10 @@ import { UPLOAD_PATH, DB_NAME } from "./constants";
  */
 const imageFilter: any = function(file: any, cb: any): Error {
   // accept image only
+
+  console.log("fu");
+  console.log("HEY: " + file.originalname);
+
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
     return cb(new Error("Only image files are allowed!"), false);
   }

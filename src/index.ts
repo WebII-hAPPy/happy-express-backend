@@ -11,12 +11,15 @@ import { Routes } from "./routes";
 import { AuthService } from "./services/auth.service";
 import { UPLOAD_PATH } from "./shared/constants";
 import { imageFilter } from "./shared/utils";
+import * as cors from "cors";
 
 createConnection()
   .then(async (connection) => {
     // create express app
     const app: any = express();
     app.use(bodyParser.json());
+
+    app.use(cors());
 
     const upload: multer.Instance = multer({
       dest: `${UPLOAD_PATH}/`,
@@ -53,7 +56,9 @@ createConnection()
       (app as any)[route.method](
         route.route,
         [
-          route.route === "/image" ? upload.single("image") : middleware.skip,
+          route.route === "/api/image"
+            ? upload.single("image")
+            : middleware.skip,
           route.route.startsWith("/api") ? middleware.protect : middleware.skip
         ],
         (request: Request, res: Response, next: Function) => {
