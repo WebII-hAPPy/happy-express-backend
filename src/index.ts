@@ -19,7 +19,11 @@ createConnection()
     const app: any = express();
     app.use(bodyParser.json());
 
-    app.use(cors());
+    const corsOptions: cors.CorsOptions = {
+      exposedHeaders: ["Access-Control-Expose-Headers", "code"]
+    };
+
+    app.use(cors(corsOptions));
 
     const upload: multer.Instance = multer({
       dest: `${UPLOAD_PATH}/`,
@@ -45,6 +49,7 @@ createConnection()
           next();
         } else {
           response
+            .set("status", "401")
             .status(401)
             .json({ message: "Route protected. Authentication required." });
         }
@@ -70,6 +75,7 @@ createConnection()
               if (result !== null && result !== undefined) {
                 if (result.status !== undefined) {
                   res
+                    .set("status", `${result.status}`)
                     .status(result.status)
                     .json({ message: result.message, data: result.data });
                 } else {
