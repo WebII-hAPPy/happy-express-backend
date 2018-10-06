@@ -9,8 +9,7 @@ before_script:
 build:
   stage: build
   script:
-    - docker build -t "$CI_REGISTRY_IMAGE" .
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
     - docker push "$CI_REGISTRY_IMAGE"
-    - docker logout ${CI_REGISTRY}
   only:
     - develop
