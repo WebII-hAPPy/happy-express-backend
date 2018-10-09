@@ -1,15 +1,29 @@
 image: docker:latest
 
+stages:
+  - build
+  - deploy
+
 services:
   - docker:dind
 
 before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-
-build:
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  
+build-dev:
   stage: build
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
     - docker push "$CI_REGISTRY_IMAGE"
   only:
     - develop
+    
+deploy-dev:
+  stage: deploy
+  script:
+   - ls -l
