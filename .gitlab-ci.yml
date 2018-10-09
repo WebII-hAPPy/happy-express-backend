@@ -1,11 +1,6 @@
-image: docker:latest
-
 stages:
   - build
   - deploy
-
-services:
-  - docker:dind
 
 before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
@@ -15,15 +10,32 @@ before_script:
   - mkdir -p ~/.ssh
   - chmod 700 ~/.ssh
   
-build-dev:
+push-dev:
   stage: build
-  script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-    - docker push "$CI_REGISTRY_IMAGE"
+  image: docker:latest
   only:
     - develop
+  services:
+    - docker:dind
+  before_script:
+   - docker version
+   - docker info
+   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
+  after_script:
+    - docker logout $CI_REGISTRY
     
 deploy-dev:
   stage: deploy
+  image: kroniak/ssh-client
+  only:
+    - develop
   script:
-   - ls -l
+   - mkdir -p ~/.ssh
+   - chmod 700 ~/.ssh
+   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+   - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+   - chmod 600 ~/.ssh/is_rsa
+   - ssh $DEPLOY_STAGING_SSH_HOST 'ls -l'
