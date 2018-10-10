@@ -93,11 +93,18 @@ export class Repo {
   ): Promise<void> {
     console.log(result);
     const res: IAzureResponse = JSON.parse(result)[0];
-    const _res: IAnalysis = this.convertToAnalysis(res, user);
-    const analysis: Analysis = await this.analysisController.create(_res);
-    analysis.user.password = "";
-    analysis.user.salt = "";
-    response.status(201).json({ message: "Analysis complete", data: analysis });
+
+    if (res !== null || res !== undefined) {
+      const _res: IAnalysis = this.convertToAnalysis(res, user);
+      const analysis: Analysis = await this.analysisController.create(_res);
+      analysis.user.password = "";
+      analysis.user.salt = "";
+      response
+        .status(201)
+        .json({ message: "Analysis complete", data: analysis });
+    } else {
+      response.status(406).json({ message: "No face recognized" });
+    }
   }
 
   convertToAnalysis(res: IAzureResponse, user: User): IAnalysis {
@@ -105,15 +112,7 @@ export class Repo {
     const _res: IAnalysis = {
       user: user,
       time: date,
-      emotion: res.faceAttributes.emotion,
-      smile: res.faceAttributes.smile,
-      accessories: res.faceAttributes.accessories,
-      makeup: res.faceAttributes.makeup,
-      glasses: res.faceAttributes.glasses,
-      gender: res.faceAttributes.gender,
-      age: res.faceAttributes.age,
-      facialHair: res.faceAttributes.facialHair,
-      hair: res.faceAttributes.hair
+      ...res.faceAttributes
     };
     return _res;
   }
