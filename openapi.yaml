@@ -104,6 +104,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        406:
+          description: "No face recognized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         415:
           description: "Mediatype not supported"
           content:
