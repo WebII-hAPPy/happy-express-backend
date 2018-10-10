@@ -8,3 +8,4 @@ logs/
 app-env
 uploads/
 app.env
+ormconfig.json
