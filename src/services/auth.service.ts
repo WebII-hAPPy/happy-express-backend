@@ -36,6 +36,20 @@ export class AuthService {
     return token;
   }
 
+  public getIdClaim(request: Request): number {
+    const token: string = request.headers.authorization;
+    let decoded: any;
+    try {
+      decoded = jwt.verify(token, this.secret);
+    } catch (err) {
+      return -1;
+    }
+
+    if (!decoded) {
+      return -1;
+    }
+    return decoded.user.id;
+  }
   /**
    * Tries to decode and validate token against JWT_SECRET
    * @param request User request
