@@ -104,6 +104,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        401:
+          description: "Could not identify user claim"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/Error"
+
         406:
           description: "No face recognized"
           content:
