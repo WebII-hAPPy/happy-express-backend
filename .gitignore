@@ -7,3 +7,4 @@ temp/
 logs/
 app-env
 uploads/
+app.env

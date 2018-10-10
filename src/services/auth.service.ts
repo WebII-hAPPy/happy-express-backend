@@ -58,6 +58,32 @@ export class AuthService {
   }
 
   /**
+   * makes sure a user requesting an analysis is who he claims to be by v
+   * alidating the jwt token claim
+   * @param request http Request
+   */
+  public affirmIdentity(request: Request): boolean {
+    const token: string = request.headers.authorization;
+    // not sure know how to properly handle string | object correctly -> any for now
+    let decoded: any;
+    try {
+      decoded = jwt.verify(token, this.secret);
+    } catch (err) {
+      return false;
+    }
+
+    if (!decoded) {
+      return false;
+    } else {
+      // tslint:disable-next-line
+      if (decoded.user.id === parseInt(request.body.id, 10)) {
+        return true;
+      }
+      return false;
+    }
+  }
+
+  /**
    * creates Hash for email verification
    */
   public async createHash(): Promise<string> {

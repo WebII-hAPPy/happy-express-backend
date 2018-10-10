@@ -1,7 +1,6 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -19,27 +18,22 @@ export class Analysis {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  uuid: string;
-
   @ManyToOne((type) => User, (user) => user.analyses)
   user: User;
 
-  @Column("timestamp")
-  time: string;
+  @Column("date")
+  time: Date;
 
   @OneToOne((type) => Emotion)
-  @JoinColumn()
   emotion: Emotion;
 
-  @Column()
+  @Column("double precision")
   smile: number;
 
   @OneToMany((type) => Accessory, (accessory) => accessory.analysis)
   accessories: Accessory[];
 
   @OneToOne((type) => MakeUp)
-  @JoinColumn()
   makeUp: MakeUp;
 
   @Column()
@@ -49,7 +43,7 @@ export class Analysis {
   gender: string;
 
   @Column()
-  age: string;
+  age: number;
 
   @OneToOne((type) => FacialHair)
   facialHair: FacialHair;

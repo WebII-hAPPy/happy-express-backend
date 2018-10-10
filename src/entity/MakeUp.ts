@@ -6,8 +6,8 @@ export class MakeUp {
   id: number;
 
   @Column()
-  eyeMakeUp: boolean;
+  eyeMakeup: boolean;
 
   @Column()
-  lipMakeUp: boolean;
+  lipMakeup: boolean;
 }
