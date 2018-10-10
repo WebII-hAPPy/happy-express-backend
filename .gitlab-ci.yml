@@ -32,5 +32,5 @@ deploy-dev:
    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
    - chmod 600 ~/.ssh/id_ed25519
    - ssh $SSH_HOST "docker pull $CI_REGISTRY_IMAGE"
-   - ssh $SSH_HOST "cd /home/$SSH_USER/happy; docker-compose up -d"
+   - ssh $SSH_HOST "cd /home/$SSH_USER/happy; docker-compose down; docker-compose up -d"
    
