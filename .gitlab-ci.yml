@@ -30,4 +30,4 @@ deploy-dev:
    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
    - chmod 600 ~/.ssh/id_ed25519
-   - ssh $DEPLOY_STAGING_SSH_HOST 'ls -l'
+   - ssh $SSH_HOST 'ls -l'
