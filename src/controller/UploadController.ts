@@ -47,13 +47,14 @@ export class UploadController {
         originalName: data.originalname
       };
 
-      if (!request.body.id && !this.authService.affirmIdentity(request)) {
-        response.status(400).json({ message: "Could not confirm identity" });
-      }
+      // move this somewhere else
+      // if (!request.body.id && !this.authService.affirmIdentity(request)) {
+      //   response.status(400).json({ message: "Could not confirm identity" });
+      // }
 
-      const user: User = await this.userController.getUserById(
-        parseInt(request.body.id, 10)
-      );
+      const userId: number = this.authService.getIdClaim(request);
+
+      const user: User = await this.userController.getUserById(userId);
 
       this.repo.analyseImage(result.fileName, user, response);
     } catch (err) {
