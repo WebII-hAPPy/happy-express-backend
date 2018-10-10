@@ -13,7 +13,7 @@ const imageFilter: any = function(req: any, file: any, cb: any): Error {
   // accept image only
   const ext: string = path.extname(file.originalname);
   if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg") {
-    return cb(new Error("Only images are allowed"));
+    return cb(new Error("Only images are allowed"), false);
   }
   cb(null, true);
 };
