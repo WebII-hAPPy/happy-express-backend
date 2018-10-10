@@ -80,7 +80,9 @@ export class Repo {
 
       post_req.end();
     } catch (err) {
+      this.deleteController.delete(imageName);
       console.log("Could not read file " + err);
+      response.status(400).json({ message: "Could not read file" });
     }
   }
 
@@ -89,9 +91,12 @@ export class Repo {
     user: User,
     response: Response
   ): Promise<void> {
+    console.log(result);
     const res: IAzureResponse = JSON.parse(result)[0];
     const _res: IAnalysis = this.convertToAnalysis(res, user);
     const analysis: Analysis = await this.analysisController.create(_res);
+    analysis.user.password = "";
+    analysis.user.salt = "";
     response.status(201).json({ message: "Analysis complete", data: analysis });
   }
 

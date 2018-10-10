@@ -1,13 +1,11 @@
-import { NextFunction, Request, Response, json } from "express";
-import { IResponse } from "../models/Response.model";
+import { NextFunction, Request, Response } from "express";
+import { User } from "../entity/User";
 import { IUploadResponse } from "../models/UploadResult.model";
+import { AuthService } from "../services/auth.service";
 import { COLLECTION_NAME } from "../shared/constants";
 import { db, loadCollection } from "../shared/utils";
-import { AnalysisController } from "./AnalysisController";
 import { Repo } from "./Repository";
-import { AuthService } from "../services/auth.service";
 import { UserController } from "./UserController";
-import { User } from "../entity/User";
 
 export class UploadController {
   repo: Repo;
