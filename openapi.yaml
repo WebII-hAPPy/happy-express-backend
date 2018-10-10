@@ -11,99 +11,105 @@ tags:
   - name: "statistic"
   - name: "image"
 paths:
+  "/register":
+    post:
+      tags:
+        - register
+      operationId: "register"
+      responses:
+        201:
+          description: "Registration successful."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        401:
+          description: "Username and password are required."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        409:
+          description: "E-Mail is already registered."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  "/login":
+    post:
+      tags:
+        - login
+      operationId: "login"
+      responses:
+        200:
+          description: "Login successful."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        401:
+          description: "Username and password are required"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        422:
+          description: "E-Mail or password invalid."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    get:
+      tags:
+        - "verify"
+      description: "Verifies a user account"
+      operationId: "verify-account"
+      responses:
+        200:
+          description: "User successfully activated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+        404:
+          description: "Activation link invalid or expired"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      parameters:
+        - in: path
+          name: "hash"
+          description: "validation hash"
+          required: true
+          schema:
+            type: string
   "/api/image":
     post:
       tags:
-        - "image"
-      description: "Uploads a single image file."
-      operationId: "post-image"
-      requestBody:
-        description: "MultipartFormDataInput of file"
-        content:
-          multipart/form-data:
-            schema:
-              # EDIT REF
-              $ref: "#/components/schemas/Emotion"
-        required: false
+        - "image-upload"
+      description: "upload image for azure analysis"
+      operationId: "image-upload"
       responses:
-        200:
-          description: "Uploaded successfully"
-          content:
-            application/json:
-              schema:
-                # EDIT REF
-                $ref: "#/components/schemas/Emotion"
-        500:
-          description: "An error occurred"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  "/api/image/{imageName}":
-    delete:
-      tags:
-        - "image"
-      description: "Deletes a single image file"
-      operationId: "delete-image"
-      responses:
-        200:
-          description: "Deleted successfully"
-        501:
-          description: "An error occurred"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: "Entity not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    parameters:
-      - in: path
-        name: "imageName"
-        description: "The name of the image which you want to delete"
-        required: true
-        schema:
-          type: "string"
-  "/api/face/{imageName}":
-    get:
-      tags:
-        - "face"
-      operationId: "post-face"
-      responses:
-        200:
-          description: "Request successfully"
+        201:
+          description: "Analysis complete"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Analysis"
-        500:
-          description: "An error occurred"
+        400:
+          description: "Could not process file"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        404:
-          description: "Entity not found"
+        415:
+          description: "Mediatype not supported"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    parameters:
-      - in: path
-        name: "imageName"
-        description: "The name of the image which you an analysis of"
-        required: true
-        schema:
-          type: "string"
-      - in: body
-        name: "userId"
-        description: "Id of user"
-        required: true
-        schema:
-          type: "number"
   "/api/statistic/{id}":
     get:
       tags:
@@ -111,7 +117,7 @@ paths:
       operationId: "get-statistic"
       responses:
         200:
-          description: "Generated successfully some statistics"
+          description: "Generated statistics"
           content:
             application/json:
               schema:
@@ -135,66 +141,6 @@ paths:
           required: true
           schema:
             type: number
-  "/login":
-    post:
-      tags:
-        - login
-      operationId: "login"
-      responses:
-        200:
-          description: "Login successful."
-          content:
-            application/json:
-              schema:
-                $ref: "#component/schemas/User"
-        422:
-          description: "E-Mail or password invalid."
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  "/register":
-    post:
-      tags:
-        - register
-      operationId: "register"
-      responses:
-        201:
-          description: "Registration successful."
-          content:
-            application/json:
-              schema:
-                $ref: "#/schemas/User"
-        401:
-          description: "Username and/or password missing."
-          content:
-            application/json:
-              schema:
-                $ref: "#schema/Error"
-        409:
-          description: "E-Mail is already registered."
-          content:
-            application/json:
-              schema:
-                $ref: "#/schemas/Error"
-  "/verifyAccount":
-    get:
-      tags:
-        - verifyAccount
-      operationId: "account_verification"
-      responses:
-        200:
-          description: "User E-Mail successfully verified."
-          content:
-            application/json:
-              schema:
-                $ref: "#/schemas/User"
-        404:
-          description: "Activation link invalid or expired"
-          content:
-            application/json:
-              schema:
-                $ref: "#/schemas/Error"
 components:
   schemas:
     User:
@@ -208,6 +154,8 @@ components:
           type: "string"
         password:
           type: "string"
+        salt:
+          type: "string"
         analysis-count:
           type: "integer"
     Analysis:
@@ -215,13 +163,10 @@ components:
         id:
           type: "number"
           format: "integer"
-        userId:
-          type: "number"
-          format: "integer"
         date:
           type: "string"
           format: "date"
-        emotions:
+        emotion:
           $ref: "#/components/schemas/Emotion"
         smile:
           type: "number"
@@ -332,3 +277,9 @@ components:
       properties:
         message:
           type: "string"
+    Response:
+      properties:
+        message:
+          type: "string"
+        data:
+          type: "object"
