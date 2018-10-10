@@ -53,10 +53,10 @@ export class UploadController {
       const userId: number = this.authService.getIdClaim(request);
 
       if (userId !== -1) {
-        response.status(401).json({ message: "Could not identify user claim" });
-      } else {
         const user: User = await this.userController.getUserById(userId);
         this.repo.analyseImage(result.fileName, user, response);
+      } else {
+        response.status(401).json({ message: "Could not identify user claim" });
       }
     } catch (err) {
       console.log(err);
