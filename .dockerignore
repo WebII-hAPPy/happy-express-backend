@@ -4,6 +4,7 @@ uploads
 
 .dockerignore
 .gitignore
+.gitlab-ci.yml
 .prettierrc
 app-env
 docker-compose.yml
