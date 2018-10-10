@@ -1,5 +1,5 @@
 export interface IUploadResponse {
   id: Number;
-  fileName: String;
-  originalName: String;
+  fileName: string;
+  originalName: string;
 }

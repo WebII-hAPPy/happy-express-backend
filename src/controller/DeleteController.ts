@@ -3,24 +3,14 @@ import { deleteImage } from "../shared/utils";
 
 export class DeleteController {
   /**
-   * Login authentication
-   * @param request User request
-   * @param response Server response
-   * @param next callback
+   * deletes a image on disk by filename
+   * @param imageName image name on disk
    */
-  async delete(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const result: string[] = deleteImage(request.params.imageName);
+  async delete(imageName: string): Promise<void> {
+    const result: string[] = deleteImage(imageName);
 
-    if (result !== []) {
-      response.sendStatus(200);
-    } else if (result != null) {
-      response.sendStatus(404);
-    } else {
-      response.sendStatus(501);
+    if (result === []) {
+      console.error("COULD NOT DELETE IMAGE: " + imageName);
     }
   }
 }

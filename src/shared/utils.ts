@@ -1,17 +1,19 @@
 import * as Loki from "lokijs";
 import * as del from "del";
 import { UPLOAD_PATH, DB_NAME } from "./constants";
+import * as path from "path";
 
 /**
  * Throws an error if the type of the image isnt jpg, jpeg, png or gif.
+ * @param req http request
  * @param file Image file
  * @param cb Call back
  */
-const imageFilter: any = function(file: any, cb: any): Error {
+const imageFilter: any = function(req: any, file: any, cb: any): Error {
   // accept image only
-
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    return cb(new Error("Only image files are allowed!"), false);
+  const ext: string = path.extname(file.originalname);
+  if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg") {
+    return cb(new Error("Only images are allowed"));
   }
   cb(null, true);
 };

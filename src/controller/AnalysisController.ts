@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Analysis } from "../entity/Analysis";
+import { IAnalysis } from "../models/Analysis";
 
 export class AnalysisController {
   private analysisRepository = getRepository(Analysis);
@@ -45,6 +46,14 @@ export class AnalysisController {
     next: NextFunction
   ): Promise<any> {
     return this.analysisRepository.save(request.body);
+  }
+
+  /**
+   * Inserts a single analysis into the database
+   * @param analysis accepts objects that implement the IAnalysis interface
+   */
+  async create(analysis: IAnalysis): Promise<any> {
+    return this.analysisRepository.save(analysis);
   }
 
   /**

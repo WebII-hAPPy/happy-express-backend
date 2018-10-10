@@ -1,10 +1,25 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response, json } from "express";
 import { IResponse } from "../models/Response.model";
 import { IUploadResponse } from "../models/UploadResult.model";
 import { COLLECTION_NAME } from "../shared/constants";
 import { db, loadCollection } from "../shared/utils";
+import { AnalysisController } from "./AnalysisController";
+import { Repo } from "./Repository";
+import { AuthService } from "../services/auth.service";
+import { UserController } from "./UserController";
+import { User } from "../entity/User";
 
 export class UploadController {
+  repo: Repo;
+  authService: AuthService;
+  userController: UserController;
+
+  constructor() {
+    this.repo = new Repo();
+    this.authService = new AuthService();
+    this.userController = new UserController();
+  }
+
   /**
    * Login authentication
    * @param request User request
@@ -15,7 +30,7 @@ export class UploadController {
     request: Request,
     response: Response,
     next: NextFunction
-  ): Promise<IResponse> {
+  ): Promise<void> {
     try {
       const col: LokiConstructor.Collection<any> = await loadCollection(
         COLLECTION_NAME,
@@ -26,20 +41,24 @@ export class UploadController {
 
       db.saveDatabase();
 
-      let result: IUploadResponse = {
+      const result: IUploadResponse = {
         id: data.$loki,
         fileName: data.filename,
         originalName: data.originalname
       };
 
-      return {
-        status: 200,
-        data: result
-      };
+      if (!request.body.id && !this.authService.affirmIdentity(request)) {
+        response.status(400).json({ message: "Could not confirm identity" });
+      }
+
+      const user: User = await this.userController.getUserById(
+        parseInt(request.body.id, 10)
+      );
+
+      this.repo.analyseImage(result.fileName, user, response);
     } catch (err) {
       console.log(err);
-
-      response.sendStatus(400);
+      response.status(400).json({ message: "Could not process file" });
     }
   }
 }
