@@ -7,6 +7,7 @@ push-dev:
   image: docker:latest
   only:
     - develop
+    - master
   services:
     - docker:dind
   before_script:
@@ -24,6 +25,7 @@ deploy-dev:
   image: kroniak/ssh-client
   only:
     - develop
+    - master
   script:
    - mkdir -p ~/.ssh
    - chmod 700 ~/.ssh
