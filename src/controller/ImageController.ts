@@ -24,6 +24,7 @@ import {
 } from "../shared/constants";
 import { AnalysisController } from "./AnalysisController";
 import { DeleteController } from "./DeleteController";
+import { IResponse } from "../models/Response.model";
 
 export class ImageController {
   analysisController: AnalysisController;
@@ -103,10 +104,20 @@ export class ImageController {
       const analysis: Analysis = await this.analysisController.store(__res);
       analysis.user.password = "";
       analysis.user.salt = "";
-      response.status(201).json({
+
+      const _response: IResponse = {
+        status: 201,
         message: "Analysis complete",
-        data: { analysisId: analysis.id }
-      });
+        data: { id: analysis.id }
+      };
+
+      response
+        .set("status", `${_response.status}`)
+        .status(_response.status)
+        .json({
+          message: _response.message,
+          data: _response.data
+        });
     } else {
       response.status(406).json({ message: "No face recognized" });
     }
