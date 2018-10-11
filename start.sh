@@ -6,4 +6,4 @@ echo export GMAIL_PASS=\"passoctober2018\" >> app-env
  
 . ./app-env
 
-yarn start
+yarn start-prod
