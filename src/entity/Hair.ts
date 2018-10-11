@@ -4,7 +4,7 @@ import { HairColor } from "./HairColor";
 @Entity()
 export class Hair {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column("double precision")
   bald: number;
@@ -12,6 +12,8 @@ export class Hair {
   @Column()
   invisible: boolean;
 
-  @OneToMany((type) => HairColor, (hairColor) => hairColor.hair)
+  @OneToMany((type) => HairColor, (hairColor) => hairColor.hair, {
+    cascade: true
+  })
   hairColor: HairColor[];
 }

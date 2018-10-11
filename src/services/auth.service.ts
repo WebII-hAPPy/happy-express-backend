@@ -50,6 +50,7 @@ export class AuthService {
     }
     return decoded.user.id;
   }
+
   /**
    * Tries to decode and validate token against JWT_SECRET
    * @param request User request

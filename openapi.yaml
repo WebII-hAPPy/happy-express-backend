@@ -97,7 +97,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Analysis"
+                $ref: "#/components/schemas/Response"
         400:
           description: "Could not process file"
           content:
@@ -123,6 +123,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  "/api/analysis/{id}":
+    get:
+      tags:
+        - analysis
+      operationId: "get-analysis"
+      responses:
+        200:
+          description: "Analysis Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Analysis"
   "/api/statistic/{id}":
     get:
       tags:
