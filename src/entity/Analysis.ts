@@ -4,7 +4,8 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  JoinColumn
 } from "typeorm";
 import { Accessory } from "./Accessory";
 import { Emotion } from "./Emotion";
@@ -16,7 +17,7 @@ import { User } from "./User";
 @Entity()
 export class Analysis {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @ManyToOne((type) => User, (user) => user.analyses)
   user: User;
@@ -24,16 +25,24 @@ export class Analysis {
   @Column("date")
   time: Date;
 
-  @OneToOne((type) => Emotion)
+  @OneToOne((type) => Emotion, {
+    cascade: true
+  })
+  @JoinColumn()
   emotion: Emotion;
 
   @Column("double precision")
   smile: number;
 
-  @OneToMany((type) => Accessory, (accessory) => accessory.analysis)
+  @OneToMany((type) => Accessory, (accessory) => accessory.analysis, {
+    cascade: true
+  })
   accessories: Accessory[];
 
-  @OneToOne((type) => MakeUp)
+  @OneToOne((type) => MakeUp, {
+    cascade: true
+  })
+  @JoinColumn()
   makeUp: MakeUp;
 
   @Column()
@@ -45,9 +54,15 @@ export class Analysis {
   @Column()
   age: number;
 
-  @OneToOne((type) => FacialHair)
+  @OneToOne((type) => FacialHair, {
+    cascade: true
+  })
+  @JoinColumn()
   facialHair: FacialHair;
 
-  @OneToOne((type) => Hair)
+  @OneToOne((type) => Hair, {
+    cascade: true
+  })
+  @JoinColumn()
   hair: Hair;
 }

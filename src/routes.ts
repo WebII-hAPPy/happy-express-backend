@@ -1,7 +1,7 @@
 import { AnalysisController } from "./controller/AnalysisController";
 import { AuthController } from "./controller/AuthController";
 import { DeleteController } from "./controller/DeleteController";
-import { Repo } from "./controller/Repository";
+import { ImageController } from "./controller/ImageController";
 import { UploadController } from "./controller/UploadController";
 import { UserController } from "./controller/UserController";
 import { IRoute } from "./models/Route.model";
@@ -33,57 +33,15 @@ export const Routes: IRoute[] = [
     action: "all"
   },
   {
-    method: "get",
-    route: "/api/users/:id",
-    controller: UserController,
-    action: "one"
-  },
-  {
-    method: "post",
-    route: "/api/users",
-    controller: UserController,
-    action: "save"
-  },
-  {
-    method: "delete",
-    route: "/api/users",
-    controller: UserController,
-    action: "remove"
-  },
-  {
-    method: "get",
-    route: "/api/analyses",
-    controller: AnalysisController,
-    action: "all"
-  },
-  {
-    method: "get",
-    route: "/api/analysis",
-    controller: AnalysisController,
-    action: "one"
-  },
-  {
-    method: "delete",
-    route: "/api/analysis/:id",
-    controller: AnalysisController,
-    action: "remove"
-  },
-  {
     method: "post",
     route: "/api/image",
     controller: UploadController,
     action: "save"
   },
   {
-    method: "delete",
-    route: "/api/image/:imageName",
-    controller: DeleteController,
-    action: "delete"
-  },
-  {
     method: "get",
-    route: "/api/face/:imageName",
-    controller: Repo,
-    action: "getImageAnalysis"
+    route: "/api/analysis/:id",
+    controller: AnalysisController,
+    action: "one"
   }
 ];

@@ -4,7 +4,7 @@ import { Hair } from "./Hair";
 @Entity()
 export class HairColor {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column()
   color: string;
