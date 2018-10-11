@@ -8,7 +8,7 @@ import { IResponse } from "../models/Response.model";
 export class AnalysisController {
   authService: AuthService;
 
-  private analysisRepository = getRepository(Analysis);
+  private analysisRepository = getRepository(Analysis, process.env.NODE_ENV);
 
   constructor() {
     this.authService = new AuthService();
