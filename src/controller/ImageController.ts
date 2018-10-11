@@ -1,29 +1,31 @@
-import { NextFunction, Request, Response } from "express";
-import { readFile, write } from "fs";
+import { Response } from "express";
+import { readFile } from "fs";
 import { ClientRequest, IncomingMessage } from "http";
 import * as https from "https";
-import {
-  OCP_APIM_SUBSCRIPTION_KEY,
-  URI_BASE,
-  AZURE_PARAMS
-} from "../shared/constants";
-import { IAzureParams } from "../models/AzureParams";
 import * as util from "util";
-import { Writable } from "stream";
-import {
-  IAzureResponse,
-  IAccessory,
-  IHairColor
-} from "../models/AzureResponse";
+import { Accessory } from "../entity/Accessory";
 import { Analysis } from "../entity/Analysis";
 import { Emotion } from "../entity/Emotion";
+import { FacialHair } from "../entity/FacialHair";
+import { Hair } from "../entity/Hair";
 import { HairColor } from "../entity/HairColor";
-import { IAnalysis } from "../models/Analysis";
+import { MakeUp } from "../entity/MakeUp";
 import { User } from "../entity/User";
+import { IAnalysis } from "../models/Analysis";
+import {
+  IAccessory,
+  IAzureResponse,
+  IHairColor
+} from "../models/AzureResponse";
+import {
+  AZURE_PARAMS,
+  OCP_APIM_SUBSCRIPTION_KEY,
+  URI_BASE
+} from "../shared/constants";
 import { AnalysisController } from "./AnalysisController";
 import { DeleteController } from "./DeleteController";
 
-export class Repo {
+export class ImageController {
   analysisController: AnalysisController;
   deleteController: DeleteController;
 
@@ -96,12 +98,15 @@ export class Repo {
 
     if (res !== null || res !== undefined) {
       const _res: IAnalysis = this.convertToAnalysis(res, user);
-      const analysis: Analysis = await this.analysisController.create(_res);
+      const __res: Analysis = this.convertToEntity(_res);
+      // const analysis: Analysis = await this.analysisController.create(_res);
+      const analysis: Analysis = await this.analysisController.store(__res);
       analysis.user.password = "";
       analysis.user.salt = "";
-      response
-        .status(201)
-        .json({ message: "Analysis complete", data: analysis });
+      response.status(201).json({
+        message: "Analysis complete",
+        data: { analysisId: analysis.id }
+      });
     } else {
       response.status(406).json({ message: "No face recognized" });
     }
@@ -115,5 +120,53 @@ export class Repo {
       ...res.faceAttributes
     };
     return _res;
+  }
+
+  convertToEntity(analysis: IAnalysis): Analysis {
+    const _emotion: Emotion = {
+      ...analysis.emotion
+    };
+
+    let _accessories: Accessory[] = [];
+
+    analysis.accessories.forEach((accessory: IAccessory) => {
+      _accessories.push({ ...accessory, analysis: null });
+    });
+
+    const _makeUp: MakeUp = {
+      ...analysis.makeup
+    };
+
+    const _facialHair: FacialHair = {
+      ...analysis.facialHair
+    };
+
+    let _hairColor: HairColor[] = [];
+
+    analysis.hair.hairColor.forEach((hairColor: IHairColor) => {
+      _hairColor.push({ ...hairColor, hair: _hair });
+    });
+
+    const _hair: Hair = {
+      bald: analysis.hair.bald,
+      invisible: analysis.hair.invisible,
+      hairColor: _hairColor
+    };
+
+    const _analysis: Analysis = {
+      user: analysis.user,
+      time: analysis.time,
+      emotion: _emotion,
+      smile: analysis.smile,
+      accessories: _accessories,
+      makeUp: _makeUp,
+      glasses: analysis.glasses,
+      gender: analysis.gender,
+      age: analysis.age,
+      facialHair: _facialHair,
+      hair: _hair
+    };
+
+    return _analysis;
   }
 }

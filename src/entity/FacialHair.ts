@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class FacialHair {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column("double precision")
   moustache: number;

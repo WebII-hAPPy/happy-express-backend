@@ -4,16 +4,16 @@ import { IUploadResponse } from "../models/UploadResult.model";
 import { AuthService } from "../services/auth.service";
 import { COLLECTION_NAME } from "../shared/constants";
 import { db, loadCollection } from "../shared/utils";
-import { Repo } from "./Repository";
+import { ImageController } from "./ImageController";
 import { UserController } from "./UserController";
 
 export class UploadController {
-  repo: Repo;
+  repo: ImageController;
   authService: AuthService;
   userController: UserController;
 
   constructor() {
-    this.repo = new Repo();
+    this.repo = new ImageController();
     this.authService = new AuthService();
     this.userController = new UserController();
   }
