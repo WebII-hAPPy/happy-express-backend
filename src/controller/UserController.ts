@@ -9,7 +9,7 @@ export class UserController {
   constructor() {
     this.userService = new UserService();
   }
-  private userRepository = getRepository(User);
+  private userRepository = getRepository(User, process.env.NODE_ENV);
 
   /**
    * Login authentication
