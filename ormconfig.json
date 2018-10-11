@@ -1,18 +1,40 @@
-{
-  "type": "postgres",
-  "host": "happy-database",
-  "port": 5432,
-  "username": "root",
-  "password": "root",
-  "database": "happy-database",
-  "synchronize": true,
-  "logging": true,
-  "entities": ["src/entity/**/*.ts"],
-  "migrations": ["src/migration/**/*.ts"],
-  "subscribers": ["src/subscriber/**/*.ts"],
-  "cli": {
-    "entitiesDir": "src/entity",
-    "migrationsDir": "src/migration",
-    "subscribersDir": "src/subscriber"
+[
+  {
+    "name": "dev",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "root",
+    "password": "root",
+    "database": "happy-database",
+    "synchronize": true,
+    "logging": false,
+    "entities": ["src/entity/**/*.ts"],
+    "migrations": ["src/migration/**/*.ts"],
+    "subscribers": ["src/subscriber/**/*.ts"],
+    "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+    }
+  },
+  {
+    "name": "prod",
+    "type": "postgres",
+    "host": "happy-databse",
+    "port": 5432,
+    "username": "root",
+    "password": "root",
+    "database": "happy-database",
+    "synchronize": true,
+    "logging": false,
+    "entities": ["src/entity/**/*.ts"],
+    "migrations": ["src/migration/**/*.ts"],
+    "subscribers": ["src/subscriber/**/*.ts"],
+    "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+    }
   }
-}
+]

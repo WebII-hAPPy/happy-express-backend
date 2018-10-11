@@ -13,7 +13,7 @@ import { UPLOAD_PATH } from "./shared/constants";
 import { imageFilter } from "./shared/utils";
 import * as cors from "cors";
 
-createConnection()
+createConnection(process.env.NODE_ENV)
   .then(async (connection) => {
     // create express app
     const app: any = express();
