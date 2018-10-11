@@ -3,7 +3,7 @@ import { getRepository } from "typeorm";
 import { Analysis } from "../entity/Analysis";
 
 export class StatisticController {
-  private analysisRepository = getRepository(Analysis);
+  private analysisRepository = getRepository(Analysis, process.env.NODE_ENV);
 
   /**
    * Login authentication

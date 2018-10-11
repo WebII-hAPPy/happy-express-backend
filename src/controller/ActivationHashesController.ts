@@ -6,7 +6,10 @@ import { AuthService } from "../services/auth.service";
 
 export class ActivationHashController {
   authService: AuthService;
-  private activationHashRepository = getRepository(ActivationHash);
+  private activationHashRepository = getRepository(
+    ActivationHash,
+    process.env.NODE_ENV
+  );
 
   constructor() {
     this.authService = new AuthService();
