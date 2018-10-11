@@ -21,7 +21,7 @@
   {
     "name": "prod",
     "type": "postgres",
-    "host": "happy-databse",
+    "host": "happy-database",
     "port": 5432,
     "username": "root",
     "password": "root",
