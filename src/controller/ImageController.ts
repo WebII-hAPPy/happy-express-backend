@@ -105,18 +105,12 @@ export class ImageController {
       analysis.user.password = "";
       analysis.user.salt = "";
 
-      const _response: IResponse = {
-        status: 201,
-        message: "Analysis complete",
-        data: { id: analysis.id }
-      };
-
       response
-        .set("status", `${_response.status}`)
-        .status(_response.status)
+        .set("status", "201")
+        .status(201)
         .json({
-          message: _response.message,
-          data: _response.data
+          message: "Analysis complete",
+          data: { analysisId: analysis.id }
         });
     } else {
       response.status(406).json({ message: "No face recognized" });
