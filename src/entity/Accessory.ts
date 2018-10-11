@@ -4,7 +4,7 @@ import { Analysis } from "./Analysis";
 @Entity()
 export class Accessory {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column()
   type: string;

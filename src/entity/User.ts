@@ -4,7 +4,7 @@ import { Analysis } from "./Analysis";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({
     default: false
@@ -33,6 +33,8 @@ export class User {
   })
   analysisCount: number;
 
-  @OneToMany((type) => Analysis, (analysis) => analysis.user)
+  @OneToMany((type) => Analysis, (analysis) => analysis.user, {
+    cascade: true
+  })
   analyses: Analysis[];
 }
