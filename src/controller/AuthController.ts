@@ -98,7 +98,9 @@ export class AuthController {
       user = await this.userController.createUser(request);
 
       const isVerification: boolean = true;
-      const hash: ActivationHash = await this.hashController.createHash(user);
+      let hash: ActivationHash = await this.hashController.createHash(user);
+      hash.user = user;
+      hash = await this.hashController.update(hash);
       this.emailService.send(user.email, user.name, isVerification, hash.hash);
 
       if (user) {
@@ -126,16 +128,16 @@ export class AuthController {
     response: Response,
     next: NextFunction
   ): Promise<IResponse> {
-    const hash: ActivationHash = await this.hashController.findHash(
+    let hash: ActivationHash = await this.hashController.findByHash(
       request.params.hash
     );
+
     if (hash) {
-      let user: User = await this.userController.getUserById(hash.userId);
+      let user: User = hash.user;
       user.active = true;
       user = await this.userController.update(user);
-      user.password = "";
-      user.salt = "";
-      this.hashController.removeHash(hash);
+      hash = await this.hashController.removeHash(hash);
+
       return {
         status: 200,
         message: "User successfully activated",
@@ -145,6 +147,7 @@ export class AuthController {
         }
       };
     }
+
     return {
       status: 404,
       message: "Activation link invalid or expired"

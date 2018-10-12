@@ -1,5 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn
+} from "typeorm";
 import { Analysis } from "./Analysis";
+import { ActivationHash } from "./ActivationHash";
 
 @Entity()
 export class User {
@@ -33,8 +41,15 @@ export class User {
   })
   analysisCount: number;
 
-  @OneToMany((type) => Analysis, (analysis) => analysis.user, {
+  @OneToOne((type) => ActivationHash, {
     cascade: true
+  })
+  activationHash: ActivationHash;
+
+  @OneToMany((type) => Analysis, (analysis) => analysis.user, {
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
   })
   analyses: Analysis[];
 }

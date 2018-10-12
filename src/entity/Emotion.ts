@@ -1,9 +1,24 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn
+} from "typeorm";
+import { Analysis } from "./Analysis";
 
 @Entity()
 export class Emotion {
   @PrimaryGeneratedColumn()
   id?: number;
+
+  @OneToOne((type) => Analysis, {
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+  })
+  @JoinColumn()
+  analysis: Analysis;
 
   @Column("double precision")
   anger: number;

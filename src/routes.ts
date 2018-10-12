@@ -1,7 +1,5 @@
 import { AnalysisController } from "./controller/AnalysisController";
 import { AuthController } from "./controller/AuthController";
-import { DeleteController } from "./controller/DeleteController";
-import { ImageController } from "./controller/ImageController";
 import { UploadController } from "./controller/UploadController";
 import { UserController } from "./controller/UserController";
 import { IRoute } from "./models/Route.model";
@@ -20,17 +18,22 @@ export const Routes: IRoute[] = [
     action: "register"
   },
   {
+    method: "post",
+    route: "/api/changeName/:id",
+    controller: UserController,
+    action: "changeName"
+  },
+  {
+    method: "delete",
+    route: "/api/deleteAccount/:id",
+    controller: UserController,
+    action: "deleteAccount"
+  },
+  {
     method: "get",
     route: "/verifyAccount/:hash",
     controller: AuthController,
     action: "verifyAccount"
-  },
-  {
-    method: "get",
-    // todo: protect route
-    route: "/users",
-    controller: UserController,
-    action: "all"
   },
   {
     method: "post",
@@ -43,5 +46,11 @@ export const Routes: IRoute[] = [
     route: "/api/analysis/:id",
     controller: AnalysisController,
     action: "one"
+  },
+  {
+    method: "delete",
+    route: "/api/analysis/:id",
+    controller: AnalysisController,
+    action: "remove"
   }
 ];

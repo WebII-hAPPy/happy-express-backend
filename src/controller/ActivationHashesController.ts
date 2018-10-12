@@ -15,65 +15,56 @@ export class ActivationHashController {
     this.authService = new AuthService();
   }
 
-  async all(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<ActivationHash[]> {
-    return this.activationHashRepository.find();
+  /**
+   * creates a newe hash objects and saves it into the database
+   * @param user new registered user, hash for email validation
+   */
+  public async createHash(user: User): Promise<ActivationHash> {
+    const hash: ActivationHash = new ActivationHash();
+    hash.hash = await this.authService.createHash();
+
+    return hash;
   }
 
-  async one(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<ActivationHash> {
-    return this.activationHashRepository.findOne(request.params.id);
+  /**
+   * updates a hash
+   * @param hash updated activation hash object
+   */
+  async update(hash: ActivationHash): Promise<ActivationHash> {
+    return this.activationHashRepository.save(hash);
   }
 
-  public async findHash(hash: string): Promise<ActivationHash> {
-    return this.activationHashRepository
+  /**
+   * finds hash in database
+   * @param hash hash string
+   */
+  async findByHash(hash: string): Promise<ActivationHash> {
+    return await this.activationHashRepository
       .createQueryBuilder("hash")
+      .innerJoinAndSelect("hash.user", "user")
       .select()
       .where("hash.hash = :hash", { hash: hash })
       .getOne();
   }
 
-  async save(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<ActivationHash> {
-    return this.activationHashRepository.save(request.body);
+  /**
+   * removes hash from database
+   * @param hash to be removed hash object
+   */
+  async removeHash(hash: ActivationHash): Promise<ActivationHash> {
+    return await this.activationHashRepository.remove(hash);
   }
 
-  async remove(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<void> {
-    await this.activationHashRepository.remove(request.params.id);
-  }
+  async removeInactiveHash(userId: number): Promise<ActivationHash> {
+    const hash: ActivationHash = await this.activationHashRepository
+      .createQueryBuilder("hash")
+      .innerJoinAndSelect("hash.user", "user")
+      .select()
+      .where("hash.user.id = :userId", { userId: userId })
+      .getOne();
 
-  async removeHash(hash: ActivationHash): Promise<void> {
-    await this.activationHashRepository.remove(hash);
-  }
-
-  async query(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<void> {
-    await this.activationHashRepository.createQueryBuilder("analysis");
-    // .where(`analysis.uuid = ${request.params.imageName}`)
-    // .andWhere(`analysis.user.id = ${request.body.userId}`);
-  }
-
-  public async createHash(user: User): Promise<ActivationHash> {
-    const hash: ActivationHash = new ActivationHash();
-    hash.hash = await this.authService.createHash();
-    hash.userId = user.id;
-
-    return this.activationHashRepository.save(hash);
+    if (hash) {
+      return this.activationHashRepository.remove(hash);
+    }
   }
 }
