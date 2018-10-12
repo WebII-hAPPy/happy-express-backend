@@ -2,12 +2,11 @@ import {
   Column,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn,
   OneToOne,
-  JoinColumn
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { Analysis } from "./Analysis";
 import { ActivationHash } from "./ActivationHash";
+import { Analysis } from "./Analysis";
 
 @Entity()
 export class User {
@@ -18,9 +17,6 @@ export class User {
     default: false
   })
   active: boolean;
-
-  // @OneToOne((type) => ActivationHash)
-  // hash: ActivationHash;
 
   @Column()
   name: string;

@@ -1,7 +1,7 @@
-import * as Loki from "lokijs";
 import * as del from "del";
-import { UPLOAD_PATH, DB_NAME } from "./constants";
+import * as Loki from "lokijs";
 import * as path from "path";
+import { DB_NAME, UPLOAD_PATH } from "./constants";
 
 /**
  * Throws an error if the type of the image isnt jpg, jpeg, png or gif.

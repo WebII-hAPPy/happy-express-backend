@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Analysis } from "../entity/Analysis";
-import { IAnalysis } from "../models/Analysis";
-import { AuthService } from "../services/auth.service";
 import { IResponse } from "../models/Response.model";
+import { AuthService } from "../services/auth.service";
 
 export class AnalysisController {
   authService: AuthService;

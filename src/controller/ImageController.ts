@@ -24,7 +24,6 @@ import {
 } from "../shared/constants";
 import { AnalysisController } from "./AnalysisController";
 import { DeleteController } from "./DeleteController";
-import { IResponse } from "../models/Response.model";
 
 export class ImageController {
   analysisController: AnalysisController;

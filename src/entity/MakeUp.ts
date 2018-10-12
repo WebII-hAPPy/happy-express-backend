@@ -1,9 +1,9 @@
 import {
   Column,
   Entity,
-  PrimaryGeneratedColumn,
+  JoinColumn,
   OneToOne,
-  JoinColumn
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { Analysis } from "./Analysis";
 

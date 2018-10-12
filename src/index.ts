@@ -1,4 +1,5 @@
 import * as bodyParser from "body-parser";
+import * as cors from "cors";
 import * as express from "express";
 import { Request, Response } from "express";
 import * as morgan from "morgan";
@@ -11,7 +12,6 @@ import { Routes } from "./routes";
 import { AuthService } from "./services/auth.service";
 import { UPLOAD_PATH } from "./shared/constants";
 import { imageFilter } from "./shared/utils";
-import * as cors from "cors";
 
 createConnection(process.env.NODE_ENV)
   .then(async (connection) => {
