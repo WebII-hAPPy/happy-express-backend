@@ -12,6 +12,9 @@ export class HairColor {
   @Column("double precision")
   confidence: number;
 
-  @ManyToOne((type) => Hair, (hair) => hair.hairColor)
+  @ManyToOne((type) => Hair, (hair) => hair.hairColor, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+  })
   hair: Hair;
 }

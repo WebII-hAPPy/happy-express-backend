@@ -1,70 +1,57 @@
 import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { User } from "../entity/User";
+import { IResponse } from "../models/Response.model";
+import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
+import { ActivationHashController } from "./ActivationHashesController";
 
 export class UserController {
   userService: UserService;
-
+  authService: AuthService;
+  hashController: ActivationHashController;
   constructor() {
     this.userService = new UserService();
+    this.authService = new AuthService();
+    this.hashController = new ActivationHashController();
   }
   private userRepository = getRepository(User, process.env.NODE_ENV);
 
-  /**
-   * Login authentication
-   * @param request User request
-   * @param response Server response
-   * @param next callback
-   */
-  async all(
+  async deleteAccount(
     request: Request,
     response: Response,
     next: NextFunction
-  ): Promise<User[]> {
-    return this.userRepository.find();
-  }
+  ): Promise<IResponse> {
+    if (this.authService.affirmIdentity(request)) {
+      const user: User = await this.userRepository.findOne(request.params.id);
+      if (user === undefined || user === null) {
+        return {
+          status: 404,
+          message: "Could not find User in database"
+        };
+      }
 
-  /**
-   * Login authentication
-   * @param request User request
-   * @param response Server response
-   * @param next callback
-   */
-  async one(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<User> {
-    return this.userRepository.findOne(request.params.id);
-  }
+      if (!user.active) {
+        this.hashController.removeInactiveHash(user.id).then();
+      }
 
-  /**
-   * Login authentication
-   * @param request User request
-   * @param response Server response
-   * @param next callback
-   */
-  async save(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<any> {
-    return this.userRepository.save(request.body);
-  }
-
-  /**
-   * Login authentication
-   * @param request User request
-   * @param response Server response
-   * @param next callback
-   */
-  async remove(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<void> {
-    await this.userRepository.remove(request.params.id);
+      const deleted: User = await this.userRepository.remove(user);
+      if (deleted !== null || deleted !== undefined) {
+        return {
+          status: 200,
+          message: "User successfully deleted",
+          data: { deletedUser: deleted }
+        };
+      }
+      return {
+        status: 500,
+        message: "Could not delete User"
+      };
+    }
+    return {
+      status: 401,
+      message: "Could not affirm identity"
+    };
   }
 
   /**
@@ -113,5 +100,34 @@ export class UserController {
     user.salt = salt;
     user.password = hash;
     return this.userRepository.save(user);
+  }
+
+  public async changeName(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<IResponse> {
+    if (this.authService.affirmIdentity(request)) {
+      let user: User = await this.getUserById(request.params.id);
+      if (user) {
+        user.name = request.body.name;
+        user = await this.update(user);
+        user.password = "";
+        user.salt = "";
+        return {
+          status: 200,
+          message: "Name changed successfully",
+          data: user
+        };
+      }
+      return {
+        status: 404,
+        message: "Could not find user in database"
+      };
+    }
+    return {
+      status: 401,
+      message: "Could not affirm identity"
+    };
   }
 }

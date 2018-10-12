@@ -90,8 +90,7 @@ export class AuthService {
     if (!decoded) {
       return false;
     } else {
-      // tslint:disable-next-line
-      if (decoded.user.id === parseInt(request.body.id, 10)) {
+      if (decoded.user.id === parseInt(request.params.id, 10)) {
         return true;
       }
       return false;

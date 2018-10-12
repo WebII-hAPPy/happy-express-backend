@@ -7,25 +7,10 @@ import { IResponse } from "../models/Response.model";
 
 export class AnalysisController {
   authService: AuthService;
-
   private analysisRepository = getRepository(Analysis, process.env.NODE_ENV);
 
   constructor() {
     this.authService = new AuthService();
-  }
-
-  /**
-   * Login authentication
-   * @param request User request
-   * @param response Server response
-   * @param next callback
-   */
-  async all(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<Analysis[]> {
-    return this.analysisRepository.find();
   }
 
   /**
@@ -68,28 +53,6 @@ export class AnalysisController {
   }
 
   /**
-   * Login authentication
-   * @param request User request
-   * @param response Server response
-   * @param next callback
-   */
-  async save(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<any> {
-    return this.analysisRepository.save(request.body);
-  }
-
-  /**
-   * Inserts a single analysis into the database
-   * @param analysis accepts objects that implement the IAnalysis interface
-   */
-  async create(analysis: IAnalysis): Promise<any> {
-    return this.analysisRepository.save(analysis);
-  }
-
-  /**
    * Inserts a single analysis into the database
    * @param analysis analysis object
    */
@@ -108,22 +71,9 @@ export class AnalysisController {
     response: Response,
     next: NextFunction
   ): Promise<void> {
-    await this.analysisRepository.remove(request.params.id);
-  }
-
-  /**
-   * Login authentication
-   * @param request User request
-   * @param response Server response
-   * @param next callback
-   */
-  async query(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<void> {
-    await this.analysisRepository.createQueryBuilder("analysis");
-    // .where(`analysis.uuid = ${request.params.imageName}`)
-    // .andWhere(`analysis.user.id = ${request.body.userId}`);
+    const analysis: Analysis = await this.analysisRepository.findOne(
+      request.params.id
+    );
+    await this.analysisRepository.remove(analysis);
   }
 }

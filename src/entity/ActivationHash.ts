@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+  JoinColumn
+} from "typeorm";
+import { User } from "./User";
 
 @Entity()
 export class ActivationHash {
@@ -8,6 +16,7 @@ export class ActivationHash {
   @Column()
   hash: string;
 
-  @Column()
-  userId: number;
+  @OneToOne((type) => User)
+  @JoinColumn()
+  user: User;
 }

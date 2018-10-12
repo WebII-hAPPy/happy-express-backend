@@ -12,6 +12,9 @@ export class Accessory {
   @Column("float")
   confidence: number;
 
-  @ManyToOne((type) => Analysis, (analysis) => analysis.accessories)
+  @ManyToOne((type) => Analysis, (analysis) => analysis.accessories, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+  })
   analysis: Analysis;
 }

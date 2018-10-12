@@ -59,7 +59,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
+  "/verifyAccount/{hash}":
     get:
       tags:
         - "verify"
@@ -85,6 +85,62 @@ paths:
           required: true
           schema:
             type: string
+  "/api/changeName":
+    post:
+      tags:
+        - "name-change"
+      description: "Change name of a user"
+      operationId: "name-change"
+      responses:
+        200:
+          description: "Name changed successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/User"
+        401:
+          description: "Could not affirm identity"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/Error"
+        404:
+          description: "Could not find user in database"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/Error"
+  "/api/deleteAccount":
+    delete:
+      tags:
+        - "delete-account"
+      description: "delete account and all related information"
+      operationId: "delete-account"
+      responses:
+        200:
+          description: "User successfully deleted"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        401:
+          description: "Could not affirm identity"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: "Could not find User in database"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: "Could not delete User"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   "/api/image":
     post:
       tags:
@@ -135,6 +191,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Analysis"
+        400:
+          description: "Could not find analysis for user"
+          content:
+            applicaiton/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   "/api/statistic/{id}":
     get:
       tags:

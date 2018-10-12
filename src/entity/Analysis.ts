@@ -19,30 +19,37 @@ export class Analysis {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @ManyToOne((type) => User, (user) => user.analyses)
+  @ManyToOne((type) => User, (user) => user.analyses, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+  })
   user: User;
 
   @Column("date")
   time: Date;
 
   @OneToOne((type) => Emotion, {
-    cascade: true
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
   })
-  @JoinColumn()
   emotion: Emotion;
 
   @Column("double precision")
   smile: number;
 
   @OneToMany((type) => Accessory, (accessory) => accessory.analysis, {
-    cascade: true
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
   })
   accessories: Accessory[];
 
   @OneToOne((type) => MakeUp, {
-    cascade: true
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
   })
-  @JoinColumn()
   makeUp: MakeUp;
 
   @Column()
@@ -55,14 +62,16 @@ export class Analysis {
   age: number;
 
   @OneToOne((type) => FacialHair, {
-    cascade: true
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
   })
-  @JoinColumn()
   facialHair: FacialHair;
 
   @OneToOne((type) => Hair, {
-    cascade: true
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
   })
-  @JoinColumn()
   hair: Hair;
 }

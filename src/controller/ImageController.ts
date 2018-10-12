@@ -94,7 +94,6 @@ export class ImageController {
     user: User,
     response: Response
   ): Promise<void> {
-    console.log(result);
     const res: IAzureResponse = JSON.parse(result)[0];
 
     if (res !== null || res !== undefined) {
@@ -129,6 +128,7 @@ export class ImageController {
 
   convertToEntity(analysis: IAnalysis): Analysis {
     const _emotion: Emotion = {
+      analysis: null,
       ...analysis.emotion
     };
 
@@ -139,10 +139,12 @@ export class ImageController {
     });
 
     const _makeUp: MakeUp = {
+      analysis: null,
       ...analysis.makeup
     };
 
     const _facialHair: FacialHair = {
+      analysis: null,
       ...analysis.facialHair
     };
 
@@ -153,6 +155,7 @@ export class ImageController {
     });
 
     const _hair: Hair = {
+      analysis: null,
       bald: analysis.hair.bald,
       invisible: analysis.hair.invisible,
       hairColor: _hairColor
@@ -171,6 +174,22 @@ export class ImageController {
       facialHair: _facialHair,
       hair: _hair
     };
+
+    _analysis.emotion.analysis = _analysis;
+    _analysis.accessories.forEach(
+      (accessory: Accessory) => (accessory.analysis = _analysis)
+    );
+    _analysis.facialHair.analysis = _analysis;
+    _analysis.makeUp.analysis = _analysis;
+    _analysis.hair.analysis = _analysis;
+
+    _emotion.analysis = _analysis;
+    _accessories.forEach(
+      (accessory: Accessory) => (accessory.analysis = _analysis)
+    );
+    _facialHair.analysis = _analysis;
+    _makeUp.analysis = _analysis;
+    _hair.analysis = _analysis;
 
     return _analysis;
   }
