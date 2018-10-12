@@ -18,7 +18,7 @@ export const Routes: IRoute[] = [
     action: "register"
   },
   {
-    method: "post",
+    method: "put",
     route: "/api/changeName/:id",
     controller: UserController,
     action: "changeName"
