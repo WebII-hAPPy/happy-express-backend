@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-push-dev:
+push:
   stage: build
   image: docker:latest
   only:
@@ -20,7 +20,7 @@ push-dev:
   after_script:
     - docker logout $CI_REGISTRY
 
-deploy-dev:
+deploy:
   stage: deploy
   image: kroniak/ssh-client
   only:
