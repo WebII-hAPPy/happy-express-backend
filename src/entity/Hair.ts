@@ -14,7 +14,7 @@ export class Hair {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @OneToOne((type) => Analysis, {
+  @OneToOne((type) => Analysis, (analysis) => analysis.hair, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })

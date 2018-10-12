@@ -12,7 +12,7 @@ export class FacialHair {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @OneToOne((type) => Analysis, {
+  @OneToOne((type) => Analysis, (analysis) => analysis.facialHair, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })
