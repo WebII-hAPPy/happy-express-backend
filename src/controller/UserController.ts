@@ -115,6 +115,7 @@ export class UserController {
         user.password = "";
         user.salt = "";
         console.log(request);
+        
         console.log(user);
         return {
           status: 200,
