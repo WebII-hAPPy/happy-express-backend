@@ -4,7 +4,8 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  JoinColumn
 } from "typeorm";
 import { Accessory } from "./Accessory";
 import { Emotion } from "./Emotion";
@@ -27,9 +28,8 @@ export class Analysis {
   @Column("date")
   time: Date;
 
-  @OneToOne((type) => Emotion, {
+  @OneToOne((type) => Emotion, (emotion) => emotion.analysis, {
     cascade: true,
-    onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })
   emotion: Emotion;
@@ -44,9 +44,8 @@ export class Analysis {
   })
   accessories: Accessory[];
 
-  @OneToOne((type) => MakeUp, {
+  @OneToOne((type) => MakeUp, (makeUp) => makeUp.analysis, {
     cascade: true,
-    onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })
   makeUp: MakeUp;
@@ -60,16 +59,14 @@ export class Analysis {
   @Column()
   age: number;
 
-  @OneToOne((type) => FacialHair, {
+  @OneToOne((type) => FacialHair, (facialHair) => facialHair.analysis, {
     cascade: true,
-    onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })
   facialHair: FacialHair;
 
-  @OneToOne((type) => Hair, {
+  @OneToOne((type) => Hair, (hair) => hair.analysis, {
     cascade: true,
-    onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })
   hair: Hair;

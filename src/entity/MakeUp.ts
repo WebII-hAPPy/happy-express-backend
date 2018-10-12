@@ -12,7 +12,7 @@ export class MakeUp {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @OneToOne((type) => Analysis, {
+  @OneToOne((type) => Analysis, (analysis) => analysis.makeUp, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })
