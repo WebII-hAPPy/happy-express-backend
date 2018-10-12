@@ -114,9 +114,6 @@ export class UserController {
         user = await this.update(user);
         user.password = "";
         user.salt = "";
-        console.log(request);
-        
-        console.log(user);
         return {
           status: 200,
           message: "Name changed successfully",
