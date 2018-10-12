@@ -1,13 +1,13 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
-  PrimaryGeneratedColumn,
   OneToOne,
-  JoinColumn
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { HairColor } from "./HairColor";
 import { Analysis } from "./Analysis";
+import { HairColor } from "./HairColor";
 
 @Entity()
 export class Hair {

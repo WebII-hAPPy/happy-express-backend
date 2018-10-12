@@ -4,8 +4,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn,
-  JoinColumn
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { Accessory } from "./Accessory";
 import { Emotion } from "./Emotion";

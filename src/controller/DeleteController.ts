@@ -1,4 +1,3 @@
-import { NextFunction, Request, Response } from "express";
 import { deleteImage } from "../shared/utils";
 
 export class DeleteController {
