@@ -19,7 +19,7 @@
     }
   },
   {
-    "name": "prod",
+    "name": "production",
     "type": "postgres",
     "host": "happy-database",
     "port": 5432,
