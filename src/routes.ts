@@ -3,6 +3,7 @@ import { AuthController } from "./controller/AuthController";
 import { UploadController } from "./controller/UploadController";
 import { UserController } from "./controller/UserController";
 import { IRoute } from "./models/Route.model";
+import { StatisticController } from "./controller/Statistics";
 
 export const Routes: IRoute[] = [
   {
@@ -48,9 +49,9 @@ export const Routes: IRoute[] = [
     action: "one"
   },
   {
-    method: "delete",
-    route: "/api/analysis/:id",
-    controller: AnalysisController,
-    action: "remove"
+    method: "get",
+    route: "/api/statistics/:id",
+    controller: StatisticController,
+    action: "compose"
   }
 ];

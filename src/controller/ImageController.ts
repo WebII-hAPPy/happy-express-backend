@@ -24,14 +24,17 @@ import {
 } from "../shared/constants";
 import { AnalysisController } from "./AnalysisController";
 import { DeleteController } from "./DeleteController";
+import { UserController } from "./UserController";
 
 export class ImageController {
   analysisController: AnalysisController;
   deleteController: DeleteController;
+  userController: UserController;
 
   constructor() {
     this.analysisController = new AnalysisController();
     this.deleteController = new DeleteController();
+    this.userController = new UserController();
   }
 
   public async analyseImage(
@@ -95,11 +98,16 @@ export class ImageController {
   ): Promise<void> {
     const res: IAzureResponse = JSON.parse(result)[0];
 
-    if (res !== null || res !== undefined) {
+    if (res !== undefined || res !== null) {
       const _res: IAnalysis = this.convertToAnalysis(res, user);
       const __res: Analysis = this.convertToEntity(_res);
       // const analysis: Analysis = await this.analysisController.create(_res);
       const analysis: Analysis = await this.analysisController.store(__res);
+
+      user.analysisCount += 1;
+
+      await this.userController.update(user);
+
       analysis.user.password = "";
       analysis.user.salt = "";
 
@@ -111,7 +119,10 @@ export class ImageController {
           data: { analysisId: analysis.id }
         });
     } else {
-      response.status(406).json({ message: "No face recognized" });
+      response
+        .set("status", "406")
+        .status(406)
+        .json({ message: "No face recognized" });
     }
   }
 

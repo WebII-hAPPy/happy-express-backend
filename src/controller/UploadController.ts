@@ -45,11 +45,6 @@ export class UploadController {
         originalName: data.originalname
       };
 
-      // move this somewhere else
-      // if (!request.body.id && !this.authService.affirmIdentity(request)) {
-      //   response.status(400).json({ message: "Could not confirm identity" });
-      // }
-
       const userId: number = this.authService.getIdClaim(request);
 
       if (userId !== -1) {
