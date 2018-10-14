@@ -26,6 +26,8 @@ export class AnalysisController {
     const userId: number = this.authService.getIdClaim(request);
     const analysis: Analysis = await this.analysisRepository
       .createQueryBuilder("analysis")
+      .select()
+      .where("analysis.id = :id", { id: request.params.id })
       .innerJoinAndSelect("analysis.user", "user")
       .innerJoinAndSelect("analysis.emotion", "emotion")
       .leftJoinAndSelect("analysis.accessories", "accessories")
@@ -33,11 +35,11 @@ export class AnalysisController {
       .innerJoinAndSelect("analysis.facialHair", "facialHair")
       .innerJoinAndSelect("analysis.hair", "hair")
       .leftJoinAndSelect("hair.hairColor", "hairColor")
-      .select()
-      .where("analysis.id = :id", { id: request.params.id })
       .getOne();
 
     if (userId === analysis.user.id) {
+      analysis.user.password = "";
+      analysis.user.salt = "";
       return {
         status: 200,
         message: "Analysis found",
