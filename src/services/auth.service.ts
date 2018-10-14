@@ -3,10 +3,15 @@ import * as crypto from "crypto";
 import { Request } from "express";
 import * as jwt from "jsonwebtoken";
 import { User } from "../entity/User";
+import { UserController } from "../controller/UserController";
 
 export class AuthService {
+  usercController: UserController;
   readonly secret = process.env.JWT_SECRET;
 
+  constructor() {
+    this.usercController = new UserController();
+  }
   /**
    * Test password against hash.
    * @param password Password from user request.
@@ -95,6 +100,16 @@ export class AuthService {
       }
       return false;
     }
+  }
+
+  public async tokenUserExists(request: Request): Promise<boolean> {
+    const user: User = await this.usercController.getUserById(
+      this.getIdClaim(request)
+    );
+    if (user === undefined || user === null) {
+      return false;
+    }
+    return true;
   }
 
   /**

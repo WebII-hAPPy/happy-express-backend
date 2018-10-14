@@ -153,4 +153,21 @@ export class AuthController {
       message: "Activation link invalid or expired"
     };
   }
+
+  public async isTokenClaimValid(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<IResponse> {
+    if (await this.authService.tokenUserExists(request)) {
+      return {
+        status: 200,
+        message: "User exist"
+      };
+    }
+    return {
+      status: 404,
+      message: "User does not exist"
+    };
+  }
 }

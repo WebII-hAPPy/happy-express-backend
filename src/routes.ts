@@ -4,6 +4,7 @@ import { UploadController } from "./controller/UploadController";
 import { UserController } from "./controller/UserController";
 import { IRoute } from "./models/Route.model";
 import { StatisticController } from "./controller/Statistics";
+import { AuthService } from "./services/auth.service";
 
 export const Routes: IRoute[] = [
   {
@@ -35,6 +36,12 @@ export const Routes: IRoute[] = [
     route: "/verifyAccount/:hash",
     controller: AuthController,
     action: "verifyAccount"
+  },
+  {
+    method: "post",
+    route: "/api/verifyToken",
+    controller: AuthController,
+    action: "isTokenClaimValid"
   },
   {
     method: "post",

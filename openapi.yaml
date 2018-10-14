@@ -85,6 +85,25 @@ paths:
           required: true
           schema:
             type: string
+  "/verifyToken":
+    post:
+      tags:
+        - "verify-token"
+      description: "Verifies the user in jwt claim exists"
+      operationId: "verify-token"
+      responses:
+        200:
+          description: "User exists"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+        404:
+          description: "User does not exist"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   "/api/changeName":
     post:
       tags:
