@@ -97,19 +97,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/User"
+                $ref: "#/components/schemas/User"
         401:
           description: "Could not affirm identity"
           content:
             application/json:
               schema:
-                $ref: "#/components/Error"
+                $ref: "#/components/schemas/Error"
         404:
           description: "Could not find user in database"
           content:
             application/json:
               schema:
-                $ref: "#/components/Error"
+                $ref: "#/components/schemas/Error"
   "/api/deleteAccount":
     delete:
       tags:
@@ -165,7 +165,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/Error"
+                $ref: "#/components/schemas/Error"
 
         406:
           description: "No face recognized"
@@ -197,6 +197,13 @@ paths:
             applicaiton/json:
               schema:
                 $ref: "#/components/schemas/Error"
+      parameters:
+        - in: path
+          name: "id"
+          description: "The user id."
+          required: true
+          schema:
+            type: number
   "/api/statistic/{id}":
     get:
       tags:
