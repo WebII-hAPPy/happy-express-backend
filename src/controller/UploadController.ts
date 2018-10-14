@@ -49,13 +49,26 @@ export class UploadController {
 
       if (userId !== -1) {
         const user: User = await this.userController.getUserById(userId);
-        this.repo.analyseImage(result.fileName, user, response);
+        if (user !== undefined && user !== null) {
+          this.repo.analyseImage(result.fileName, user, response);
+        } else {
+          response
+            .set("status", "404")
+            .status(404)
+            .json({ message: "User not found" });
+        }
       } else {
-        response.status(401).json({ message: "Could not identify user claim" });
+        response
+          .set("status", "401")
+          .status(401)
+          .json({ message: "Could not identify user claim" });
       }
     } catch (err) {
       console.log(err);
-      response.status(400).json({ message: "Could not process file" });
+      response
+        .set("status", "400")
+        .status(400)
+        .json({ message: "Could not process file" });
     }
   }
 }
