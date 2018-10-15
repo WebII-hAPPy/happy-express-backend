@@ -159,7 +159,11 @@ export class AuthController {
     response: Response,
     next: NextFunction
   ): Promise<IResponse> {
-    if (await this.authService.tokenUserExists(request)) {
+    const userId: number = this.authService.getIdClaim(request);
+
+    const user: User = await this.userController.getUserById(userId);
+
+    if (user !== undefined && user !== null) {
       return {
         status: 200,
         message: "User exist"
