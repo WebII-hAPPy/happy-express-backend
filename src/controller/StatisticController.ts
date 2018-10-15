@@ -4,6 +4,7 @@ import { Analysis } from "../entity/Analysis";
 import { User } from "../entity/User";
 import { AuthService } from "../services/auth.service";
 import { IResponse } from "../models/Response.model";
+import { IEmotionWithTimestamp } from "../models/EmotionsWithTimestamp";
 
 export class StatisticController {
   authService: AuthService;
@@ -29,13 +30,32 @@ export class StatisticController {
         .createQueryBuilder("user")
         .where("user.id = :id", { id: request.params.id })
         .select()
-        .leftJoinAndSelect("user.analyses", "analyses")
+        .leftJoinAndSelect("user.analyses", "analysis")
+        .innerJoinAndSelect("analysis.emotion", "emotion")
         .getOne();
+
+      let emotions: IEmotionWithTimestamp[] = [];
+
+      user.analyses.forEach((analysis: Analysis) => {
+        const emotion: IEmotionWithTimestamp = {
+          id: analysis.emotion.id,
+          timestamp: analysis.time,
+          sadness: analysis.emotion.sadness,
+          anger: analysis.emotion.anger,
+          disgust: analysis.emotion.disgust,
+          fear: analysis.emotion.fear,
+          contempt: analysis.emotion.contempt,
+          neutral: analysis.emotion.neutral,
+          surprise: analysis.emotion.surprise,
+          happiness: analysis.emotion.happiness
+        };
+        emotions.push(emotion);
+      });
 
       return {
         status: 200,
         message: `Request granted. Returning statistics for user ${user.id}`,
-        data: user.analyses
+        data: emotions
       };
     }
     return {

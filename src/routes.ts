@@ -1,10 +1,9 @@
 import { AnalysisController } from "./controller/AnalysisController";
 import { AuthController } from "./controller/AuthController";
+import { StatisticController } from "./controller/StatisticController";
 import { UploadController } from "./controller/UploadController";
 import { UserController } from "./controller/UserController";
 import { IRoute } from "./models/Route.model";
-import { StatisticController } from "./controller/Statistics";
-import { AuthService } from "./services/auth.service";
 
 export const Routes: IRoute[] = [
   {
