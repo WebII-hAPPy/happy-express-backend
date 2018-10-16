@@ -166,7 +166,8 @@ export class AuthController {
     if (user !== undefined && user !== null) {
       return {
         status: 200,
-        message: "User exist"
+        message: "User exist",
+        data: user
       };
     }
     return {
