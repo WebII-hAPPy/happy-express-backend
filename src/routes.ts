@@ -38,7 +38,7 @@ export const Routes: IRoute[] = [
   },
   {
     method: "get",
-    route: "/api/verifyToken",
+    route: "/verifyToken",
     controller: AuthController,
     action: "isTokenClaimValid"
   },
