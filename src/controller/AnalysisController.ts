@@ -24,7 +24,19 @@ export class AnalysisController {
     next: NextFunction
   ): Promise<IResponse> {
     const userId: number = this.authService.getIdClaim(request);
-    const analysis: Analysis = await this.analysisRepository
+
+    let analysis: Analysis = await this.analysisRepository.findOne(
+      request.params.id
+    );
+
+    if (analysis === undefined) {
+      return {
+        status: 404,
+        message: `No analysis with the the id ${request.params.id}`
+      };
+    }
+
+    analysis = await this.analysisRepository
       .createQueryBuilder("analysis")
       .select()
       .where("analysis.id = :id", { id: request.params.id })

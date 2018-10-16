@@ -26,7 +26,7 @@
     "username": "root",
     "password": "root",
     "database": "happy-database",
-    "synchronize": true,
+    "synchronize": false,
     "logging": false,
     "entities": ["src/entity/**/*.ts"],
     "migrations": ["src/migration/**/*.ts"],
