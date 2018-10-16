@@ -33,6 +33,6 @@ deploy:
     - chmod 600 ~/.ssh
     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
-    - ssh $SSH_HOST "docker pull $CI_REGISTRY_IMAGE"
-    - scp -r ./docker-compose.yml $SSH_HOST:/home/mweidmann/happy/
-    - ssh $SSH_HOST "cd /home/$SSH_USER/happy; docker-compose down; docker-compose up -d; docker image prune -f"
+    - ssh $SSH_USER@$SSH_HOST "docker pull $CI_REGISTRY_IMAGE"
+    - scp -r ./docker-compose.yml $SSH_USER@$SSH_HOST:/home/$SSH_USER/happy/
+    - ssh $SSH_USER@$SSH_HOST "cd /home/$DIR/happy; docker-compose down; docker-compose up -d; docker image prune -f"
