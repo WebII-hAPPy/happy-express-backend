@@ -86,7 +86,7 @@ paths:
           schema:
             type: string
   "/verifyToken":
-    post:
+    get:
       tags:
         - "verify-token"
       description: "Verifies the user in jwt claim exists"
