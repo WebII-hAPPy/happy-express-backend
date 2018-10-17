@@ -335,6 +335,10 @@ components:
         id:
           type: "number"
           format: "integer"
+        emotions:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Emotion"
     Accessory:
       properties:
         id:
