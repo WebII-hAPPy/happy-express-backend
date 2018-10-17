@@ -163,10 +163,9 @@ export class AuthController {
 
     const user: User = await this.userController.getUserById(userId);
 
-    user.password = "";
-    user.salt = "";
-
     if (user !== undefined && user !== null) {
+      user.password = "";
+      user.salt = "";
       return {
         status: 200,
         message: "User exist",
