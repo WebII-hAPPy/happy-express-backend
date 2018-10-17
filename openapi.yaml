@@ -1,15 +1,12 @@
 openapi: "3.0.0"
 info:
   description: "API for the Web-Engineering II project hAPPy"
-  version: "0"
+  version: "0.5"
   title: "hAPPy"
 servers:
-  - url: "localhost"
+  - url: "backend.happy-service.ml"
 tags:
-  - name: "face"
-  - name: "user"
   - name: "statistic"
-  - name: "image"
 paths:
   "/register":
     post:
@@ -223,7 +220,7 @@ paths:
           required: true
           schema:
             type: number
-  "/api/statistic/{id}":
+  "/api/statistics/{id}":
     get:
       tags:
         - statistic
@@ -235,25 +232,42 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Statistic"
-        500:
-          description: "An error occurred"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         404:
           description: "User not found"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      parameters:
-        - in: path
-          name: "id"
-          description: "The user id."
-          required: true
-          schema:
-            type: number
+        500:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - statistic
+      operationId: "delete-statistic"
+      responses:
+        200:
+          description: "Successfully deleted all analyses"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+        406:
+          description: "Could not affirm identity"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - in: path
+        name: "id"
+        description: "The user id."
+        required: true
+        schema:
+          type: number
 components:
   schemas:
     User:
