@@ -96,5 +96,9 @@ createConnection(process.env.NODE_ENV)
     app.use(morgan("combined", { stream: new LoggerStream() }));
     // app.use(morgan("combined"));
     console.log("Express server has started on port 3000.");
+
+    return app;
   })
   .catch((error) => console.log(error));
+
+export { createConnection };
