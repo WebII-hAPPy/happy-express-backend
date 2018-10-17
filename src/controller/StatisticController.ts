@@ -40,14 +40,16 @@ export class StatisticController {
         const emotion: IEmotionWithTimestamp = {
           id: analysis.emotion.id,
           timestamp: analysis.time,
-          sadness: analysis.emotion.sadness,
-          anger: analysis.emotion.anger,
-          disgust: analysis.emotion.disgust,
-          fear: analysis.emotion.fear,
-          contempt: analysis.emotion.contempt,
-          neutral: analysis.emotion.neutral,
-          surprise: analysis.emotion.surprise,
-          happiness: analysis.emotion.happiness
+          emotions: {
+            sadness: analysis.emotion.sadness,
+            anger: analysis.emotion.anger,
+            disgust: analysis.emotion.disgust,
+            fear: analysis.emotion.fear,
+            contempt: analysis.emotion.contempt,
+            neutral: analysis.emotion.neutral,
+            surprise: analysis.emotion.surprise,
+            happiness: analysis.emotion.happiness
+          }
         };
         emotions.push(emotion);
       });
