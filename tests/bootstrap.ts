@@ -1,7 +1,7 @@
 import * as supertest from "supertest";
-import { createConnection } from "../src/index";
+import { App } from "../src/index";
 import { SuperTest, Test } from "supertest";
 
-export function getTestApp(): SuperTest<Test> {
-  return supertest(createConnection(process.env.NODE_ENV));
+export function getTestApp(): Promise<SuperTest<Test>> {
+  return App.getApp().then((app) => supertest(app));
 }

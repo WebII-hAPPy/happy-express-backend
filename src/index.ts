@@ -1,51 +1,78 @@
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import * as express from "express";
-import { Request, Response } from "express";
+import { Express, Request, Response } from "express";
 import * as morgan from "morgan";
 import * as multer from "multer";
 import "reflect-metadata";
-import { createConnection } from "typeorm";
+import {
+  createConnection,
+  Connection,
+  EntityMetadata,
+  Repository
+} from "typeorm";
 import { LoggerStream } from "./config/logger";
 import { IRequestResult } from "./models/RequestResult.model";
 import { Routes } from "./routes";
 import { AuthService } from "./services/auth.service";
 import { UPLOAD_PATH } from "./shared/constants";
 import { imageFilter } from "./shared/utils";
+import { IEntitiy } from "./models/Entity";
 
-createConnection(process.env.NODE_ENV)
-  .then(async (connection) => {
+export class App {
+  public static async getApp(): Promise<Express> {
+    const connection: Connection = await createConnection(process.env.NODE_ENV);
+
+    // const clearDb: Function = async () => {
+    //   const entities: IEntitiy[] = [
+    //     {
+    //       name: "ActivationHash",
+    //       table: "activation_Hash"
+    //     },
+    //     {
+    //       name: "User",
+    //       table: "user"
+    //     }
+    //   ];
+    //   for (const entity of entities) {
+    //     const repository: Repository<{}> = await connection.getRepository(
+    //       entity.name
+    //     );
+    //     await repository.query(`delete from ${entity.table} where 1=1;`);
+    //   }
+    // };
+
+    // resets test database for each test
+    // if (process.env.NODE_ENV === "test") {
+    //   await clearDb();
+    // }
+
     // create express app
-    const app: any = express();
+    const app: Express = express();
     app.use(bodyParser.json());
-
     const corsOptions: cors.CorsOptions = {
       exposedHeaders: ["Access-Control-Expose-Headers", "code"]
     };
-
     app.use(cors(corsOptions));
-
     const upload: multer.Instance = multer({
       dest: `${UPLOAD_PATH}/`,
       fileFilter: imageFilter
     });
-
     const authService: AuthService = new AuthService();
-
     const middleware: any = {
       skip: function(
-        request: Request,
+        request_1: Request,
         response: Response,
         next: Function
       ): void {
         next();
       },
       protect: function(
-        request: Request,
+        request_3: Request,
         response: Response,
         next: Function
       ): void {
-        if (authService.validate(request)) {
+        if (authService.validate(request_3)) {
           next();
         } else {
           response
@@ -55,7 +82,6 @@ createConnection(process.env.NODE_ENV)
         }
       }
     };
-
     // register express routes from defined application routes
     Routes.forEach((route) => {
       (app as any)[route.method](
@@ -66,20 +92,20 @@ createConnection(process.env.NODE_ENV)
             : middleware.skip,
           route.route.startsWith("/api") ? middleware.protect : middleware.skip
         ],
-        (request: Request, res: Response, next: Function) => {
+        (request_4: Request, res: Response, next: Function) => {
           const result: IRequestResult = new (route.controller as any)()[
             route.action
-          ](request, res, next);
+          ](request_4, res, next);
           if (result instanceof Promise) {
-            result.then((result) => {
-              if (result !== null && result !== undefined) {
-                if (result.status !== undefined) {
+            result.then((result_1) => {
+              if (result_1 !== null && result_1 !== undefined) {
+                if (result_1.status !== undefined) {
                   res
-                    .set("status", `${result.status}`)
-                    .status(result.status)
-                    .json({ message: result.message, data: result.data });
+                    .set("status", `${result_1.status}`)
+                    .status(result_1.status)
+                    .json({ message: result_1.message, data: result_1.data });
                 } else {
-                  res.json({ data: result });
+                  res.json({ data: result_1 });
                 }
               }
             });
@@ -89,16 +115,15 @@ createConnection(process.env.NODE_ENV)
         }
       );
     });
-
     // start express server
     app.listen(3000);
-
     app.use(morgan("combined", { stream: new LoggerStream() }));
     // app.use(morgan("combined"));
     console.log("Express server has started on port 3000.");
-
     return app;
-  })
-  .catch((error) => console.log(error));
+  }
+}
 
-export { createConnection };
+if (process.env.NODE_ENV !== "test") {
+  App.getApp();
+}
