@@ -59,5 +59,11 @@ export const Routes: IRoute[] = [
     route: "/api/statistics/:id",
     controller: StatisticController,
     action: "compose"
+  },
+  {
+    method: "delete",
+    route: "/api/statistics/:id",
+    controller: StatisticController,
+    action: "reset"
   }
 ];
