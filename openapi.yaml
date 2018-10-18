@@ -129,7 +129,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  "/api/deleteAccount":
+  "/api/deleteAccount/:id":
     delete:
       tags:
         - "delete-account"
