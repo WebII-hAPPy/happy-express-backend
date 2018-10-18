@@ -9,9 +9,15 @@
     "database": "happy-database",
     "synchronize": false,
     "logging": true,
-    "entities": ["src/entity/**/*.ts"],
-    "migrations": ["src/migration/**/*.ts"],
-    "subscribers": ["src/subscriber/**/*.ts"],
+    "entities": [
+      "src/entity/**/*.ts"
+    ],
+    "migrations": [
+      "src/migration/**/*.ts"
+    ],
+    "subscribers": [
+      "src/subscriber/**/*.ts"
+    ],
     "cli": {
       "entitiesDir": "src/entity",
       "migrationsDir": "src/migration",
@@ -22,15 +28,21 @@
     "name": "test",
     "type": "postgres",
     "host": "localhost",
-    "port": 5433,
+    "port": 5432,
     "username": "root",
     "password": "root",
     "database": "happy-test",
     "synchronize": false,
-    "logging": true,
-    "entities": ["src/entity/**/*.ts"],
-    "migrations": ["src/migration/**/*.ts"],
-    "subscribers": ["src/subscriber/**/*.ts"],
+    "logging": false,
+    "entities": [
+      "src/entity/**/*.ts"
+    ],
+    "migrations": [
+      "src/migration/**/*.ts"
+    ],
+    "subscribers": [
+      "src/subscriber/**/*.ts"
+    ],
     "cli": {
       "entitiesDir": "src/entity",
       "migrationsDir": "src/migration",
@@ -47,9 +59,15 @@
     "database": "happy-database",
     "synchronize": false,
     "logging": false,
-    "entities": ["src/entity/**/*.ts"],
-    "migrations": ["src/migration/**/*.ts"],
-    "subscribers": ["src/subscriber/**/*.ts"],
+    "entities": [
+      "src/entity/**/*.ts"
+    ],
+    "migrations": [
+      "src/migration/**/*.ts"
+    ],
+    "subscribers": [
+      "src/subscriber/**/*.ts"
+    ],
     "cli": {
       "entitiesDir": "src/entity",
       "migrationsDir": "src/migration",
