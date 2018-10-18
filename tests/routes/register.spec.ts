@@ -4,6 +4,7 @@ import { IRegister } from "../models/register.model";
 
 let app: SuperTest<Test>;
 let token: number;
+let userId: number;
 
 describe("Register test", () => {
   before((done) => {
@@ -101,6 +102,8 @@ describe("Register test", () => {
             return done(err);
           }
           token = res.body.data.token;
+          userId = res.body.data.user.id;
+          console.log(userId);
           done();
         });
     });
@@ -170,6 +173,26 @@ describe("Register test", () => {
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
         .expect(422)
+        .end((err) => (err ? done(err) : done()));
+    });
+  });
+
+  describe("DELETE the test user", () => {
+    const data: IRegister = {
+      name: "test",
+      email: "phuc.vuuu@gmail.com",
+      password: "test"
+    };
+    it("should be rejected", (done) => {
+      app
+        .delete("/api/deleteAccount/" + userId)
+        .send(data)
+        .set({
+          "Accept": "application/json",
+          "authorization": token
+        })
+        .expect("Content-Type", /json/)
+        .expect(200)
         .end((err) => (err ? done(err) : done()));
     });
   });

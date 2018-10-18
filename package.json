@@ -44,6 +44,6 @@
     "start": "NODE_ENV=dev ts-node src/index.ts",
     "start-prod": "NODE_ENV=production ts-node src/index.ts",
     "precommit": "pretty-quick --staged",
-    "test": "NODE_ENV=test mocha --require ts-node/register ./tests/routes/*.spec.ts --exit"
+    "test": "NODE_ENV=test mocha --require ts-node/register ./tests/routes/*.spec.ts ./tests/routes/delete.spec.ts --exit"
   }
 }
