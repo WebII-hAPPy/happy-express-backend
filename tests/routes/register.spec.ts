@@ -6,6 +6,7 @@ import * as path from "path";
 let app: SuperTest<Test>;
 let token: number;
 let userId: number;
+let analysisId: number;
 
 describe("Register test", () => {
   before((done) => {
@@ -104,7 +105,6 @@ describe("Register test", () => {
           }
           token = res.body.data.token;
           userId = res.body.data.user.id;
-          console.log(userId);
           done();
         });
     });
@@ -199,8 +199,7 @@ describe("Register test", () => {
   });
 
   describe("IMAGE upload test image", () => {
-
-    it("should return complete analysis", (done) => {
+    it("should upload a test image", (done) => {
       app
         .post("/api/image")
         .set({
@@ -212,7 +211,60 @@ describe("Register test", () => {
         .expect(201)
         .end((err, resp) => {
           err ? done(err) : done();
-          console.log(resp);
+          analysisId = resp.body.data.analysisId;
+        });
+    });
+  });
+
+  // . TODO: not implemented in the backend.
+  //
+  // describe("IMAGE epmty upload test image without a face", () => {
+  //   it("should be rejected", (done) => {
+  //     app
+  //       .post("/api/image")
+  //       .set({
+  //         "Content-Type": "multipart/form-data",
+  //         "authorization": token
+  //       })
+  //       .attach("image", path.resolve("tests", "ressources", "testNoFace.jpeg"))
+  //       .expect("Content-Type", /json/)
+  //       .expect(406)
+  //       .end((err) => {
+  //         err ? done(err) : done();
+  //       });
+  //   });
+  // });
+  //
+  // describe("IMAGE upload test.txt", () => {
+  //   it("should be rejected", (done) => {
+  //     app
+  //       .post("/api/image")
+  //       .set({
+  //         "Content-Type": "multipart/form-data",
+  //         "authorization": token
+  //       })
+  //       .attach("image", path.resolve("tests", "ressources", "test.txt"))
+  //       .expect("Content-Type", "text/html; charset=utf-8")
+  //       .expect(415)
+  //       .end((err) => {
+  //         err ? done(err) : done();
+  //       });
+  //   });
+  // });
+
+  describe("IMAGE upload test image with wrong authorization", () => {
+    it("should be rejected", (done) => {
+      app
+        .post("/api/image")
+        .set({
+          "Content-Type": "multipart/form-data",
+          "authorization": 1
+        })
+        .attach("image", path.resolve("tests", "ressources", "testFace.jpeg"))
+        .expect("Content-Type", /json/)
+        .expect(401)
+        .end((err) => {
+          err ? done(err) : done();
         });
     });
   });

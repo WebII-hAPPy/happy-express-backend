@@ -60,14 +60,14 @@ export class App {
     });
     const authService: AuthService = new AuthService();
     const middleware: any = {
-      skip: function(
+      skip: function (
         request_1: Request,
         response: Response,
         next: Function
       ): void {
         next();
       },
-      protect: function(
+      protect: function (
         request_3: Request,
         response: Response,
         next: Function
