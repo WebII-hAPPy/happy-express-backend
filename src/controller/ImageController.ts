@@ -50,9 +50,9 @@ export class ImageController {
         host: URI_BASE,
         path: `/face/v1.0/detect?returnFaceId=${
           AZURE_PARAMS.faceId
-        }&returnFaceLandmarks=${
+          }&returnFaceLandmarks=${
           AZURE_PARAMS.faceLandmarks
-        }&returnFaceAttributes=${AZURE_PARAMS.faceAttributes}`,
+          }&returnFaceAttributes=${AZURE_PARAMS.faceAttributes}`,
         method: "POST",
         data: data,
         headers: {
@@ -70,7 +70,7 @@ export class ImageController {
       const post_req: ClientRequest = https.request(
         post_options,
         (_response: IncomingMessage) => {
-          _response.on("data", function(rdata: string): void {
+          _response.on("data", function (rdata: string): void {
             responseText += rdata;
           });
 
