@@ -210,7 +210,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Analysis"
-        400:
+        404:
           description: "Could not find analysis for user"
           content:
             applicaiton/json:

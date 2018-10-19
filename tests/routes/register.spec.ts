@@ -269,6 +269,38 @@ describe("Register test", () => {
     });
   });
 
+  describe("ANALYSIS get analysis of previous picture", () => {
+    it("should return an analysis", (done) => {
+      app
+        .get("/api/analysis/" + analysisId)
+        .set({
+          "Content-Type": "application/json",
+          "authorization": token
+        })
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err) => {
+          err ? done(err) : done();
+        });
+    });
+  });
+
+  describe("ANALYSIS get analysis with wrong id", () => {
+    it("should be rejected", (done) => {
+      app
+        .get("/api/analysis/" + analysisId + 1)
+        .set({
+          "Content-Type": "application/json",
+          "authorization": token
+        })
+        .expect("Content-Type", /json/)
+        .expect(404)
+        .end((err) => {
+          err ? done(err) : done();
+        });
+    });
+  });
+
   describe("DELETE the test user", () => {
     const data: IRegister = {
       name: "test",
