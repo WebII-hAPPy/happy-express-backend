@@ -204,7 +204,7 @@ describe("Register test", () => {
       app
         .post("/api/image")
         .set({
-          "Accept": "multipart/form-data",
+          "Content-Type": "multipart/form-data",
           "authorization": token
         })
         .attach("image", path.resolve("tests", "ressources", "testFace.jpeg"))
