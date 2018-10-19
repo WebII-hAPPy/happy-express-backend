@@ -177,6 +177,28 @@ describe("Register test", () => {
     });
   });
 
+
+
+  describe("VERIFY the user token", () => {
+    const data: IRegister = {
+      name: "test",
+      email: "phuc.vuuu@gmail.com",
+      password: "test"
+    };
+    it("should be accepted", (done) => {
+      app
+        .get("/verifyToken")
+        .send(data)
+        .set({
+          "Accept": "application/json",
+          "authorization": token
+        })
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err) => (err ? done(err) : done()));
+    });
+  });
+
   describe("DELETE the test user", () => {
     const data: IRegister = {
       name: "test",
@@ -193,6 +215,26 @@ describe("Register test", () => {
         })
         .expect("Content-Type", /json/)
         .expect(200)
+        .end((err) => (err ? done(err) : done()));
+    });
+  });
+
+  describe("VERIFY old user token as wrong", () => {
+    const data: IRegister = {
+      name: "test",
+      email: "phuc.vuuu@gmail.com",
+      password: "test"
+    };
+    it("should be rejected", (done) => {
+      app
+        .get("/verifyToken")
+        .send(data)
+        .set({
+          "Accept": "application/json",
+          "authorization": token
+        })
+        .expect("Content-Type", /json/)
+        .expect(404)
         .end((err) => (err ? done(err) : done()));
     });
   });
