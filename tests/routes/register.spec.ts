@@ -288,7 +288,39 @@ describe("Register test", () => {
   describe("ANALYSIS get analysis with wrong id", () => {
     it("should be rejected", (done) => {
       app
-        .get("/api/analysis/" + analysisId + 1)
+        .get("/api/analysis/" + 0)
+        .set({
+          "Content-Type": "application/json",
+          "authorization": token
+        })
+        .expect("Content-Type", /json/)
+        .expect(404)
+        .end((err) => {
+          err ? done(err) : done();
+        });
+    });
+  });
+
+  describe("STATISTICS get statistics for previous analysis", () => {
+    it("should return statistics", (done) => {
+      app
+        .get("/api/statistics/" + userId)
+        .set({
+          "Content-Type": "application/json",
+          "authorization": token
+        })
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err) => {
+          err ? done(err) : done();
+        });
+    });
+  });
+
+  describe("STATISTICS not get a statistic", () => {
+    it("should be rejected", (done) => {
+      app
+        .get("/api/statistics/" + 0)
         .set({
           "Content-Type": "application/json",
           "authorization": token
