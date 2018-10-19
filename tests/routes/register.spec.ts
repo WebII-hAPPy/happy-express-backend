@@ -1,6 +1,7 @@
 import { SuperTest, Test } from "supertest";
 import { getTestApp } from "../bootstrap";
 import { IRegister } from "../models/register.model";
+import * as path from "path";
 
 let app: SuperTest<Test>;
 let token: number;
@@ -177,8 +178,6 @@ describe("Register test", () => {
     });
   });
 
-
-
   describe("VERIFY the user token", () => {
     const data: IRegister = {
       name: "test",
@@ -196,6 +195,25 @@ describe("Register test", () => {
         .expect("Content-Type", /json/)
         .expect(200)
         .end((err) => (err ? done(err) : done()));
+    });
+  });
+
+  describe("IMAGE upload test image", () => {
+
+    it("should return complete analysis", (done) => {
+      app
+        .post("/api/image")
+        .set({
+          "Accept": "multipart/form-data",
+          "authorization": token
+        })
+        .attach("image", path.resolve("tests", "ressources", "testFace.jpeg"))
+        .expect("Content-Type", /json/)
+        .expect(201)
+        .end((err, resp) => {
+          err ? done(err) : done();
+          console.log(resp);
+        });
     });
   });
 
