@@ -1,26 +1,28 @@
 import { NextFunction, Request, Response } from "express";
-import { getRepository } from "typeorm";
 import { Analysis } from "../entity/Analysis";
 import { User } from "../entity/User";
-import { AuthService } from "../services/auth.service";
-import { IResponse } from "../models/Response.model";
 import { IEmotionWithTimestamp } from "../models/EmotionsWithTimestamp";
-import { AnalysisController } from "./AnalysisController";
+import { IResponse } from "../models/Response.model";
+import { AnalysisService } from "../services/analysis.service";
+import { AuthService } from "../services/auth.service";
+import { UserService } from "../services/user.service";
 
 export class StatisticController {
-  authService: AuthService;
-  private userRepository = getRepository(User, process.env.NODE_ENV);
-  private analysisRepository = getRepository(Analysis, process.env.NODE_ENV);
+  private authService: AuthService;
+  private userService: UserService;
+  private analysisService: AnalysisService;
 
   constructor() {
     this.authService = new AuthService();
+    this.userService = new UserService();
+    this.analysisService = new AnalysisService();
   }
 
   /**
-   * Login authentication
+   * Get statistics for one specific user
    * @param request User request
    * @param response Server response
-   * @param next callback
+   * @param next Callback
    */
   async compose(
     request: Request,
@@ -28,13 +30,9 @@ export class StatisticController {
     next: NextFunction
   ): Promise<IResponse> {
     if (this.authService.affirmIdentity(request)) {
-      const user: User = await this.userRepository
-        .createQueryBuilder("user")
-        .where("user.id = :id", { id: request.params.id })
-        .select()
-        .leftJoinAndSelect("user.analyses", "analysis")
-        .innerJoinAndSelect("analysis.emotion", "emotion")
-        .getOne();
+      const user: User = await this.userService.getStatisticFromUser(
+        request.params.id
+      );
 
       let emotions: IEmotionWithTimestamp[] = [];
 
@@ -58,32 +56,34 @@ export class StatisticController {
 
       return {
         status: 200,
-        message: `Request granted. Returning statistics for user ${user.id}`,
+        message: `Request granted. Returning statistics for user ${user.id}.`,
         data: emotions
       };
     }
     return {
-      status: 406,
-      message: "Could not affirm identity"
+      status: 404,
+      message: "Could not affirm identity."
     };
   }
 
+  /**
+   * Resets the statistics of a user
+   * @param request HTTP request
+   * @param response HTTP response
+   * @param next Callback
+   */
   public async reset(
     request: Request,
     response: Response,
     next: NextFunction
   ): Promise<IResponse> {
     if (this.authService.affirmIdentity(request)) {
-      const user: User = await this.userRepository
-        .createQueryBuilder("user")
-        .where("user.id = :id", { id: request.params.id })
-        .select()
-        .leftJoinAndSelect("user.analyses", "analysis")
-        .innerJoinAndSelect("analysis.emotion", "emotion")
-        .getOne();
+      const user: User = await this.userService.getStatisticFromUser(
+        request.params.id
+      );
 
       user.analyses.forEach(async (analysis: Analysis) => {
-        await this.analysisRepository.remove(analysis);
+        await this.analysisService.remove(analysis);
       });
 
       return {
