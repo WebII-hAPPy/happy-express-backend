@@ -1,10 +1,10 @@
 import { User } from "../entity/User";
 import {
-  IEmotion,
   IAccessory,
-  IMakeup,
+  IEmotion,
   IFacialHair,
-  IHair
+  IHair,
+  IMakeup
 } from "./AzureResponse";
 
 export interface IAnalysis {
