@@ -13,7 +13,7 @@ const imageFilter: any = function(req: any, file: any, cb: any): Error {
   // accept image only
   const ext: string = path.extname(file.originalname);
   if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg") {
-    return cb(new Error("Only images are allowed"), false);
+    return cb(new Error("Only images are allowed"));
   }
   cb(null, true);
 };
@@ -23,7 +23,7 @@ const imageFilter: any = function(req: any, file: any, cb: any): Error {
  * @param colName Column name
  * @param db Loki databse name
  */
-const loadCollection: any = function(
+const loadCollection: Function = function(
   colName: string,
   db: Loki
 ): Promise<Loki.Collection<any>> {
@@ -44,7 +44,7 @@ const db: Loki = new Loki(`${UPLOAD_PATH}/${DB_NAME}`, {
  * Deletes an image inside a folder, but not its folder
  * @param imageName Name of the image
  */
-const deleteImage: any = function(imageName: string): string[] {
+const deleteImage: Function = function(imageName: string): string[] {
   // delete files inside folder but not the folder itself
   return del.sync([`${UPLOAD_PATH}/${imageName}`, `!${UPLOAD_PATH}`]);
 };

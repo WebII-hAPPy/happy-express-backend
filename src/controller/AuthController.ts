@@ -34,7 +34,7 @@ export class AuthController {
     if (!(request.body && request.body.email && request.body.password)) {
       return {
         status: 401,
-        message: "Username and password are required."
+        message: "Email and password are required."
       };
     }
 
@@ -166,6 +166,7 @@ export class AuthController {
     if (user !== undefined && user !== null) {
       user.password = "";
       user.salt = "";
+
       return {
         status: 200,
         message: "User exist",

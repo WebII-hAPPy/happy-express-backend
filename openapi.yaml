@@ -21,7 +21,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/User"
         401:
-          description: "Username and password are required."
+          description: "E-Mail and password are required."
           content:
             application/json:
               schema:
@@ -126,7 +126,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  "/api/deleteAccount":
+  "/api/deleteAccount/:id":
     delete:
       tags:
         - "delete-account"
@@ -207,7 +207,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Analysis"
-        400:
+        404:
           description: "Could not find analysis for user"
           content:
             applicaiton/json:
