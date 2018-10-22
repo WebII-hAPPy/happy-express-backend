@@ -2,7 +2,7 @@
   "rules": {
     "ban": [true, ["_", "extend"], ["_", "isNull"], ["_", "isDefined"]],
     "class-name": true,
-    "comment-format": [true, "check-space", "check-lowercase"],
+    "comment-format": [true, "check-space"],
     "curly": true,
     "eofline": false,
     "forin": true,
