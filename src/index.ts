@@ -5,51 +5,22 @@ import { Express, Request, Response } from "express";
 import * as morgan from "morgan";
 import * as multer from "multer";
 import "reflect-metadata";
-import {
-  createConnection,
-  Connection,
-  EntityMetadata,
-  Repository
-} from "typeorm";
+import { createConnection } from "typeorm";
 import { LoggerStream } from "./config/logger";
 import { IRequestResult } from "./models/RequestResult.model";
 import { Routes } from "./routes";
 import { AuthService } from "./services/auth.service";
 import { UPLOAD_PATH } from "./shared/constants";
 import { imageFilter } from "./shared/utils";
-import { IEntitiy } from "./models/Entity";
 
 export class App {
   public static async getApp(): Promise<Express> {
-    const connection: Connection = await createConnection(process.env.NODE_ENV);
-
-    // const clearDb: Function = async () => {
-    //   const entities: IEntitiy[] = [
-    //     {
-    //       name: "ActivationHash",
-    //       table: "activation_Hash"
-    //     },
-    //     {
-    //       name: "User",
-    //       table: "user"
-    //     }
-    //   ];
-    //   for (const entity of entities) {
-    //     const repository: Repository<{}> = await connection.getRepository(
-    //       entity.name
-    //     );
-    //     await repository.query(`delete from ${entity.table} where 1=1;`);
-    //   }
-    // };
-
-    // resets test database for each test
-    // if (process.env.NODE_ENV === "test") {
-    //   await clearDb();
-    // }
+    await createConnection(process.env.NODE_ENV);
 
     // create express app
     const app: Express = express();
     app.use(bodyParser.json());
+
     const corsOptions: cors.CorsOptions = {
       exposedHeaders: ["Access-Control-Expose-Headers", "code"]
     };
@@ -58,6 +29,7 @@ export class App {
       dest: `${UPLOAD_PATH}/`,
       fileFilter: imageFilter
     });
+
     const authService: AuthService = new AuthService();
     const middleware: any = {
       skip: function(
@@ -82,6 +54,7 @@ export class App {
         }
       }
     };
+
     // register express routes from defined application routes
     Routes.forEach((route) => {
       (app as any)[route.method](
@@ -115,10 +88,11 @@ export class App {
         }
       );
     });
+
     // start express server
     app.listen(3000);
+
     app.use(morgan("combined", { stream: new LoggerStream() }));
-    // app.use(morgan("combined"));
     console.log("Express server has started on port 3000.");
     return app;
   }
