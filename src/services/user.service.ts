@@ -35,16 +35,6 @@ export class UserService {
    * @param id user id
    */
   public async getStatisticFromUser(userId: number): Promise<User> {
-    console.log(
-      await this.userRepository
-        .createQueryBuilder("user")
-        .select()
-        .where("user.id = :id", { id: 1 })
-        .leftJoinAndSelect("user.analyses", "analysis")
-        .innerJoinAndSelect("analysis.emotion", "emotion")
-        .getOne()
-    );
-
     return this.userRepository
       .createQueryBuilder("user")
       .select()
@@ -74,7 +64,7 @@ export class UserService {
    * @param user a user object
    */
   public async update(user: User): Promise<User> {
-    return await this.userRepository.save(user);
+    return this.userRepository.save(user);
   }
 
   /**
@@ -82,7 +72,7 @@ export class UserService {
    * @param user a user object
    */
   public async deleteUser(user: User): Promise<User> {
-    return await this.userRepository.remove(user);
+    return this.userRepository.remove(user);
   }
 
   /**
