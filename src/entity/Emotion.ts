@@ -13,7 +13,6 @@ export class Emotion {
   id?: number;
 
   @OneToOne((type) => Analysis, (analysis) => analysis.emotion, {
-    // cascade: true,
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })

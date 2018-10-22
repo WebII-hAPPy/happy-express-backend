@@ -186,7 +186,7 @@ describe("Register test", () => {
     };
     it("should be accepted", (done) => {
       app
-        .get("/verifyToken")
+        .get("/api/verifyToken")
         .send(data)
         .set({
           Accept: "application/json",
@@ -361,7 +361,7 @@ describe("Register test", () => {
     };
     it("should be rejected", (done) => {
       app
-        .get("/verifyToken")
+        .get("/api/verifyToken")
         .send(data)
         .set({
           Accept: "application/json",
