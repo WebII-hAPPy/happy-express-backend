@@ -34,13 +34,24 @@ export class UserService {
    * Gets the statistics from one user by id
    * @param id user id
    */
-  public async getStatisticFromUser(id: number) {
-    return await this.userRepository
+  public async getStatisticFromUser(userId: number): Promise<User> {
+    console.log(
+      await this.userRepository
+        .createQueryBuilder("user")
+        .select()
+        .where("user.id = :id", { id: 1 })
+        .leftJoinAndSelect("user.analyses", "analysis")
+        .innerJoinAndSelect("analysis.emotion", "emotion")
+        .getOne()
+    );
+
+    return this.userRepository
       .createQueryBuilder("user")
-      .where("user.id = :id", { id: id })
+      .select()
+      .where("user.id = :id", { id: userId })
       .select()
       .leftJoinAndSelect("user.analyses", "analysis")
-      .innerJoinAndSelect("analysis.emotion", "emotion")
+      .leftJoinAndSelect("analysis.emotion", "emotion")
       .getOne();
   }
 
