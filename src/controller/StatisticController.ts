@@ -30,12 +30,9 @@ export class StatisticController {
     next: NextFunction
   ): Promise<IResponse> {
     if (this.authService.affirmIdentity(request)) {
-      let user: User;
-      try {
-        user = await this.userService.getStatisticFromUser(request.params.id);
-      } catch (err) {
-        console.log(err);
-      }
+      const user: User = await this.userService.getStatisticFromUser(
+        request.params.id
+      );
 
       let emotions: IEmotionWithTimestamp[] = [];
 
@@ -56,8 +53,6 @@ export class StatisticController {
         };
         emotions.push(emotion);
       });
-
-      console.log(user.analyses);
 
       return {
         status: 200,
