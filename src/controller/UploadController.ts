@@ -2,27 +2,27 @@ import { NextFunction, Request, Response } from "express";
 import { User } from "../entity/User";
 import { IUploadResponse } from "../models/UploadResult.model";
 import { AuthService } from "../services/auth.service";
+import { ImageService } from "../services/image.service";
+import { UserService } from "../services/user.service";
 import { COLLECTION_NAME } from "../shared/constants";
 import { db, loadCollection } from "../shared/utils";
-import { ImageController } from "./ImageController";
-import { UserController } from "./UserController";
 
 export class UploadController {
-  repo: ImageController;
-  authService: AuthService;
-  userController: UserController;
+  private imageService: ImageService;
+  private userService: UserService;
+  private authService: AuthService;
 
   constructor() {
-    this.repo = new ImageController();
+    this.imageService = new ImageService();
     this.authService = new AuthService();
-    this.userController = new UserController();
+    this.userService = new UserService();
   }
 
   /**
-   * Login authentication
+   * Uploading the photo and analysing it
    * @param request User request
    * @param response Server response
-   * @param next callback
+   * @param next Callback
    */
   async save(
     request: Request,
@@ -48,9 +48,9 @@ export class UploadController {
       const userId: number = this.authService.getIdClaim(request);
 
       if (userId !== -1) {
-        const user: User = await this.userController.getUserById(userId);
+        const user: User = await this.userService.getUserById(userId);
         if (user !== undefined && user !== null) {
-          this.repo.analyseImage(result.fileName, user, response);
+          this.imageService.analyseImage(result.fileName, user, response);
         } else {
           response
             .set("status", "404")
