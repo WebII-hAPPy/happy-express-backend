@@ -1,10 +1,13 @@
 # hAPPy-API for the Web-Engineering II project
 
+Welcome to the backend of the hAPPy project.
+This is a project done for the class 'Web-Engineering II' at the DHBW Stuttgart.
+
 ## Table of Contents
 
 1. [Requirements](#requirements)
 2. [Getting Started](#getting-started)
-3. [Providers](#providers)
+3. [Architecture](#architecture)
 
 ## <a name="requirements"></a>Requirements
 
@@ -12,7 +15,7 @@
 2. Running postgresql database (for configuration see ormconfig.json)
 3. Node package manager Yarn
 
-## <a name="getting started"></a> Getting Started
+## <a name="getting started"></a>Getting Started
 
 ### Installation
 
@@ -48,7 +51,7 @@ yarn test
 yarn start
 ```
 
-## Architecture
+##<a name="architecture"></a>Architecture
 
 ### Entities
 
