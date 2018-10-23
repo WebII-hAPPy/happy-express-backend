@@ -36,7 +36,7 @@ export class AuthController {
   ): Promise<IResponse> {
     if (!(request.body && request.body.email && request.body.password)) {
       return {
-        status: 401,
+        status: 422,
         message: "E-Mail and password are required."
       };
     }
@@ -55,6 +55,7 @@ export class AuthController {
         user.password = "";
         user.salt = "";
         return {
+          message: "User successfully logged in.",
           status: 200,
           data: {
             user: user,
@@ -65,7 +66,7 @@ export class AuthController {
     }
 
     return {
-      status: 422,
+      status: 400,
       message: "E-Mail / Password invalid."
     };
   }
@@ -83,7 +84,7 @@ export class AuthController {
   ): Promise<IResponse> {
     if (!(request.body && request.body.email && request.body.password)) {
       return {
-        status: 401,
+        status: 422,
         message: "E-Mail and password are required."
       };
     }
@@ -165,7 +166,7 @@ export class AuthController {
 
     return {
       status: 404,
-      message: "Activation link invalid.."
+      message: "Activation link invalid."
     };
   }
 
@@ -226,7 +227,7 @@ export class AuthController {
       };
     } else if (!user.active) {
       return {
-        status: 402,
+        status: 403,
         message: "Cannot reset password with not validated E-Mail."
       };
     }
@@ -287,7 +288,7 @@ export class AuthController {
       };
     } else {
       return {
-        status: 401,
+        status: 404,
         message: "Could not find user in database."
       };
     }

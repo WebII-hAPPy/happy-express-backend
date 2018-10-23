@@ -48,7 +48,7 @@ export class UserController {
     }
     return {
       status: 401,
-      message: "Could not affirm identity."
+      message: "Route protected. Authentication required."
     };
   }
 
@@ -69,7 +69,7 @@ export class UserController {
       if (user === undefined || user === null) {
         return {
           status: 404,
-          message: "Could not find User in database"
+          message: "Could not find User in database."
         };
       }
 
@@ -80,20 +80,22 @@ export class UserController {
       const deleted: User = await this.userService.deleteUser(user);
 
       if (deleted !== null || deleted !== undefined) {
+        deleted.password = "";
+        deleted.salt = "";
         return {
           status: 200,
-          message: "User successfully deleted",
-          data: { deletedUser: deleted }
+          message: "User successfully deleted.",
+          data: { user: deleted }
         };
       }
       return {
         status: 500,
-        message: "Could not delete User"
+        message: "Could not delete User."
       };
     }
     return {
       status: 401,
-      message: "Could not affirm identity"
+      message: "Route protected. Authentication required."
     };
   }
 }
