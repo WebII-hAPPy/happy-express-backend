@@ -217,31 +217,30 @@ describe("Register test", () => {
   });
 
   // . TODO: not implemented in the backend.
-  //
-  // describe("IMAGE epmty upload test image without a face", () => {
-  //   it("should be rejected", (done) => {
-  //     app
-  //       .post("/api/image")
-  //       .set({
-  //         "Content-Type": "multipart/form-data",
-  //         "authorization": token
-  //       })
-  //       .attach("image", path.resolve("tests", "ressources", "testNoFace.jpeg"))
-  //       .expect("Content-Type", /json/)
-  //       .expect(406)
-  //       .end((err) => {
-  //         err ? done(err) : done();
-  //       });
-  //   });
-  // });
-  //
+  describe("IMAGE image without a face", () => {
+    it("should be rejected", (done) => {
+      app
+        .post("/api/image")
+        .set({
+          "Content-Type": "multipart/form-data",
+          authorization: token
+        })
+        .attach("image", path.resolve("tests", "ressources", "testNoFace.jpeg"))
+        .expect("Content-Type", /json/)
+        .expect(406)
+        .end((err) => {
+          err ? done(err) : done();
+        });
+    });
+  });
+
   // describe("IMAGE upload test.txt", () => {
   //   it("should be rejected", (done) => {
   //     app
   //       .post("/api/image")
   //       .set({
   //         "Content-Type": "multipart/form-data",
-  //         "authorization": token
+  //         authorization: token
   //       })
   //       .attach("image", path.resolve("tests", "ressources", "test.txt"))
   //       .expect("Content-Type", "text/html; charset=utf-8")

@@ -99,7 +99,9 @@ export class ImageService {
         .json({
           message: "Analysis failed. No face recognized."
         });
+      return;
     }
+
     const res: IAzureResponse = JSON.parse(result)[0];
 
     if (res !== undefined || res !== null) {
