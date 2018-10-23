@@ -24,7 +24,7 @@ export class UploadController {
    * @param response Server response
    * @param next Callback
    */
-  async save(
+  public async upload(
     request: Request,
     response: Response,
     next: NextFunction
@@ -55,20 +55,20 @@ export class UploadController {
           response
             .set("status", "404")
             .status(404)
-            .json({ message: "User not found" });
+            .json({ message: "User not found." });
         }
       } else {
         response
           .set("status", "401")
           .status(401)
-          .json({ message: "Could not identify user claim" });
+          .json({ message: "Route protected. Authentication required." });
       }
     } catch (err) {
       console.log(err);
       response
         .set("status", "400")
         .status(400)
-        .json({ message: "Could not process file" });
+        .json({ message: "Could not process file." });
     }
   }
 }

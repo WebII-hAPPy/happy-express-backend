@@ -47,7 +47,7 @@ describe("Register test", () => {
         .send(data)
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
-        .expect(401)
+        .expect(422)
         .end((err) => (err ? done(err) : done()));
     });
   });
@@ -64,7 +64,7 @@ describe("Register test", () => {
         .send(data)
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
-        .expect(401)
+        .expect(422)
         .end((err) => (err ? done(err) : done()));
     });
   });
@@ -122,7 +122,7 @@ describe("Register test", () => {
         .send(data)
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
-        .expect(401)
+        .expect(422)
         .end((err) => (err ? done(err) : done()));
     });
   });
@@ -139,7 +139,7 @@ describe("Register test", () => {
         .send(data)
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
-        .expect(401)
+        .expect(422)
         .end((err) => (err ? done(err) : done()));
     });
   });
@@ -156,7 +156,7 @@ describe("Register test", () => {
         .send(data)
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
-        .expect(422)
+        .expect(400)
         .end((err) => (err ? done(err) : done()));
     });
   });
@@ -173,7 +173,7 @@ describe("Register test", () => {
         .send(data)
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
-        .expect(422)
+        .expect(400)
         .end((err) => (err ? done(err) : done()));
     });
   });
@@ -216,7 +216,6 @@ describe("Register test", () => {
     });
   });
 
-  // . TODO: not implemented in the backend.
   describe("IMAGE image without a face", () => {
     it("should be rejected", (done) => {
       app
@@ -234,6 +233,7 @@ describe("Register test", () => {
     });
   });
 
+  // TODO: not implemented in the backend.
   // describe("IMAGE upload test.txt", () => {
   //   it("should be rejected", (done) => {
   //     app
@@ -325,7 +325,7 @@ describe("Register test", () => {
           authorization: token
         })
         .expect("Content-Type", /json/)
-        .expect(404)
+        .expect(406)
         .end((err) => {
           err ? done(err) : done();
         });
