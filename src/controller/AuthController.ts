@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from "express";
+import * as fs from "fs";
+import * as path from "path";
 import { ActivationHash } from "../entity/ActivationHash";
 import { User } from "../entity/User";
 import { IResponse } from "../models/Response.model";
@@ -6,6 +8,7 @@ import { ActivationHashService } from "../services/activationHash.service";
 import { AuthService } from "../services/auth.service";
 import { MailService } from "../services/email.service";
 import { UserService } from "../services/user.service";
+import { URL_BASE } from "../shared/constants";
 
 export class AuthController {
   private userService: UserService;
@@ -33,7 +36,7 @@ export class AuthController {
   ): Promise<IResponse> {
     if (!(request.body && request.body.email && request.body.password)) {
       return {
-        status: 401,
+        status: 422,
         message: "E-Mail and password are required."
       };
     }
@@ -52,6 +55,7 @@ export class AuthController {
         user.password = "";
         user.salt = "";
         return {
+          message: "User successfully logged in.",
           status: 200,
           data: {
             user: user,
@@ -62,7 +66,7 @@ export class AuthController {
     }
 
     return {
-      status: 422,
+      status: 400,
       message: "E-Mail / Password invalid."
     };
   }
@@ -80,7 +84,7 @@ export class AuthController {
   ): Promise<IResponse> {
     if (!(request.body && request.body.email && request.body.password)) {
       return {
-        status: 401,
+        status: 422,
         message: "E-Mail and password are required."
       };
     }
@@ -101,7 +105,19 @@ export class AuthController {
       );
       hash.user = user;
       hash = await this.activationHashService.update(hash);
-      this.emailService.send(user.email, user.name, isVerification, hash.hash);
+
+      let html: string = fs
+        .readFileSync(
+          path.resolve("src", "templates", "verification", "html.html")
+        )
+        .toString()
+        .replace("${name}", user.name)
+        .replace(
+          "${verificationLink}",
+          `${URL_BASE}/verifyAccount/${hash.hash}`
+        );
+
+      this.emailService.send(user.email, isVerification, html);
 
       if (user) {
         user.password = "";
@@ -150,7 +166,7 @@ export class AuthController {
 
     return {
       status: 404,
-      message: "Activation link invalid or expired."
+      message: "Activation link invalid."
     };
   }
 
@@ -182,5 +198,99 @@ export class AuthController {
       status: 404,
       message: "User does not exist."
     };
+  }
+
+  /**
+   * The first step to reset the password of a account. It sends an E-Mail with a temporary password.
+   * @param request HTTP request
+   * @param response HTTP response
+   * @param next Callback
+   */
+  public async resetPassword(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<IResponse> {
+    if (!(request.body && request.body.email)) {
+      return {
+        status: 422,
+        message: "E-Mail is required for a password reset."
+      };
+    }
+
+    let user: User = await this.userService.getUserByEmail(request.body.email);
+
+    if (user === undefined || user === null || !user) {
+      return {
+        status: 404,
+        message: "This user does not exist."
+      };
+    } else if (!user.active) {
+      return {
+        status: 403,
+        message: "Cannot reset password with not validated E-Mail."
+      };
+    }
+
+    const code: string = await this.authService.createHash(8);
+
+    let html: string = fs
+      .readFileSync(path.resolve("src", "templates", "reset", "html.html"))
+      .toString()
+      .replace("${name}", user.name)
+      .replace("${code}", code);
+
+    user.passwordReset = true;
+    user.password = await this.userService.hashPassword(code, user.salt);
+    this.userService.update(user);
+
+    this.emailService.send(user.email, false, html);
+
+    return {
+      status: 200,
+      message: "Reset E-Mail was sent."
+    };
+  }
+
+  /**
+   * Updates a password in the database
+   * @param request HTTP request
+   * @param response HTTP response
+   * @param next Callback
+   */
+  public async updatePassword(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<IResponse> {
+    if (!(request.body && request.body.password)) {
+      return {
+        status: 422,
+        message: "Password is required for a password update."
+      };
+    }
+
+    const userId: number = this.authService.getIdClaim(request);
+
+    if (userId !== -1) {
+      let user: User = await this.userService.getUserById(userId);
+
+      user.passwordReset = false;
+      user.password = await this.userService.hashPassword(
+        request.body.password,
+        user.salt
+      );
+      this.userService.update(user);
+
+      return {
+        status: 200,
+        message: "Updated successfully the password."
+      };
+    } else {
+      return {
+        status: 404,
+        message: "Could not find user in database."
+      };
+    }
   }
 }

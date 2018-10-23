@@ -107,9 +107,9 @@ export class AuthService {
   /**
    * Creates hash for E-Mail verification
    */
-  public async createHash(): Promise<string> {
+  public async createHash(bytes: number): Promise<string> {
     return crypto
-      .randomBytes(256)
+      .randomBytes(bytes)
       .toString("base64")
       .replace(/\//g, "");
   }

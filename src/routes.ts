@@ -8,6 +8,18 @@ import { IRoute } from "./models/Route.model";
 export const Routes: IRoute[] = [
   // AuthController
   {
+    method: "get",
+    route: "/verifyAccount/:hash",
+    controller: AuthController,
+    action: "verifyAccount"
+  },
+  {
+    method: "get",
+    route: "/api/verifyToken",
+    controller: AuthController,
+    action: "isTokenClaimValid"
+  },
+  {
     method: "post",
     route: "/login",
     controller: AuthController,
@@ -20,16 +32,16 @@ export const Routes: IRoute[] = [
     action: "register"
   },
   {
-    method: "get",
-    route: "/verifyAccount/:hash",
+    method: "post",
+    route: "/resetPassword",
     controller: AuthController,
-    action: "verifyAccount"
+    action: "resetPassword"
   },
   {
-    method: "get",
-    route: "/api/verifyToken",
+    method: "put",
+    route: "/api/updatePassword",
     controller: AuthController,
-    action: "isTokenClaimValid"
+    action: "updatePassword"
   },
   // UserController
   {
@@ -49,21 +61,21 @@ export const Routes: IRoute[] = [
     method: "post",
     route: "/api/image",
     controller: UploadController,
-    action: "save"
+    action: "upload"
   },
   // AnalysisController
   {
     method: "get",
     route: "/api/analysis/:id",
     controller: AnalysisController,
-    action: "one"
+    action: "getAnalysis"
   },
   // StatisticController
   {
     method: "get",
     route: "/api/statistics/:id",
     controller: StatisticController,
-    action: "compose"
+    action: "getStatistic"
   },
   {
     method: "delete",

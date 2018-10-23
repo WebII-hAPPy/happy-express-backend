@@ -24,7 +24,7 @@ export class StatisticController {
    * @param response Server response
    * @param next Callback
    */
-  async compose(
+  public async getStatistic(
     request: Request,
     response: Response,
     next: NextFunction
@@ -61,7 +61,7 @@ export class StatisticController {
       };
     }
     return {
-      status: 404,
+      status: 406,
       message: "Could not affirm identity."
     };
   }
@@ -88,12 +88,12 @@ export class StatisticController {
 
       return {
         status: 200,
-        message: "Successfully removed statistics"
+        message: "Successfully removed statistics."
       };
     }
     return {
       status: 406,
-      message: "Could not affirm identity"
+      message: "Could not affirm identity."
     };
   }
 }
