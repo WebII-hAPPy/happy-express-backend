@@ -83,11 +83,11 @@ export class ImageService {
     } catch (err) {
       this.delete(imageName);
       console.log("Could not read file " + err);
-      response.status(400).json({ message: "Could not read file" });
+      response.status(400).json({ message: "Could not process file." });
     }
   }
 
-  async saveAnalysis(
+  public async saveAnalysis(
     result: string,
     user: User,
     response: Response
@@ -121,7 +121,7 @@ export class ImageService {
         .set("status", "201")
         .status(201)
         .json({
-          message: "Analysis complete",
+          message: "Analysis complete.",
           data: { analysisId: analysis.id }
         });
     }

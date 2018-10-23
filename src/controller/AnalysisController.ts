@@ -19,7 +19,7 @@ export class AnalysisController {
    * @param response Server response
    * @param next Callback
    */
-  async one(
+  public async getAnalysis(
     request: Request,
     response: Response,
     next: NextFunction
@@ -33,7 +33,7 @@ export class AnalysisController {
     if (analysis === undefined) {
       return {
         status: 404,
-        message: `No analysis with the the id ${request.params.id}.`
+        message: `No analysis with the id ${request.params.id}.`
       };
     }
 
