@@ -20,7 +20,7 @@ export class ActivationHashService {
    */
   public async createHash(user: User): Promise<ActivationHash> {
     const hash: ActivationHash = new ActivationHash();
-    hash.hash = await this.authService.createHash();
+    hash.hash = await this.authService.createHash(256);
     return hash;
   }
 

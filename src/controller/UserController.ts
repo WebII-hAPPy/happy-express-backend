@@ -53,7 +53,7 @@ export class UserController {
   }
 
   /**
-   * Delets a user account
+   * Deletes a user account
    * @param request HTTP request
    * @param response HTTP response
    * @param next Callback

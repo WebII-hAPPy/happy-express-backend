@@ -26,6 +26,18 @@ export const Routes: IRoute[] = [
     action: "verifyAccount"
   },
   {
+    method: "post",
+    route: "/resetPassword",
+    controller: AuthController,
+    action: "resetPassword"
+  },
+  {
+    method: "post",
+    route: "/api/updatePassword",
+    controller: AuthController,
+    action: "updatePassword"
+  },
+  {
     method: "get",
     route: "/api/verifyToken",
     controller: AuthController,
