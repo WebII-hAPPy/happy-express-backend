@@ -11,7 +11,6 @@ import { IRequestResult } from "./models/RequestResult.model";
 import { Routes } from "./routes";
 import { AuthService } from "./services/auth.service";
 import { UPLOAD_PATH } from "./shared/constants";
-import { imageFilter } from "./shared/utils";
 
 export class App {
   public static async getApp(): Promise<Express> {
@@ -26,8 +25,7 @@ export class App {
     };
     app.use(cors(corsOptions));
     const upload: multer.Instance = multer({
-      dest: `${UPLOAD_PATH}/`,
-      fileFilter: imageFilter
+      dest: `${UPLOAD_PATH}/`
     });
 
     const authService: AuthService = new AuthService();
