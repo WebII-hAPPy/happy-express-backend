@@ -14,7 +14,6 @@ services:
       - "5432:5432"
     volumes:
       - happy:/var/lib/postgresql/data
-
   happy-backend:
     depends_on:
       - happy-database
@@ -26,7 +25,7 @@ services:
       - happy-network
 
 networks:
-  happy-network:
+  ? happy-network
 volumes:
   happy:
     external: true

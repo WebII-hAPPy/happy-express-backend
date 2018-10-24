@@ -1,8 +1,8 @@
-FROM node:8
+FROM node:8-slim
 WORKDIR /usr/src/app
 
 COPY package.json ./
-RUN yarn install
+RUN yarn cache clean --force && yarn install --prod
 COPY . .
 
 RUN chmod 700 start.sh
