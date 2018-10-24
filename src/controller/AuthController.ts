@@ -143,7 +143,7 @@ export class AuthController {
     request: Request,
     response: Response,
     next: NextFunction
-  ): Promise<IResponse> {
+  ): Promise<void> {
     let hash: ActivationHash = await this.activationHashService.findByHash(
       request.params.hash
     );
@@ -154,20 +154,20 @@ export class AuthController {
       user = await this.userService.update(user);
       hash = await this.activationHashService.removeHash(hash);
 
-      return {
-        status: 200,
-        message: "User successfully activated.",
-        data: {
-          user: user,
-          token: await this.authService.createToken(user)
-        }
-      };
-    }
+      let html: string = fs
+        .readFileSync(
+          path.resolve("src", "templates", "verificated", "html.html")
+        )
+        .toString()
+        .replace("${name}", user.name);
 
-    return {
-      status: 404,
-      message: "Activation link invalid."
-    };
+      response.send(html);
+      return;
+    }
+    response
+      .set("status", "404")
+      .status(404)
+      .json({ message: "Activation link invalid." });
   }
 
   /**
