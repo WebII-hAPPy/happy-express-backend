@@ -2,6 +2,7 @@
 
 Welcome to the backend of the hAPPy project.
 This is a project done for the class 'Web-Engineering II' at the DHBW Stuttgart.
+This project is licensed with the MIT license.
 
 ## Table of Contents
 
@@ -40,7 +41,7 @@ export GMAIL_PASS=""
 ```
 
 ```bash
-source app.env
+. ./app.env
 ```
 
 Finally install packages with yarn
@@ -67,11 +68,11 @@ Please refer to the [TypeORM documentation](https://github.com/typeorm/typeorm) 
 
 ### Controller
 
-smt controller
+Controller are the interface between the internet and the this application. The controller methods will be called if you access an API endpoint.
 
 ### Services
 
-smt services
+Services are the interface between the database and this application. They get, save, update and delete data in database.
 
 ### Routes
 
