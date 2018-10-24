@@ -178,6 +178,65 @@ describe("Register test", () => {
     });
   });
 
+  describe("UPDATE user password with wrong request body", () => {
+    const data = {
+      pasword: "test1"
+    };
+    it("should be rejected", (done) => {
+      app
+        .put("/api/updatePassword")
+        .send(data)
+        .set({
+          Accept: "application/json",
+          authorization: token
+        })
+        .expect("Content-Type", /json/)
+        .expect(422)
+        .end((err) => (err ? done(err) : done()));
+    });
+  });
+
+  describe("UPDATE user password", () => {
+    const data = {
+      password: "test1"
+    };
+    it("should be accepted", (done) => {
+      app
+        .put("/api/updatePassword")
+        .send(data)
+        .set({
+          Accept: "application/json",
+          authorization: token
+        })
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err) => (err ? done(err) : done()));
+    });
+  });
+
+  describe("CHECK if password update works", () => {
+    const data = {
+      email: "phuc.vuuu@gmail.com",
+      password: "test1"
+    };
+    it("should be accepted", (done) => {
+      app
+        .post("/login")
+        .send(data)
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          token = res.body.data.token;
+          userId = res.body.data.user.id;
+          done();
+        });
+    });
+  });
+
   describe("VERIFY the user token", () => {
     const data: IRegister = {
       name: "test",

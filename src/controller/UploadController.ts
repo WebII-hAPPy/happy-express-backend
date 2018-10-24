@@ -20,7 +20,7 @@ export class UploadController {
   }
 
   /**
-   * Uploading the photo and analysing it
+   * Uploading the photo and calls method to analyse it
    * @param request User request
    * @param response Server response
    * @param next Callback
