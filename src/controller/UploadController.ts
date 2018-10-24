@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import * as path from "path";
 import { User } from "../entity/User";
 import { IUploadResponse } from "../models/UploadResult.model";
 import { AuthService } from "../services/auth.service";
@@ -35,6 +36,19 @@ export class UploadController {
         db
       );
 
+      const ext: string = path.extname(request.file.originalname);
+      if (
+        ext !== ".png" &&
+        ext !== ".jpg" &&
+        ext !== ".gif" &&
+        ext !== ".jpeg"
+      ) {
+        response
+          .set("status", "415")
+          .status(415)
+          .json({ message: "Only images are allowed." });
+        return;
+      }
       const data: any = col.insert(request.file);
 
       db.saveDatabase();

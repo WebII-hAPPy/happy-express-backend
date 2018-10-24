@@ -486,6 +486,14 @@ paths:
                 $ref: "#/components/schemas/Message"
               example:
                 message: "Analysis failed. No face recognized."
+        415:
+          description: "Only images are allowed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Only images are allowed."
   /api/analysis/{id}:
     get:
       tags:
@@ -512,7 +520,7 @@ paths:
                   message:
                     type: string
                   data:
-                    $ref: "#/components/schemas/Emotion"
+                    $ref: "#/components/schemas/Analysis"
               example:
                 message: "Analysis found."
                 data:

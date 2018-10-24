@@ -233,23 +233,22 @@ describe("Register test", () => {
     });
   });
 
-  // TODO: not implemented in the backend.
-  // describe("IMAGE upload test.txt", () => {
-  //   it("should be rejected", (done) => {
-  //     app
-  //       .post("/api/image")
-  //       .set({
-  //         "Content-Type": "multipart/form-data",
-  //         authorization: token
-  //       })
-  //       .attach("image", path.resolve("tests", "ressources", "test.txt"))
-  //       .expect("Content-Type", "text/html; charset=utf-8")
-  //       .expect(415)
-  //       .end((err) => {
-  //         err ? done(err) : done();
-  //       });
-  //   });
-  // });
+  describe("IMAGE upload test.txt", () => {
+    it("should be rejected", (done) => {
+      app
+        .post("/api/image")
+        .set({
+          "Content-Type": "multipart/form-data",
+          authorization: token
+        })
+        .attach("image", path.resolve("tests", "ressources", "test.txt"))
+        .expect("Content-Type", "application/json; charset=utf-8")
+        .expect(415)
+        .end((err) => {
+          err ? done(err) : done();
+        });
+    });
+  });
 
   describe("IMAGE upload test image with wrong authorization", () => {
     it("should be rejected", (done) => {
