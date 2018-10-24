@@ -2,11 +2,11 @@
   "rules": {
     "ban": [true, ["_", "extend"], ["_", "isNull"], ["_", "isDefined"]],
     "class-name": true,
-    "comment-format": [true, "check-space", "check-lowercase"],
+    "comment-format": [true, "check-space"],
     "curly": true,
     "eofline": false,
     "forin": true,
-    "indent": [true, 4],
+    "indent": [true, "spaces", 4],
     "interface-name": true,
     "jsdoc-format": true,
     "label-position": true,
@@ -48,8 +48,12 @@
     ],
     "typedef-whitespace": [
       true,
-      { "call-signature": "nospace" },
-      { "index-signature": "space" }
+      {
+        "call-signature": "nospace"
+      },
+      {
+        "index-signature": "space"
+      }
     ],
     "use-strict": [true, "check-module", "check-function"],
     "variable-name": false,

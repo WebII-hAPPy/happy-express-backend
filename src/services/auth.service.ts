@@ -3,15 +3,14 @@ import * as crypto from "crypto";
 import { Request } from "express";
 import * as jwt from "jsonwebtoken";
 import { User } from "../entity/User";
-import { UserController } from "../controller/UserController";
 
 export class AuthService {
-  readonly secret = process.env.JWT_SECRET;
+  private readonly secret = process.env.JWT_SECRET;
 
   /**
    * Test password against hash.
-   * @param password Password from user request.
-   * @param hash Hash from database.
+   * @param password Password from user request
+   * @param hash Hash from database
    */
   public async checkCredentials(
     password: string,
@@ -21,7 +20,7 @@ export class AuthService {
   }
 
   /**
-   * Creates an authorization jwt token.
+   * Creates an authorization JWT token.
    * @param user User object
    */
   public async createToken(user: User): Promise<string> {
@@ -37,9 +36,14 @@ export class AuthService {
     return token;
   }
 
+  /**
+   * Gets the user id out of a jwt token
+   * @param request
+   */
   public getIdClaim(request: Request): number {
     const token: string = request.headers.authorization;
     let decoded: any;
+
     try {
       decoded = jwt.verify(token, this.secret);
     } catch (err) {
@@ -74,14 +78,16 @@ export class AuthService {
   }
 
   /**
-   * makes sure a user requesting an analysis is who he claims to be by v
-   * alidating the jwt token claim
-   * @param request http Request
+   * Makes sure a user requesting an analysis is who he claims to be by
+   * validating the jwt token claim
+   * @param request HTTP Request
    */
   public affirmIdentity(request: Request): boolean {
     const token: string = request.headers.authorization;
+
     // not sure know how to properly handle string | object correctly -> any for now
     let decoded: any;
+
     try {
       decoded = jwt.verify(token, this.secret);
     } catch (err) {
@@ -99,11 +105,11 @@ export class AuthService {
   }
 
   /**
-   * creates Hash for email verification
+   * Creates hash for E-Mail verification
    */
-  public async createHash(): Promise<string> {
+  public async createHash(bytes: number): Promise<string> {
     return crypto
-      .randomBytes(256)
+      .randomBytes(bytes)
       .toString("base64")
       .replace(/\//g, "");
   }

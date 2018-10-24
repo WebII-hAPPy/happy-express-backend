@@ -48,4 +48,9 @@ export class User {
     onUpdate: "CASCADE"
   })
   analyses: Analysis[];
+
+  @Column({
+    default: false
+  })
+  passwordReset: boolean;
 }

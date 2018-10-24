@@ -1,60 +1,50 @@
 import { NextFunction, Request, Response } from "express";
-import { getRepository } from "typeorm";
 import { Analysis } from "../entity/Analysis";
 import { IResponse } from "../models/Response.model";
+import { AnalysisService } from "../services/analysis.service";
 import { AuthService } from "../services/auth.service";
 
 export class AnalysisController {
-  authService: AuthService;
-  private analysisRepository = getRepository(Analysis, process.env.NODE_ENV);
+  private authService: AuthService;
+  private analysisService: AnalysisService;
 
   constructor() {
     this.authService = new AuthService();
+    this.analysisService = new AnalysisService();
   }
 
   /**
-   * Login authentication
+   * Get one analysis
    * @param request User request
    * @param response Server response
-   * @param next callback
+   * @param next Callback
    */
-  async one(
+  public async getAnalysis(
     request: Request,
     response: Response,
     next: NextFunction
   ): Promise<IResponse> {
     const userId: number = this.authService.getIdClaim(request);
 
-    let analysis: Analysis = await this.analysisRepository.findOne(
+    let analysis: Analysis = await this.analysisService.findById(
       request.params.id
     );
 
     if (analysis === undefined) {
       return {
         status: 404,
-        message: `No analysis with the the id ${request.params.id}`
+        message: `No analysis with the id ${request.params.id}.`
       };
     }
 
-    analysis = await this.analysisRepository
-      .createQueryBuilder("analysis")
-      .select()
-      .where("analysis.id = :id", { id: request.params.id })
-      .innerJoinAndSelect("analysis.user", "user")
-      .innerJoinAndSelect("analysis.emotion", "emotion")
-      .leftJoinAndSelect("analysis.accessories", "accessories")
-      .innerJoinAndSelect("analysis.makeUp", "makeUp")
-      .innerJoinAndSelect("analysis.facialHair", "facialHair")
-      .innerJoinAndSelect("analysis.hair", "hair")
-      .leftJoinAndSelect("hair.hairColor", "hairColor")
-      .getOne();
+    analysis = await this.analysisService.getAnalysis(request.params.id);
 
     if (userId === analysis.user.id) {
       analysis.user.password = "";
       analysis.user.salt = "";
       return {
         status: 200,
-        message: "Analysis found",
+        message: "Analysis found.",
         data: analysis
       };
     } else {
@@ -63,30 +53,5 @@ export class AnalysisController {
         message: "Could not find analysis for user."
       };
     }
-  }
-
-  /**
-   * Inserts a single analysis into the database
-   * @param analysis analysis object
-   */
-  async store(analysis: Analysis): Promise<Analysis> {
-    return this.analysisRepository.save(analysis);
-  }
-
-  /**
-   * Login authentication
-   * @param request User request
-   * @param response Server response
-   * @param next callback
-   */
-  async remove(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const analysis: Analysis = await this.analysisRepository.findOne(
-      request.params.id
-    );
-    await this.analysisRepository.remove(analysis);
   }
 }
