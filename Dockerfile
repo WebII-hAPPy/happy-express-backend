@@ -2,7 +2,7 @@ FROM node:8-slim
 WORKDIR /usr/src/app
 
 COPY package.json ./
-RUN yarn cache clean --force && yarn install --prod
+RUN yarn install
 COPY . .
 
 RUN chmod 700 start.sh
