@@ -1,6 +1,7 @@
 dist
 node_modules
 uploads
+test
 
 .dockerignore
 .gitignore
@@ -12,5 +13,7 @@ Dockerfile
 openapi.yaml
 package-lock.json
 README.md
+tsconfig.json
 tslint.json
 yarn-error.log
+yarn.lock
