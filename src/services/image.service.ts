@@ -26,7 +26,6 @@ import { deleteImage } from "../shared/utils";
 import { AnalysisService } from "./analysis.service";
 import { UserService } from "./user.service";
 
-// TODO: documentation
 export class ImageService {
   private userService: UserService;
   private analysisService: AnalysisService;
@@ -36,6 +35,12 @@ export class ImageService {
     this.analysisService = new AnalysisService();
   }
 
+  /**
+   * Call to Azure Face API to analyse the image
+   * @param imageName Name of the image
+   * @param user The current user object
+   * @param response HTTP response
+   */
   public async analyseImage(
     imageName: string,
     user: User,
@@ -87,6 +92,12 @@ export class ImageService {
     }
   }
 
+  /**
+   * Saves the response of the analysis
+   * @param result from the Azure Face API
+   * @param user The user object
+   * @param response HTTP response
+   */
   public async saveAnalysis(
     result: string,
     user: User,
@@ -127,6 +138,11 @@ export class ImageService {
     }
   }
 
+  /**
+   * Converts the azure response into the IAnalysis object
+   * @param res Azure response
+   * @param user The User object
+   */
   convertToAnalysis(res: IAzureResponse, user: User): IAnalysis {
     const date: Date = new Date();
 
@@ -138,6 +154,10 @@ export class ImageService {
     return _res;
   }
 
+  /**
+   * Converts a IAnalysis object to the database entity
+   * @param analysis The IAnalysis object
+   */
   convertToEntity(analysis: IAnalysis): Analysis {
     const _emotion: Emotion = {
       analysis: null,
