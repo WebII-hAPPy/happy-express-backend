@@ -1,6 +1,7 @@
 dist
 node_modules
 uploads
+test
 
 .dockerignore
 .gitignore
@@ -14,3 +15,4 @@ package-lock.json
 README.md
 tslint.json
 yarn-error.log
+yarn.lock

@@ -25,7 +25,7 @@ services:
     networks:
       - happy-network
 
-networks: 
+networks:
   happy-network:
 volumes:
   happy:
