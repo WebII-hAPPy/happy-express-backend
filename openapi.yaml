@@ -253,7 +253,7 @@ paths:
                 $ref: "#/components/schemas/Message"
               example:
                 message: "Reset E-Mail was sent."
-        402:
+        403:
           description: "Cannot reset password with not validated E-Mail."
           content:
             application/json:
