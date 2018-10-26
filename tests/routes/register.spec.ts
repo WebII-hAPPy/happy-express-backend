@@ -1,7 +1,7 @@
+import * as path from "path";
 import { SuperTest, Test } from "supertest";
 import { getTestApp } from "../bootstrap";
 import { IRegister } from "../models/register.model";
-import * as path from "path";
 
 let app: SuperTest<Test>;
 let token: number;
@@ -179,7 +179,7 @@ describe("Register test", () => {
   });
 
   describe("UPDATE user password with wrong request body", () => {
-    const data = {
+    const data: IRegister = {
       pasword: "test1"
     };
     it("should be rejected", (done) => {
@@ -197,7 +197,7 @@ describe("Register test", () => {
   });
 
   describe("UPDATE user password", () => {
-    const data = {
+    const data: IRegister = {
       password: "test1"
     };
     it("should be accepted", (done) => {
@@ -215,7 +215,7 @@ describe("Register test", () => {
   });
 
   describe("CHECK if password update works", () => {
-    const data = {
+    const data: IRegister = {
       email: "phuc.vuuu@gmail.com",
       password: "test1"
     };
