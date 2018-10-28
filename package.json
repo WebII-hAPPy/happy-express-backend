@@ -1,6 +1,6 @@
 {
   "name": "happy-backend",
-  "version": "0.0.1",
+  "version": "1.0",
   "description": "hAPPy-API Web-Engineering II project",
   "license": "MIT",
   "devDependencies": {
@@ -45,7 +45,6 @@
   "scripts": {
     "start": "NODE_ENV=dev ts-node src/index.ts",
     "start-prod": "NODE_ENV=production ts-node src/index.ts",
-    "precommit": "pretty-quick --staged",
     "test": "NODE_ENV=test mocha --require ts-node/register ./tests/routes/*.spec.ts --timeout 10000 --exit"
   }
 }
