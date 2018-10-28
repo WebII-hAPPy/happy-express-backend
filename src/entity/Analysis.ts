@@ -1,33 +1,72 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  Entity,
   ManyToOne,
-  OneToOne,
   OneToMany,
-  JoinColumn,
-  Timestamp
+  OneToOne,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { Emotion } from "./Emotion";
 import { Accessory } from "./Accessory";
+import { Emotion } from "./Emotion";
+import { FacialHair } from "./FacialHair";
+import { Hair } from "./Hair";
+import { MakeUp } from "./MakeUp";
 import { User } from "./User";
 
 @Entity()
 export class Analysis {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
-  @Column("timestamp")
-  time: string;
+  @ManyToOne((type) => User, (user) => user.analyses, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+  })
+  user: User;
 
-  @OneToOne(type => Emotion)
-  @JoinColumn()
+  @Column("date")
+  time: Date;
+
+  @OneToOne((type) => Emotion, (emotion) => emotion.analysis, {
+    cascade: true,
+    onUpdate: "CASCADE"
+  })
   emotion: Emotion;
 
-  @OneToMany(type => Accessory, accessory => accessory.analysis)
+  @Column("double precision")
+  smile: number;
+
+  @OneToMany((type) => Accessory, (accessory) => accessory.analysis, {
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+  })
   accessories: Accessory[];
 
-  @ManyToOne(type => User, user => user.analyses)
-  user: User;
+  @OneToOne((type) => MakeUp, (makeUp) => makeUp.analysis, {
+    cascade: true,
+    onUpdate: "CASCADE"
+  })
+  makeUp: MakeUp;
+
+  @Column()
+  glasses: string;
+
+  @Column()
+  gender: string;
+
+  @Column()
+  age: number;
+
+  @OneToOne((type) => FacialHair, (facialHair) => facialHair.analysis, {
+    cascade: true,
+    onUpdate: "CASCADE"
+  })
+  facialHair: FacialHair;
+
+  @OneToOne((type) => Hair, (hair) => hair.analysis, {
+    cascade: true,
+    onUpdate: "CASCADE"
+  })
+  hair: Hair;
 }

@@ -1,177 +1,786 @@
 openapi: "3.0.0"
 info:
-  description: "API for the Web-Engineering II project hAPPy"
-  version: "0"
-  title: "hAPPy"
+  description: API for the Web-Engineering II project hAPPy
+  version: "0.5"
+  title: hAPPy
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  contact:
+    email: mailfrom.happy.team@gmail.com
 servers:
-  - url: "localhost"
+  - url: https://backend.happy-service.ml
 tags:
-  - name: "face"
-  - name: "user"
-  - name: "statistic"
-  - name: "image"
+  - name: authentication
+    description: "All resources related to authentication"
+  - name: user
+    description: "All resources related to user"
+  - name: upload
+    description: "All resources related to upload"
+  - name: analysis
+    description: "All resources related to analysis"
+  - name: statistic
+    description: "All resources related to statistics"
 paths:
-  /image:
-    post:
-      tags:
-        - "image"
-      description: "Uploads a single image file."
-      operationId: "post-image"
-      requestBody:
-        description: "MultipartFormDataInput of file"
-        content:
-          multipart/form-data:
-            schema:
-              # EDIT REF
-              $ref: "#/components/schemas/Emotion"
-        required: false
-      responses:
-        200:
-          description: "Uploaded successfully"
-          content:
-            application/json:
-              schema:
-                # EDIT REF
-                $ref: "#/components/schemas/Emotion"
-        500:
-          description: "An error occurred"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  "/image/{imageName}":
-    delete:
-      tags:
-        - "image"
-      description: "Deletes a single image file"
-      operationId: "delete-image"
-      responses:
-        200:
-          description: "Deleted successfully"
-        500:
-          description: "An error occurred"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: "Entity not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    parameters:
-      - in: path
-        name: "imageName"
-        description: "The name of the image which you want to delete"
-        required: true
-        schema:
-          type: "string"
-  "/face/{imageName}":
-    post:
-      tags:
-        - "face"
-      operationId: "post-face"
-      responses:
-        200:
-          description: "Request successfully"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Analysis"
-        500:
-          description: "An error occurred"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: "Entity not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    parameters:
-      - in: path
-        name: "imageName"
-        description: "The name of the image which you want to delete"
-        required: true
-        schema:
-          type: "string"
-  "/statistic/{email}":
+  /verifyAccount/{hash}:
     get:
       tags:
-        - statistic
-      operationId: "get-statistic"
-      responses:
-        200:
-          description: "Generated successfully some statistics"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Statistic"
-        500:
-          description: "An error occurred"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: "User not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+        - authentication
+      operationId: authentication-verifyAccount
+      description: "Verifies a account."
       parameters:
         - in: path
-          name: "email"
-          description: "The E-Mail address of the user."
+          name: hash
+          description: "The validation hash which will identify the verification link for the user."
           required: true
           schema:
             type: string
+      responses:
+        200:
+          description: "User successfully activated."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrapperUserToken"
+              example:
+                message: "User successfully activated."
+                data:
+                  user:
+                    id: 1
+                    active: false
+                    name: "test"
+                    email: "test@test.com"
+                    password: ""
+                    salt: ""
+                    analysisCount: 0
+                    passwordReset: false
+                  token: "JWT_TOKEN"
+        404:
+          description: "Activation link invalid."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Activation link invalid."
+  /api/verifyToken:
+    get:
+      tags:
+        - authentication
+      operationId: authentication-verifyToken
+      description: "Checks if a JWT Token is valid."
+      parameters:
+        - $ref: "#/components/parameters/JWT"
+      responses:
+        200:
+          description: "User exist."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrapperUser"
+              example:
+                message: "Checks if a JWT Token is valid."
+                data:
+                  user:
+                    id: 1
+                    active: false
+                    name: "test"
+                    email: "test@test.com"
+                    password: ""
+                    salt: ""
+                    analysisCount: 0
+                    passwordReset: false
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          description: "User does not exist."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "User does not exist."
+  /register:
+    post:
+      tags:
+        - authentication
+      operationId: authentication-registerUser
+      description: "Creates a user."
+      requestBody:
+        description: "Information about the user which will be registered."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+            example:
+              name: "test"
+              email: "test@test.com"
+              password: "test"
+      responses:
+        201:
+          description: "User created."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: "#/components/schemas/User"
+              example:
+                data:
+                  user:
+                    name: "test"
+                    email: "test@test.com"
+                    password: ""
+                    salt: ""
+                    id: 1
+                    active: false
+                    analysisCount: 0
+                    passwordReset: false
+        409:
+          description: "This E-Mail is already registered."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "This E-Mail is already registered."
+        422:
+          description: "E-Mail and password are required."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "E-Mail and password are required."
+  /login:
+    post:
+      tags:
+        - authentication
+      operationId: loginUser
+      description: "Logs a user in."
+      requestBody:
+        description: "Information about the user which wants to be logged in."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: email
+            example:
+              email: "test@test.com"
+              password: "test"
+      responses:
+        200:
+          description: "User successfully logged in."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrapperUserToken"
+              example:
+                message: "User successfully logged in."
+                data:
+                  user:
+                    id: 1
+                    active: false
+                    name: "test"
+                    email: "test@test.com"
+                    password: ""
+                    salt: ""
+                    analysisCount: 0
+                    passwordReset: false
+                  token: "JWT_TOKEN"
+        400:
+          description: "E-Mail / Password invalid."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "E-Mail / Password invalid."
+        422:
+          description: "E-Mail and password are required."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "E-Mail and password are required."
+  /resetPassword:
+    post:
+      tags:
+        - authentication
+      operationId: authentication-resetPassword
+      description: "Sends an E-Mail to a user with a unique code to reset his password."
+      requestBody:
+        description: "Information about the user which will be logged in."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+            example:
+              email: "test@test.com"
+      responses:
+        200:
+          description: "Reset E-Mail was sent."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Reset E-Mail was sent."
+        403:
+          description: "Cannot reset password with not validated E-Mail."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Cannot reset password with not validated E-Mail."
+        404:
+          description: "This user does not exist."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "This user does not exist."
+        422:
+          description: "E-Mail is required for a password reset."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "E-Mail is required for a password reset."
+  /api/updatePassword:
+    put:
+      tags:
+        - authentication
+      operationId: authentication-updatePassword
+      description: "Updates the password of a user."
+      parameters:
+        - $ref: "#/components/parameters/JWT"
+      requestBody:
+        description: "Information about the new password of the user."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  format: password
+            example:
+              password: "test"
+      responses:
+        200:
+          description: "Updated successfully the password."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Updated successfully the password."
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          description: "Could not find user in database."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Could not find user in database."
+        422:
+          description: "Password is required for a password update."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Password is required for a password update."
+  /api/changeName/{id}:
+    put:
+      tags:
+        - user
+      operationId: user-changeName
+      description: "Changes the name of a user account."
+      parameters:
+        - $ref: "#/components/parameters/JWT"
+        - $ref: "#/components/parameters/UserID"
+      requestBody:
+        description: "Information about the new user name."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+            example:
+              name: "new name"
+      responses:
+        200:
+          description: "Name changed successfully."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrapperUser"
+              example:
+                message: "Name changed successfully."
+                data:
+                  user:
+                    id: 1
+                    active: false
+                    name: "test"
+                    email: "test@test.com"
+                    password: ""
+                    salt: ""
+                    analysisCount: 0
+                    passwordReset: false
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          description: "Could not find user in database."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Could not find user in database."
+  /api/deleteAccount/{id}:
+    delete:
+      tags:
+        - user
+      operationId: user-deleteAccount
+      description: "Deletes a user account."
+      parameters:
+        - $ref: "#/components/parameters/UserID"
+        - $ref: "#/components/parameters/JWT"
+      responses:
+        200:
+          description: "User successfully deleted."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrapperUser"
+              example:
+                message: "User successfully deleted."
+                data:
+                  user:
+                    id: 1
+                    active: false
+                    name: "test"
+                    email: "test@test.com"
+                    password: "hashed-pwd"
+                    salt: "salt"
+                    analysisCount: 0
+                    passwordReset: false
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          description: "Could not find User in database."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Could not find User in database."
+        500:
+          description: "Could not delete User."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Could not delete User."
+  /api/image:
+    post:
+      tags:
+        - upload
+      operationId: image-upload
+      description: "Uploading photo and anylysing it"
+      parameters:
+        - $ref: "#/components/parameters/JWT"
+      requestBody:
+        description: "The photo which should be analysed."
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: "Analysis complete."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      analysisId:
+                        type: number
+                        format: long
+              example:
+                message: "Analysis complete"
+                data:
+                  analysisId: 1
+        400:
+          description: "Could not process file."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Could not process file."
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          description: "User not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "User not found."
+        406:
+          description: "Analysis failed. No face recognized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Analysis failed. No face recognized."
+        415:
+          description: "Only images are allowed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Only images are allowed."
+  /api/analysis/{id}:
+    get:
+      tags:
+        - analysis
+      operationId: analysis-analysis
+      description: "Returns one specific analysis from the database."
+      parameters:
+        - in: path
+          name: id
+          description: "The id of the analysis."
+          required: true
+          schema:
+            type: number
+            format: integer
+        - $ref: "#/components/parameters/JWT"
+      responses:
+        200:
+          description: "Analysis found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Analysis"
+              example:
+                message: "Analysis found."
+                data:
+                  id: 89
+                  time: "2018-10-23"
+                  smile: 0.001
+                  glasses: NoGlasses
+                  gender: male
+                  age: 61
+                  user:
+                    id: 8
+                    active: false
+                    name: Bernd
+                    email: test
+                    password: ""
+                    salt: ""
+                    analysisCount: 46
+                  emotion:
+                    id: 89
+                    anger: 0.585
+                    contempt: 0
+                    disgust: 0.008
+                    fear: 0.091
+                    happiness: 0.001
+                    neutral: 0.004
+                    sadness: 0.195
+                    surprise: 0.116
+                  accessories: []
+                  makeUp:
+                    id: 89
+                    eyeMakeup: false
+                    lipMakeup: false
+                  facialHair:
+                    id: 89
+                    moustache: 0.1
+                    beard: 0.1
+                    sideburns: 0.1
+                  hair:
+                    id: 89
+                    bald: 0.53
+                    invisible: false
+                    hairColor:
+                      - id: 523
+                        color: blond
+                        confidence: 0.99
+                      - id: 524
+                        color: gray
+                        confidence: 0.95
+                      - id: 525
+                        color: brown
+                        confidence: 0.32
+                      - id: 526
+                        color: other
+                        confidence: 0.21
+                      - id: 527
+                        color: black
+                        confidence: 0.1
+                      - id: 528
+                        color: red
+                        confidence: 0.04
+        400:
+          description: "Could not find analysis for user."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Could not find analysis for user."
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          description: "No analysis with the id {id}."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "No analysis with the id {id}."
+  /api/statistics/{id}:
+    get:
+      tags:
+        - statistic
+      operationId: statistics-getStatistics
+      description: "Get statistics for one specific user."
+      responses:
+        200:
+          description: "Request granted. Returning statistics for user {id}."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Statistic"
+              example:
+                message: "Request granted. Returning statistics for user {id}."
+                data:
+                  - id: 18
+                    timestamp: "2018-10-19"
+                    emotions:
+                      sadness: 0.001
+                      anger: 0.002
+                      disgust: 0
+                      fear: 0.002
+                      contempt: 0
+                      neutral: 0.006
+                      surprise: 0.03
+                      happiness: 0.958
+                  - id: 20
+                    timestamp: "2018-10-19"
+                    emotions:
+                      sadness: 0
+                      anger: 0
+                      disgust: 0
+                      fear: 0
+                      contempt: 0
+                      neutral: 0
+                      surprise: 0
+                      happiness: 1
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        406:
+          description: "Could not affirm identity."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Could not affirm identity."
+    delete:
+      tags:
+        - statistic
+      operationId: statistics-reset
+      description: "Resets the statistics for one user."
+      responses:
+        200:
+          description: "Successfully removed statistics."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Successfully removed statistics."
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        406:
+          description: "Could not affirm identity."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: "Could not affirm identity."
+    parameters:
+      - $ref: "#/components/parameters/JWT"
+      - $ref: "#/components/parameters/UserID"
 components:
+  responses:
+    Unauthorized:
+      description: "Route protected. Authentication required."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Message"
+          example:
+            message: "Route protected. Authentication required."
+  parameters:
+    UserID:
+      in: path
+      name: id
+      description: "The id of the user."
+      required: true
+      schema:
+        type: number
+        format: integer
+    JWT:
+      in: header
+      name: Authorization
+      description: "The JWT Token of the user."
+      required: true
+      schema:
+        type: string
   schemas:
     User:
       properties:
-        id:
-          type: "number"
-          format: "long"
         name:
-          type: "string"
-        e-mail:
-          type: "string"
+          type: string
+        email:
+          type: string
+          format: email
         password:
-          type: "string"
-        analysis-count:
-          type: "integer"
+          type: string
+          format: password
+        salt:
+          type: string
+        id:
+          type: number
+          format: long
+        active:
+          type: boolean
+        analysisCount:
+          type: number
+          format: integer
+        passwordReset:
+          type: boolean
+    Message:
+      properties:
+        message:
+          type: string
+    WrapperUser:
+      properties:
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            user:
+              $ref: "#/components/schemas/User"
+    WrapperUserToken:
+      properties:
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            user:
+              $ref: "#/components/schemas/User"
+            token:
+              type: string
     Analysis:
       properties:
         id:
-          type: "number"
-          format: "long"
-        userId:
-          type: "number"
-          format: "long"
-        date:
-          type: "string"
-          format: "date"
-        emotions:
+          type: number
+          format: long
+        time:
+          type: string
+          format: date
+        user:
+          $ref: "#/components/schemas/User"
+        emotion:
           $ref: "#/components/schemas/Emotion"
         smile:
-          type: "number"
-          format: "double"
+          type: number
+          format: double
         accessories:
-          type: "array"
+          type: array
           items:
             $ref: "#/components/schemas/Accessory"
-        makeup:
+        makeUp:
           $ref: "#/components/schemas/MakeUp"
         glasses:
-          type: "string"
+          type: string
         gender:
-          type: "string"
+          type: string
         age:
-          type: "integer"
+          type: integer
         facialHair:
           $ref: "#/components/schemas/FacialHair"
         hair:
@@ -179,80 +788,124 @@ components:
     Emotion:
       properties:
         id:
-          type: "number"
-          format: "long"
-        analysisId:
-          type: "number"
-          format: "long"
+          type: number
+          format: long
         anger:
-          type: "number"
-          format: "double"
+          type: number
+          format: double
         contempt:
-          type: "number"
-          format: "double"
+          type: number
+          format: double
         disgust:
-          type: "number"
-          format: "double"
+          type: number
+          format: double
         fear:
-          type: "number"
-          format: "double"
+          type: number
+          format: double
         happiness:
-          type: "number"
-          format: "double"
+          type: number
+          format: double
         neutral:
-          type: "number"
-          format: "double"
+          type: number
+          format: double
         sadness:
-          type: "number"
-          format: "double"
+          type: number
+          format: double
         surprise:
-          type: "number"
-          format: "double"
-    Statistic:
-      type: object
+          type: number
+          format: double
     Accessory:
       properties:
+        id:
+          type: number
+          format: long
         type:
-          type: "string"
+          type: string
         confidence:
-          type: "number"
-          format: "double"
+          type: number
+          format: double
     MakeUp:
       properties:
+        id:
+          type: number
+          format: long
         eyeMakeup:
-          type: "boolean"
+          type: boolean
         lipMakeup:
-          type: "boolean"
+          type: boolean
     FacialHair:
       properties:
+        id:
+          type: number
+          format: long
         moustache:
-          type: "number"
-          format: "float"
+          type: number
+          format: double
         beard:
-          type: "number"
-          format: "float"
+          type: number
+          format: double
         sideburns:
-          type: "number"
-          format: "float"
+          type: number
+          format: double
     Hair:
       properties:
+        id:
+          type: number
+          format: long
         bald:
-          type: "number"
-          format: "float"
+          type: number
+          format: double
         invisible:
-          type: "boolean"
+          type: boolean
         hairColor:
-          type: "array"
+          type: array
           items:
             $ref: "#/components/schemas/HairColor"
     HairColor:
       properties:
+        id:
+          type: number
+          format: long
         color:
-          type: "string"
+          type: string
         confidence:
-          type: "number"
-          format: "float"
-    Error:
+          type: number
+          format: double
+    Statistic:
       properties:
-        message:
-          type: "string"
+        id:
+          type: number
+          format: long
+        timestamp:
+          type: string
+          format: date
+        emotions:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatisticEmotion"
+    StatisticEmotion:
+      properties:
+        anger:
+          type: number
+          format: double
+        contempt:
+          type: number
+          format: double
+        disgust:
+          type: number
+          format: double
+        fear:
+          type: number
+          format: double
+        happiness:
+          type: number
+          format: double
+        neutral:
+          type: number
+          format: double
+        sadness:
+          type: number
+          format: double
+        surprise:
+          type: number
+          format: double
