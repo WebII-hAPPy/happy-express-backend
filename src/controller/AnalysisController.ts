@@ -1,23 +1,57 @@
-import { getRepository } from "typeorm";
 import { NextFunction, Request, Response } from "express";
 import { Analysis } from "../entity/Analysis";
+import { IResponse } from "../models/Response.model";
+import { AnalysisService } from "../services/analysis.service";
+import { AuthService } from "../services/auth.service";
 
 export class AnalysisController {
-  private analysisRepository = getRepository(Analysis);
+  private authService: AuthService;
+  private analysisService: AnalysisService;
 
-  async all(request: Request, response: Response, next: NextFunction) {
-    return this.analysisRepository.find();
+  constructor() {
+    this.authService = new AuthService();
+    this.analysisService = new AnalysisService();
   }
 
-  async one(request: Request, response: Response, next: NextFunction) {
-    return this.analysisRepository.findOne(request.params.id);
-  }
+  /**
+   * Get one analysis
+   * @param request User request
+   * @param response Server response
+   * @param next Callback
+   */
+  public async getAnalysis(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<IResponse> {
+    const userId: number = this.authService.getIdClaim(request);
 
-  async remove(request: Request, response: Response, next: NextFunction) {
-    await this.analysisRepository.remove(request.params.id);
-  }
+    let analysis: Analysis = await this.analysisService.findById(
+      request.params.id
+    );
 
-  async save(request: Request, response: Response, next: NextFunction) {
-    return this.analysisRepository.save(request.body);
+    if (analysis === undefined) {
+      return {
+        status: 404,
+        message: `No analysis with the id ${request.params.id}.`
+      };
+    }
+
+    analysis = await this.analysisService.getAnalysis(request.params.id);
+
+    if (userId === analysis.user.id) {
+      analysis.user.password = "";
+      analysis.user.salt = "";
+      return {
+        status: 200,
+        message: "Analysis found.",
+        data: analysis
+      };
+    } else {
+      return {
+        status: 400,
+        message: "Could not find analysis for user."
+      };
+    }
   }
 }

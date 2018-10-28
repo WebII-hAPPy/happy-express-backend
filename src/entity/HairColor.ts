@@ -1,20 +1,20 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Analysis } from "./Analysis";
+import { Hair } from "./Hair";
 
 @Entity()
-export class Accessory {
+export class HairColor {
   @PrimaryGeneratedColumn()
   id?: number;
 
   @Column()
-  type: string;
+  color: string;
 
-  @Column("float")
+  @Column("double precision")
   confidence: number;
 
-  @ManyToOne((type) => Analysis, (analysis) => analysis.accessories, {
+  @ManyToOne((type) => Hair, (hair) => hair.hairColor, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })
-  analysis: Analysis;
+  hair: Hair;
 }

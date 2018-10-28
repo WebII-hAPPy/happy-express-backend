@@ -1,0 +1,38 @@
+stages:
+  - build
+  - deploy
+
+push:
+  stage: build
+  image: docker:latest
+  only:
+    - develop
+    - master
+  services:
+    - docker:dind
+  before_script:
+    - docker version
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
+  after_script:
+    - docker logout $CI_REGISTRY
+
+deploy:
+  stage: deploy
+  image: kroniak/ssh-client
+  only:
+    - develop
+    - master
+  script:
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - chmod 600 ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - ssh $SSH_USER@$SSH_HOST "docker pull $CI_REGISTRY_IMAGE"
+    - scp -r ./docker-compose.yml $SSH_USER@$SSH_HOST:/home/$SSH_USER/happy/
+    - ssh $SSH_USER@$SSH_HOST "cd /home/$DIR/happy; docker-compose down; docker-compose up -d; docker image prune -f"

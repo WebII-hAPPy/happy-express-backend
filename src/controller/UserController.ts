@@ -1,23 +1,101 @@
-import { getRepository } from "typeorm";
 import { NextFunction, Request, Response } from "express";
 import { User } from "../entity/User";
+import { IResponse } from "../models/Response.model";
+import { ActivationHashService } from "../services/activationHash.service";
+import { AuthService } from "../services/auth.service";
+import { UserService } from "../services/user.service";
 
 export class UserController {
-  private userRepository = getRepository(User);
+  private activationHashService: ActivationHashService;
+  private userService: UserService;
+  private authService: AuthService;
 
-  async all(request: Request, response: Response, next: NextFunction) {
-    return this.userRepository.find();
+  constructor() {
+    this.activationHashService = new ActivationHashService();
+    this.userService = new UserService();
+    this.authService = new AuthService();
   }
 
-  async one(request: Request, response: Response, next: NextFunction) {
-    return this.userRepository.findOne(request.params.id);
+  /**
+   * Changes the name of a user account
+   * @param request HTTP request
+   * @param response HTTP response
+   * @param next Callback
+   */
+  public async changeName(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<IResponse> {
+    if (this.authService.affirmIdentity(request)) {
+      let user: User = await this.userService.getUserById(request.params.id);
+
+      if (user) {
+        user.name = request.body.name;
+        user = await this.userService.update(user);
+        user.password = "";
+        user.salt = "";
+        return {
+          status: 200,
+          message: "Name changed successfully.",
+          data: user
+        };
+      }
+      return {
+        status: 404,
+        message: "Could not find user in database."
+      };
+    }
+    return {
+      status: 401,
+      message: "Route protected. Authentication required."
+    };
   }
 
-  async save(request: Request, response: Response, next: NextFunction) {
-    return this.userRepository.save(request.body);
-  }
+  /**
+   * Deletes a user account
+   * @param request HTTP request
+   * @param response HTTP response
+   * @param next Callback
+   */
+  async deleteAccount(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<IResponse> {
+    if (this.authService.affirmIdentity(request)) {
+      const user: User = await this.userService.getUserById(request.params.id);
 
-  // async remove(request: Request, response: Response, next: NextFunction) {
-  //     await this.userRepository.removeById(request.params.id);
-  // }
+      if (user === undefined || user === null) {
+        return {
+          status: 404,
+          message: "Could not find User in database."
+        };
+      }
+
+      if (!user.active) {
+        await this.activationHashService.removeInactiveHash(user.id);
+      }
+
+      const deleted: User = await this.userService.deleteUser(user);
+
+      if (deleted !== null || deleted !== undefined) {
+        deleted.password = "";
+        deleted.salt = "";
+        return {
+          status: 200,
+          message: "User successfully deleted.",
+          data: { user: deleted }
+        };
+      }
+      return {
+        status: 500,
+        message: "Could not delete User."
+      };
+    }
+    return {
+      status: 401,
+      message: "Route protected. Authentication required."
+    };
+  }
 }
