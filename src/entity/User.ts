@@ -1,25 +1,56 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn
+} from "typeorm";
+import { ActivationHash } from "./ActivationHash";
 import { Analysis } from "./Analysis";
 
 @Entity()
 export class User {
+  @PrimaryGeneratedColumn()
+  id?: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column({
+    default: false
+  })
+  active: boolean;
 
-    @Column()
-    email: string;
+  @Column()
+  name: string;
 
-    @Column()
-    name: string;
+  @Column({
+    unique: true
+  })
+  email: string;
 
-    @Column()
-    password: string;
+  @Column()
+  password: string;
 
-    @Column()
-    analysisCount: number;
+  @Column()
+  salt: string;
 
-    @OneToMany(type => Analysis, analysis => analysis.user)
-    analyses: Analysis[];
+  @Column({
+    default: 0
+  })
+  analysisCount: number;
 
+  @OneToOne((type) => ActivationHash, {
+    cascade: true
+  })
+  activationHash: ActivationHash;
+
+  @OneToMany((type) => Analysis, (analysis) => analysis.user, {
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+  })
+  analyses: Analysis[];
+
+  @Column({
+    default: false
+  })
+  passwordReset: boolean;
 }

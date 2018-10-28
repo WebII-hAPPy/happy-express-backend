@@ -4,3 +4,8 @@ node_modules/
 build/
 tmp/
 temp/
+logs/
+app-env
+uploads/
+app.env
+ormconfig.json
