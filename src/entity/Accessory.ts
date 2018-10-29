@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from "typeorm";
 import { Analysis } from "./Analysis";
 
 @Entity()
@@ -16,5 +16,6 @@ export class Accessory {
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })
+  @JoinColumn()
   analysis: Analysis;
 }
