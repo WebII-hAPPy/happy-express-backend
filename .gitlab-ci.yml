@@ -1,10 +1,30 @@
 stages:
+  - test
   - build
   - deploy
+  
+test:
+  stage: test
+  image: node:8-slim
+  services:
+    - postgres:11-alpine
+  variables:
+    POSTGRES_DB: happy-database
+    POSTGRES_USER: root
+    POSTGRES_PASSWORD: root
+  only:
+    - develop
+    - master
+  before_script:
+    - yarn install
+  script:
+    - yarn test
+  after_script:
+    - docker rm -f postgres-db
 
 push:
   stage: build
-  image: docker:latest
+  image: docker:stable
   only:
     - develop
     - master
@@ -22,7 +42,7 @@ push:
 
 deploy:
   stage: deploy
-  image: kroniak/ssh-client
+  image: kroniak/ssh-client:3.6
   only:
     - develop
     - master
