@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   happy-database:
-    image: postgres
+    image: postgres:11-alpine
     restart: always
     environment:
       POSTGRES_PASSWORD: root
@@ -25,7 +25,7 @@ services:
       - happy-network
 
 networks:
-  ? happy-network
+  happy-network:
 volumes:
   happy:
     external: true

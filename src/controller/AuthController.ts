@@ -114,7 +114,7 @@ export class AuthController {
         .replace("${name}", user.name)
         .replace(
           "${verificationLink}",
-          `${URL_BASE}/verifyAccount/${hash.hash}`
+          `${URL_BASE}verifyAccount/${hash.hash}`
         );
 
       this.emailService.send(user.email, isVerification, html);

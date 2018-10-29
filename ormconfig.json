@@ -19,6 +19,25 @@
     }
   },
   {
+    "name": "production",
+    "type": "postgres",
+    "host": "happy-database",
+    "port": 5432,
+    "username": "root",
+    "password": "root",
+    "database": "happy-database",
+    "synchronize": false,
+    "logging": false,
+    "entities": ["src/entity/**/*.ts"],
+    "migrations": ["src/migration/**/*.ts"],
+    "subscribers": ["src/subscriber/**/*.ts"],
+    "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+    }
+  },
+  {
     "name": "test",
     "type": "postgres",
     "host": "localhost",
@@ -38,14 +57,14 @@
     }
   },
   {
-    "name": "production",
+    "name": "test-ci",
     "type": "postgres",
-    "host": "happy-database",
+    "host": "postgres",
     "port": 5432,
     "username": "root",
     "password": "root",
     "database": "happy-database",
-    "synchronize": false,
+    "synchronize": true,
     "logging": false,
     "entities": ["src/entity/**/*.ts"],
     "migrations": ["src/migration/**/*.ts"],
