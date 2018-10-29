@@ -18,9 +18,7 @@ test:
   before_script:
     - yarn install
   script:
-    - yarn test
-  after_script:
-    - docker rm -f postgres-db
+    - yarn test-ci
 
 push:
   stage: build
