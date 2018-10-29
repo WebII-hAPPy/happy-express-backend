@@ -1,6 +1,18 @@
 stages:
+  - test
   - build
   - deploy
+  
+test:
+  stage: test
+  image: node:8-slim
+  only:
+    - develop
+    - master
+  before_script:
+    - yarn install
+  script:
+    - yarn test
 
 push:
   stage: build
