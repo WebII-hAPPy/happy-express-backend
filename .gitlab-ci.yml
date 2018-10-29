@@ -6,13 +6,18 @@ stages:
 test:
   stage: test
   image: node:8-slim
+  services:
+    - docker:dind
   only:
     - develop
     - master
   before_script:
     - yarn install
+    - docker run -d --name postgres-db -p 5432:5432 -e POSTGRES_PASSWORD=root -e POSTGRES_USER=root -e POSTGRES_DB=happy-database postgres
   script:
     - yarn test
+  after_script:
+    - docker rm -f postgres-db
 
 push:
   stage: build
