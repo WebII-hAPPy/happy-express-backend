@@ -17,6 +17,9 @@ test:
     - master
   before_script:
     - yarn install
+    - export JWT_SECRET=$TEST_JWT_TOKEN
+    - export GMAIL_USER=$TEST_GMAIL_USER
+    - export GMAIL_PASS=$TEST_GMAIL_PASS
   script:
     - yarn test-ci
 
