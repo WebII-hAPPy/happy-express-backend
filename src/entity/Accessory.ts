@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne } from "typeorm";
 import { Analysis } from "./Analysis";
 
 @Entity()
@@ -12,7 +12,7 @@ export class Accessory {
   @Column("float")
   confidence: number;
 
-  @ManyToOne((type) => Analysis, (analysis) => analysis.accessories, {
+  @OneToOne((type) => Analysis, (analysis) => analysis.accessories, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
   })
