@@ -7,13 +7,16 @@ test:
   stage: test
   image: node:8-slim
   services:
-    - docker:dind
+    - postgres:11-alpine
+  variables:
+    POSTGRES_DB: happy-database
+    POSTGRES_USER: root
+    POSTGRES_PASSWORD: root
   only:
     - develop
     - master
   before_script:
     - yarn install
-    - docker run -d --name postgres-db -p 5432:5432 -e POSTGRES_PASSWORD=root -e POSTGRES_USER=root -e POSTGRES_DB=happy-database postgres
   script:
     - yarn test
   after_script:
@@ -21,7 +24,7 @@ test:
 
 push:
   stage: build
-  image: docker:latest
+  image: docker:stable
   only:
     - develop
     - master
@@ -39,7 +42,7 @@ push:
 
 deploy:
   stage: deploy
-  image: kroniak/ssh-client
+  image: kroniak/ssh-client:3.6
   only:
     - develop
     - master
