@@ -1,5 +1,5 @@
 services:
-  - postgres:10-alpine
+  - postgres:11-alpine
 variables:
   POSTGRES_DB: happy-database
   POSTGRES_USER: root
