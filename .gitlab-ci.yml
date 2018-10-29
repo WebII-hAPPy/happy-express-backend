@@ -1,17 +1,18 @@
+services:
+  - postgres:11-alpine
+variables:
+  POSTGRES_DB: happy-database
+  POSTGRES_USER: root
+  POSTGRES_PASSWORD: root
+
 stages:
   - test
   - build
   - deploy
-  
+ 
 test:
   stage: test
   image: node:8-slim
-  services:
-    - postgres:latest
-  variables:
-    POSTGRES_DB: happy-database
-    POSTGRES_USER: root
-    POSTGRES_PASSWORD: root
   only:
     - develop
     - master
