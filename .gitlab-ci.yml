@@ -10,7 +10,6 @@ test:
     - develop
     - master
   before_script:
-    - apt-get -y remove docker docker-engine docker.io
     - apt-get update
     - apt-get install -y apt-transport-https ca-certificates wget software-properties-common
     - wget https://download.docker.com/linux/debian/gpg
