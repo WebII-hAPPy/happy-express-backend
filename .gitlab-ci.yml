@@ -18,6 +18,7 @@ test:
     - apt-get update
     - apt-cache policy docker-ce
     - apt-get -y install docker-ce
+    - apt install systemd-sysv
     - systemctl start docker
     - export JWT_SECRET=$TEST_JWT_TOKEN
     - export GMAIL_USER=$TEST_GMAIL_USER
