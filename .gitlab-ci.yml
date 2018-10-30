@@ -2,22 +2,30 @@ stages:
   - test
   - build
   - deploy
-  
+ 
 test:
   stage: test
   image: node:8-slim
-  services:
-    - postgres:latest
-  variables:
-    POSTGRES_DB: happy-database
-    POSTGRES_USER: root
-    POSTGRES_PASSWORD: root
   only:
     - develop
     - master
   before_script:
+    - apt-get update
+    - apt-get install -y apt-transport-https ca-certificates wget software-properties-common
+    - wget https://download.docker.com/linux/debian/gpg
+    - apt-key add gpg
+    - echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee -a /etc/apt/sources.list.d/docker.list
+    - apt-get update
+    - apt-cache policy docker-ce
+    - apt-get -y install docker-ce
+    - apt install systemd-sysv
+    - service docker start
+    - export JWT_SECRET=$TEST_JWT_TOKEN
+    - export GMAIL_USER=$TEST_GMAIL_USER
+    - export GMAIL_PASS=$TEST_GMAIL_PASS
     - yarn install
   script:
+    - docker run -d --name postgres-db -p 5432:5432 -e POSTGRES_PASSWORD=root -e POSTGRES_USER=root -e POSTGRES_DB=happy-database postgres:11-alpine
     - yarn test
   after_script:
     - docker rm -f postgres-db

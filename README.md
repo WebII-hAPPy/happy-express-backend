@@ -31,17 +31,17 @@ Generate Secret Key and set environment variables with `source`.
 node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
 ```
 
-Copy secret into app.env file
+Copy secret into app-env file
 
 ```env
-#file: app.env
+#file: app-env
 export JWT_SECRET="{secret}"
 export GMAIL_USER=""
 export GMAIL_PASS=""
 ```
 
 ```bash
-. ./app.env
+. ./app-env
 ```
 
 Finally install packages with yarn
@@ -51,8 +51,6 @@ yarn install
 yarn test
 yarn start
 ```
-
-##<a name="architecture"></a>Architecture
 
 ### Entities
 

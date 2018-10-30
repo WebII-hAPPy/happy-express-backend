@@ -55,24 +55,5 @@
       "migrationsDir": "src/migration",
       "subscribersDir": "src/subscriber"
     }
-  },
-  {
-    "name": "test-ci",
-    "type": "postgres",
-    "host": "postgres",
-    "port": 5432,
-    "username": "root",
-    "password": "root",
-    "database": "happy-database",
-    "synchronize": false,
-    "logging": false,
-    "entities": ["src/entity/**/*.ts"],
-    "migrations": ["src/migration/**/*.ts"],
-    "subscribers": ["src/subscriber/**/*.ts"],
-    "cli": {
-      "entitiesDir": "src/entity",
-      "migrationsDir": "src/migration",
-      "subscribersDir": "src/subscriber"
-    }
   }
 ]

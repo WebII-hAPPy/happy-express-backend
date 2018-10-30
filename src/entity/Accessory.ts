@@ -9,7 +9,7 @@ export class Accessory {
   @Column()
   type: string;
 
-  @Column("float")
+  @Column("double precision")
   confidence: number;
 
   @ManyToOne((type) => Analysis, (analysis) => analysis.accessories, {
