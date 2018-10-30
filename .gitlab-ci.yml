@@ -4,7 +4,7 @@ variables:
   POSTGRES_DB: happy-database
   POSTGRES_USER: root
   POSTGRES_PASSWORD: root
-
+ 
 stages:
   - test
   - build
@@ -17,10 +17,10 @@ test:
     - develop
     - master
   before_script:
-    - yarn install
     - export JWT_SECRET=$TEST_JWT_TOKEN
     - export GMAIL_USER=$TEST_GMAIL_USER
     - export GMAIL_PASS=$TEST_GMAIL_PASS
+    - yarn install
   script:
     - yarn test-ci
 
